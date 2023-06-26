@@ -1,0 +1,13 @@
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/IAbstractClass.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/Menu.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/MenuItem.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/UserRole.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/Orders.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/GenericRepo.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/AbstractEntity.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/FoodItems.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/OrderDetails.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/Login.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/UserTable.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/Category.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/Payments.java
