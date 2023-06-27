@@ -4,10 +4,9 @@
  */
 package com.souraj.foodorder.model;
 
-import com.souraj.foodorder.repository.AbstractEntity;
-import com.souraj.foodorder.repository.IAbstractClass;
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -28,8 +27,8 @@ public class UserTable extends AbstractEntity implements IAbstractClass, Seriali
     private String address;
    
     
-    @ManyToOne
-    @JoinColumn(name = "role_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_role")
     private UserRole roles;
 
 

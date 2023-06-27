@@ -4,8 +4,6 @@
  */
 package com.souraj.foodorder.model;
 
-import com.souraj.foodorder.repository.AbstractEntity;
-import com.souraj.foodorder.repository.IAbstractClass;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;

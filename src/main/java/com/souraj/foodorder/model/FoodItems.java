@@ -4,10 +4,10 @@
  */
 package com.souraj.foodorder.model;
 
-import com.souraj.foodorder.repository.AbstractEntity;
-import com.souraj.foodorder.repository.IAbstractClass;
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -23,9 +23,11 @@ public class FoodItems extends AbstractEntity implements IAbstractClass, Seriali
     private String name;
     private String description;
     private Double price;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category")
     private Category category;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "menu")
     private Menu menu;
     
     public FoodItems() {

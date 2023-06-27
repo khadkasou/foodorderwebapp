@@ -4,12 +4,11 @@
  */
 package com.souraj.foodorder.model;
 
-import com.souraj.foodorder.repository.AbstractEntity;
-import com.souraj.foodorder.repository.IAbstractClass;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 
 /**
  *
@@ -20,14 +19,14 @@ import javax.persistence.Table;
 public class Menu extends AbstractEntity implements IAbstractClass, Serializable {
 
     private String name;
-   private LocalDate fromDate;
-   private LocalDate toDate;
-  
 
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fromDate;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date toDate;
 
     public Menu() {
     }
-
 
     public String getName() {
         return name;
@@ -37,23 +36,21 @@ public class Menu extends AbstractEntity implements IAbstractClass, Serializable
         this.name = name;
     }
 
-    public LocalDate getFromDate() {
+    public Date getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(LocalDate fromDate) {
+    public void setFromDate(Date fromDate) {
         this.fromDate = fromDate;
     }
 
-    public LocalDate getToDate() {
+    public Date getToDate() {
         return toDate;
     }
 
-    public void setToDate(LocalDate toDate) {
+    public void setToDate(Date toDate) {
         this.toDate = toDate;
     }
-
-
 
     @Override
     public String getTableName() {

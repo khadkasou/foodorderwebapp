@@ -4,13 +4,14 @@
  */
 package com.souraj.foodorder.model;
 
-import com.souraj.foodorder.repository.AbstractEntity;
-import com.souraj.foodorder.repository.IAbstractClass;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 
 /**
  *
@@ -20,11 +21,15 @@ import javax.persistence.Table;
 @Table(name = "payments")
 public class Payments extends AbstractEntity implements IAbstractClass, Serializable{
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="order")
     private Orders order;
-    @ManyToOne
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user")
     private UserTable user;
-    private LocalDate paymentDate;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date paymentDate;
     private Double vat;
     private Double discount;
     private Double serviceCharge;
@@ -52,11 +57,11 @@ public class Payments extends AbstractEntity implements IAbstractClass, Serializ
         this.user = user;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return paymentDate;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.paymentDate = date;
     }
 
