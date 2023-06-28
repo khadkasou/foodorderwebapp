@@ -4,7 +4,8 @@
  */
 package com.souraj.foodorder.model;
 
-import java.util.Date;
+
+import java.time.LocalDateTime;
 
 /**
  *
@@ -15,11 +16,11 @@ public interface IAbstractClass {
    Long getId();
    void setId(Long id);
    
-    Date getCreatedAt();
-   void setCreatedAt(Date creadtedAt);
+   LocalDateTime getCreatedAt();
+   void setCreatedAt(LocalDateTime creadtedAt);
    
-   Date getUpdatedAt();
-   void setUpdatedAt(Date updatedAt);
+   LocalDateTime getUpdatedAt();
+   void setUpdatedAt(LocalDateTime updatedAt);
    
    String getTableName();
    

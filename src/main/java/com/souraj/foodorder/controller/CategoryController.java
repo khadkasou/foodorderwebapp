@@ -7,11 +7,10 @@ package com.souraj.foodorder.controller;
 import com.souraj.foodorder.model.Category;
 import com.souraj.foodorder.repository.CategoryRepo;
 import java.io.Serializable;
-import javax.annotation.PostConstruct;
-
-import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -22,59 +21,62 @@ import javax.inject.Named;
 @ViewScoped
 public class CategoryController implements Serializable {
 
-    private List<Category> categories;
     private Category category;
+    private List<Category> categoryList;
 
+    @Inject
     private CategoryRepo categoryRepo;
-
-    public List<Category> getCategories() {
-
-        return categories;
-    }
-
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
 
     public Category getCategory() {
         return category;
+    }
+
+    public CategoryController() {
     }
 
     public void setCategory(Category category) {
         this.category = category;
     }
 
+    public List<Category> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(List<Category> categoryList) {
+        this.categoryList = categoryList;
+    }
+
     @PostConstruct
     public void init() {
-
-        categories = new ArrayList<>();
-        category = new Category();
+        categoryList = categoryRepo.findAll();
 
     }
 
-    public void saveCategory() {
+    public void addCategory() {
         categoryRepo.save(category);
-        this.categories = categoryRepo.findAll();
-    }
-
-    public void deleteById(Long id) {
-        categoryRepo.deleteById(id);
-        this.categories = categoryRepo.findAll();
-
+        this.categoryList = categoryRepo.findAll();
     }
 
     public void findById(Long id) {
         categoryRepo.findById(id);
-        this.categories = categoryRepo.findAll();
-
     }
 
     public void findAll() {
         categoryRepo.findAll();
     }
 
-    public void updateById(Long id) {
-        categoryRepo.updateById(category, id);
+    public void deleteById(Long id) {
+        categoryRepo.delete(id);
+        this.categoryList = categoryRepo.findAll();
     }
 
+    /**
+     *
+     * @param id
+     */
+    public void update(Long id) {
+        categoryRepo.update(category);
+        this.categoryList = categoryRepo.findAll();
+
+    }
 }

@@ -3,76 +3,90 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.souraj.foodorder.repository;
+
 import com.souraj.foodorder.model.IAbstractClass;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Objects;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
  * @author ksouraj
  * @param <T>
  */
-public abstract class AbstractClass<T extends IAbstractClass> implements GenericRepo<T>{
+public abstract class AbstractClass<T extends IAbstractClass> implements GenericRepo<T> {
 
+    protected abstract EntityManager getEntityManager();
+    protected CriteriaQuery<T> criteriaQuery;
+    protected CriteriaBuilder criteriaBuilder;
+    private Class<T> entityClass;
+    protected Root<T> root;
 
-    private final List<T> database ;
-    
-    
-    
-    public AbstractClass(){
-        database = new ArrayList<>();
-     
+    public AbstractClass(Class<T> entityClass) {
+        this.entityClass = entityClass;
     }
-      
-    
+
+    public Class<T> getEntityClass() {
+        return entityClass;
+    }
+
+    public void setEntityClass(Class<T> entityClass) {
+        this.entityClass = entityClass;
+    }
+
+    public CriteriaQuery<T> getCriteriaQuery() {
+        return criteriaQuery;
+    }
+
+    public void setCriteriaQuery(CriteriaQuery<T> criteriaQuery) {
+        this.criteriaQuery = criteriaQuery;
+    }
+
+    public CriteriaBuilder getCriteriaBuilder() {
+        return criteriaBuilder;
+    }
+
+    public void setCriteriaBuilder(CriteriaBuilder criteriaBuilder) {
+        this.criteriaBuilder = criteriaBuilder;
+    }
+
     @Override
-    public T save(T Object) {
-        database.add(Object);
-        return Object;
-    }
-    
-         
-    @Override
-    public void deleteById(Long id){
-        T t = findById(id);
-        database.remove(t);
+    public void save(T object) {
+        getEntityManager().persist(object);
+        getEntityManager().flush();
     }
 
+    /**
+     *
+     * @param object
+     */
+    @Override
+    public void update(T object) {
+        getEntityManager().merge(object);
         
+    }
+
     @Override
     public List<T> findAll() {
-        return database;
+        criteriaBuilder = getEntityManager().getCriteriaBuilder();
+        criteriaQuery = criteriaBuilder.createQuery(entityClass);
+        root = criteriaQuery.from(entityClass);
+        criteriaQuery = criteriaQuery.select(root);
+
+        return getEntityManager().createQuery(criteriaQuery).getResultList();
     }
 
     @Override
     public T findById(Long id) {
-         
-    for (T categ : database) {
-        if (Objects.equals(categ.getId(), id)) {
-            return categ;
-        }
+        return getEntityManager().find(entityClass, id);
     }
-    return null;
-      
+
+    @Override
+    public void delete(Long id) {
+        getEntityManager().remove(findById(id));
+        getEntityManager().flush();
     }
-    
-    
-   @Override
-   public T updateById(T obj, Long id) {
-//    for (int i = 0; i < database.size(); i++) {
-//        T t = database.get(i);
-//        if (t instanceof Identifiable) {
-//            Identifiable identifiable = (Identifiable) t;
-//            if (identifiable.getId() == id) {
-//                database.set(i, obj);
-//                return obj;
-//            }
-//        }
-//    }
-    return null; 
-}
-
-
 
 }
