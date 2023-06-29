@@ -19,8 +19,6 @@ public class CategoryRepo extends AbstractClass<Category> {
     @PersistenceContext(name = "EPE")
     private EntityManager em;
 
-  
-
     public CategoryRepo() {
         super(Category.class);
     }

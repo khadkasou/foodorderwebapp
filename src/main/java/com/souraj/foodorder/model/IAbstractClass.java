@@ -4,7 +4,6 @@
  */
 package com.souraj.foodorder.model;
 
-
 import java.time.LocalDateTime;
 
 /**
@@ -12,18 +11,19 @@ import java.time.LocalDateTime;
  * @author ksouraj
  */
 public interface IAbstractClass {
-    
-   Long getId();
-   void setId(Long id);
-   
-   LocalDateTime getCreatedAt();
-   void setCreatedAt(LocalDateTime creadtedAt);
-   
-   LocalDateTime getUpdatedAt();
-   void setUpdatedAt(LocalDateTime updatedAt);
-   
-   String getTableName();
-   
-   
-    
+
+    Long getId();
+
+    void setId(Long id);
+
+    LocalDateTime getCreatedAt();
+
+    void setCreatedAt(LocalDateTime creadtedAt);
+
+    LocalDateTime getUpdatedAt();
+
+    void setUpdatedAt(LocalDateTime updatedAt);
+
+    String getTableName();
+
 }

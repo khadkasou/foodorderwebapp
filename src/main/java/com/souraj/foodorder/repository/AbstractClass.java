@@ -7,9 +7,8 @@ package com.souraj.foodorder.repository;
 import com.souraj.foodorder.model.IAbstractClass;
 import javax.persistence.EntityManager;
 import java.util.List;
-import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
@@ -19,10 +18,11 @@ import javax.persistence.criteria.Root;
 public abstract class AbstractClass<T extends IAbstractClass> implements GenericRepo<T> {
 
     protected abstract EntityManager getEntityManager();
-    protected CriteriaQuery<T> criteriaQuery;
-    protected CriteriaBuilder criteriaBuilder;
+
+    //   protected CriteriaQuery<T> criteriaQuery;
+    //  protected CriteriaBuilder criteriaBuilder;
     private Class<T> entityClass;
-    protected Root<T> root;
+    // protected Root<T> root;
 
     public AbstractClass(Class<T> entityClass) {
         this.entityClass = entityClass;
@@ -34,22 +34,6 @@ public abstract class AbstractClass<T extends IAbstractClass> implements Generic
 
     public void setEntityClass(Class<T> entityClass) {
         this.entityClass = entityClass;
-    }
-
-    public CriteriaQuery<T> getCriteriaQuery() {
-        return criteriaQuery;
-    }
-
-    public void setCriteriaQuery(CriteriaQuery<T> criteriaQuery) {
-        this.criteriaQuery = criteriaQuery;
-    }
-
-    public CriteriaBuilder getCriteriaBuilder() {
-        return criteriaBuilder;
-    }
-
-    public void setCriteriaBuilder(CriteriaBuilder criteriaBuilder) {
-        this.criteriaBuilder = criteriaBuilder;
     }
 
     @Override
@@ -65,17 +49,17 @@ public abstract class AbstractClass<T extends IAbstractClass> implements Generic
     @Override
     public void update(T object) {
         getEntityManager().merge(object);
-        
+        getEntityManager().flush();
+
     }
 
     @Override
     public List<T> findAll() {
-        criteriaBuilder = getEntityManager().getCriteriaBuilder();
-        criteriaQuery = criteriaBuilder.createQuery(entityClass);
-        root = criteriaQuery.from(entityClass);
-        criteriaQuery = criteriaQuery.select(root);
-
-        return getEntityManager().createQuery(criteriaQuery).getResultList();
+        CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        cq.select(cq.from(entityClass));
+        Query q = getEntityManager().createQuery(cq);
+        List<T> results = q.getResultList();
+        return results;
     }
 
     @Override

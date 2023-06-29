@@ -4,11 +4,10 @@
  */
 package com.souraj.foodorder.model;
 
-import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 
 /**
  *
@@ -16,7 +15,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "category")
-public class Category extends AbstractEntity implements IAbstractClass, Serializable {
+public class Category extends AbstractEntity {
 
     @Column(name = "name", unique = true)
     private String name;
@@ -24,8 +23,6 @@ public class Category extends AbstractEntity implements IAbstractClass, Serializ
     public Category() {
 
     }
-    
-    
 
     public String getName() {
         return name;
@@ -35,7 +32,27 @@ public class Category extends AbstractEntity implements IAbstractClass, Serializ
         this.name = name;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.name);
+        return hash;
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Category other = (Category) obj;
+        return Objects.equals(this.name, other.name);
+    }
 
     @Override
     public String getTableName() {

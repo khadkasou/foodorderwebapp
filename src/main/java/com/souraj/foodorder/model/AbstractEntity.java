@@ -1,5 +1,6 @@
 package com.souraj.foodorder.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -10,7 +11,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 @MappedSuperclass
-public abstract class AbstractEntity implements IAbstractClass {
+public abstract class AbstractEntity implements IAbstractClass, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
