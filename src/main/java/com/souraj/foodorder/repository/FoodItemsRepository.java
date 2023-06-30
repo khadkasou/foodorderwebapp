@@ -18,7 +18,7 @@ public class FoodItemsRepository extends AbstractClass<FoodItems>{
 
     
     @PersistenceContext(name = "EPE")
-    public EntityManager em;
+    private EntityManager em;
     
     public FoodItemsRepository() {
         super(FoodItems.class);

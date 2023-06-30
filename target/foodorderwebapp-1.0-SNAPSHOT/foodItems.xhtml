@@ -30,23 +30,23 @@
                     <f:facet name="header">Name</f:facet>
                     <h:outputText value="#{fi.name}"/>
                 </p:column>
-                
+
                 <p:column>
                     <f:facet name="header">Description</f:facet>
                     <h:outputText value="#{fi.description}"/>
                 </p:column>
-                
+
                 <p:column>
                     <f:facet name="header">price</f:facet>
                     <h:outputText value="#{fi.price}"/>
                 </p:column>
                 <p:column>
                     <f:facet name="header">Category ID</f:facet>
-                    <h:outputText value="#{fi.category}"/>
+                    <h:outputText value="#{fi.category.id}"/>
                 </p:column>
                 <p:column>
                     <f:facet name="header">Menu ID</f:facet>
-                    <h:outputText value="#{fi.menu}"/>
+                    <h:outputText value="#{fi.menu.id}"/>
                 </p:column>
 
                 <p:column>
@@ -65,7 +65,7 @@
                                      update=":frm_edit_foodItems" 
                                      oncomplete="PF('dlg').show();">
                     </p:commandButton>
-                    
+
                     <p:commandButton    id="btn_delete_foodItems" value="Delete" 
                                         update="frm_show_foodItems" 
                                         action="#{foodItemsController.delete(fi.id)}"/>
@@ -73,7 +73,7 @@
             </p:dataTable>
         </h:form>
 
-        <p:dialog header="Create Edit FoodItems" widgetVar="dlg" modal="true">
+        <p:dialog header="Create/Edit FoodItems" widgetVar="dlg" modal="true">
             <h:form id="frm_edit_foodItems">
                 <br /><br />
                 <p:outputLabel value="Name" for="name" />
@@ -81,6 +81,33 @@
                              value="#{foodItemsController.foodItems.name}">
                     <p:ajax update="@this" process="@this" />
                 </p:inputText>
+                <p:outputLabel value="Description" for="description" />
+                <p:inputText id="description" required="true" placeholder="Enter Description" 
+                             value="#{foodItemsController.foodItems.description}">
+                    <p:ajax update="@this" process="@this" />
+                </p:inputText>
+                <p:outputLabel value="Price" for="price" />
+                <p:inputText id="price" required="true" placeholder="Enter Price" 
+                             value="#{foodItemsController.foodItems.price}">
+                    <p:ajax update="@this" process="@this" />
+                </p:inputText>
+                <p:outputLabel value="Category" for="category" />
+                <p:selectOneMenu id="category" required="true" 
+                                 value="#{foodItemsController.allCategory}">
+                    <f:selectItem itemLabel="Select Category" itemValue="" />
+                    <f:selectItems value="#{categoryController.categoryList}" 
+                                   var="category" itemLabel="#{category.name}" 
+                                   itemValue="#{category.id}" />
+                </p:selectOneMenu>
+                <p:outputLabel value="Menu" for="menu" />
+                <p:selectOneMenu id="menu" required="true" 
+                                 value="#{foodItemsController.allMenu}">
+                    <f:selectItem itemLabel="Select Menu" itemValue="" />
+                    <f:selectItems value="#{menuController.mernuList}" 
+                                   var="menu" itemLabel="#{menu.name}" 
+                                   
+                                   itemValue="#{menu.id}" />
+                </p:selectOneMenu>
                 <br/><br/>
                 <p:commandButton value="Save" action="#{foodItemsController.addFoodItems()}" 
                                  rendered="#{foodItemsController.foodItems.id eq null}"

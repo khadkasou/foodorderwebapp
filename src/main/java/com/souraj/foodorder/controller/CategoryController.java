@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.souraj.foodorder.controller;
-
 import com.souraj.foodorder.model.Category;
 import com.souraj.foodorder.repository.CategoryRepo;
 import java.io.Serializable;
@@ -77,4 +76,6 @@ public class CategoryController implements Serializable {
         this.categoryList = new ArrayList<>();
         this.categoryList = categoryRepo.findAll();
     }
+    
+   
 }

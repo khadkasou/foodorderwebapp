@@ -4,8 +4,12 @@
  */
 package com.souraj.foodorder.controller;
 
+import com.souraj.foodorder.model.Category;
 import com.souraj.foodorder.model.FoodItems;
+import com.souraj.foodorder.model.Menu;
+import com.souraj.foodorder.repository.CategoryRepo;
 import com.souraj.foodorder.repository.FoodItemsRepository;
+import com.souraj.foodorder.repository.MenuRepository;
 import java.io.Serializable;
 import java.util.ArrayList;
 import javax.faces.view.ViewScoped;
@@ -28,6 +32,11 @@ public class FoodItemsController implements Serializable{
     @Inject
     private FoodItemsRepository foodItemsRepository;
     
+    @Inject
+    private CategoryRepo categoryRepo;
+    
+    @Inject
+    private MenuRepository menuRepository;
     
     public FoodItems getFoodItems() {
         return foodItems;
@@ -62,6 +71,9 @@ public class FoodItemsController implements Serializable{
     }
     
     public void addFoodItems(){
+        foodItems.setCategory((Category) categoryRepo.findAll());
+        foodItems.setMenu((Menu) menuRepository.findAll());
+        
         foodItemsRepository.save(foodItems);
         loadDate();
     }
@@ -79,6 +91,14 @@ public class FoodItemsController implements Serializable{
     public void loadDate(){
         this.foodItemsList= new ArrayList<>();
         this.foodItemsList= foodItemsRepository.findAll();
+    }
+    
+    public List<Category> getAllCategory(){
+       return categoryRepo.findAll();
+    }
+    public List<Menu> getAllMenu(){
+        return menuRepository.findAll();
+        
     }
     
 }
