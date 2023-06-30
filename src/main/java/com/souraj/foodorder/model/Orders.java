@@ -23,10 +23,14 @@ public class Orders extends AbstractEntity{
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "user")
     private UserTable user;
+    
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date orderDate;
+    
     private String status;
+    
     private String remarks;
+    
     private String descriptions;
 
     public Orders() {

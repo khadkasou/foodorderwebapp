@@ -19,16 +19,21 @@ import javax.persistence.Table;
 public class OrderDetails extends AbstractEntity{
     
     private Double quantity;
+    
     private Double rate;
+    
     private String status;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_item")
     private MenuItem menuItem;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order")
     private Orders order;
 
     public OrderDetails() {
+        
     }
 
     

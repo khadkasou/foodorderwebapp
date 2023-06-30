@@ -19,10 +19,15 @@ import javax.persistence.Table;
 public class UserTable extends AbstractEntity{
 
     private String firstName;
+    
     private String lastName;
+    
     private String username;
+    
     private String email;
+    
     private String password;
+    
     private String address;
    
     

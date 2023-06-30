@@ -27,11 +27,16 @@ public class Payments extends AbstractEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user")
     private UserTable user;
+    
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date paymentDate;
+    
     private Double vat;
+    
     private Double discount;
+    
     private Double serviceCharge;
+    
     private Double total;
 
     public Payments() {

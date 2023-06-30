@@ -20,7 +20,9 @@ public class FoodItems extends AbstractEntity {
 
     
     private String name;
+    
     private String description;
+    
     private Double price;
     
     @ManyToOne(fetch = FetchType.LAZY)
