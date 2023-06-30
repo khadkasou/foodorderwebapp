@@ -10,15 +10,17 @@
         <title>Category Details</title>
     </h:head>
     <h:body>
-        <h:form id="frm_add_category">
-            <p:commandButton    id="btn_add_category" value="Add Category" 
-                                update=":frm_edit_category"
-                                actionListener="#{categoryController.beforeCreate()}"
-                                oncomplete="PF('dlg').show();"/>
+        <h:form id="frm_add_category" style="text-align: right;">
+            <p:commandButton id="btn_add_category" value="Add Category" 
+                             update=":frm_edit_category"
+                             actionListener="#{categoryController.beforeCreate()}"
+                             oncomplete="PF('dlg').show();"
+                             style="margin-right: 15px;"/>
         </h:form>
         <br /><br />
         <h:form id="frm_show_category">
-            <p:dataTable value="#{categoryController.categoryList}" var="c" rowIndexVar="rowIndex">
+            <p:dataTable value="#{categoryController.categoryList}" var="c" 
+                         rowIndexVar="rowIndex">
                 <p:column>
                     <f:facet name="header">ID</f:facet>
                     <h:outputText value="#{rowIndex + 1}"/>
@@ -27,6 +29,8 @@
                 <p:column>
                     <f:facet name="header">Name</f:facet>
                     <h:outputText value="#{c.name}"/>
+                        
+
                 </p:column>
 
                 <p:column>
@@ -42,8 +46,10 @@
                 <p:column headerText="Action">
                     <p:commandButton id="btn_edit_category" value="Edit" 
                                      actionListener="#{categoryController.beforeUpdate(c)}"
-                                     update=":frm_edit_category" oncomplete="PF('dlg').show();">
+                                     update=":frm_edit_category" 
+                                     oncomplete="PF('dlg').show();">
                     </p:commandButton>
+                    
                     <p:commandButton    id="btn_delete_category" value="Delete" 
                                         update="frm_show_category" 
                                         action="#{categoryController.deleteById(c.id)}"/>

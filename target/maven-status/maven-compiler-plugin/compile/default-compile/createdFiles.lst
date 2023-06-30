@@ -1,10 +1,10 @@
+com/souraj/foodorder/model/IAbstractClass.class
+com/souraj/foodorder/controller/LoginController.class
+com/souraj/foodorder/repository/AbstractClass.class
+com/souraj/foodorder/repository/GenericRepo.class
 com/souraj/foodorder/model/Category.class
 com/souraj/foodorder/model/AbstractEntity_.class
-com/souraj/foodorder/repository/AbstractClass.class
-com/souraj/foodorder/controller/LoginController.class
 com/souraj/foodorder/controller/CategoryController.class
 com/souraj/foodorder/repository/CategoryRepo.class
-com/souraj/foodorder/model/IAbstractClass.class
 com/souraj/foodorder/model/Category_.class
-com/souraj/foodorder/repository/GenericRepo.class
 com/souraj/foodorder/model/AbstractEntity.class
