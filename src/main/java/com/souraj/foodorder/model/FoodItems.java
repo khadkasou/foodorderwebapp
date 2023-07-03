@@ -4,6 +4,7 @@
  */
 package com.souraj.foodorder.model;
 
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -18,28 +19,24 @@ import javax.persistence.Table;
 @Table(name = "food_item")
 public class FoodItems extends AbstractEntity {
 
-    
     private String name;
-    
+
     private String description;
-    
+
     private Double price;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category")
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu")
+
+    @ManyToOne
+    @JoinColumn(name = "menu_id")
     private Menu menu;
-    
+
     public FoodItems() {
-        
+
     }
 
-    
-  
-    
     public String getName() {
         return name;
     }
@@ -79,14 +76,53 @@ public class FoodItems extends AbstractEntity {
     public void setMenu(Menu menu) {
         this.menu = menu;
     }
-    
-    
-    
-    
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 89 * hash + Objects.hashCode(this.name);
+        hash = 89 * hash + Objects.hashCode(this.description);
+        hash = 89 * hash + Objects.hashCode(this.price);
+        hash = 89 * hash + Objects.hashCode(this.category);
+        hash = 89 * hash + Objects.hashCode(this.menu);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final FoodItems other = (FoodItems) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.description, other.description)) {
+            return false;
+        }
+        if (!Objects.equals(this.price, other.price)) {
+            return false;
+        }
+        if (!Objects.equals(this.category, other.category)) {
+            return false;
+        }
+        return Objects.equals(this.menu, other.menu);
+    }
+
+    @Override
+    public String toString() {
+        return "" + getId();
+    }
+
     @Override
     public String getTableName() {
-        return "food_item"; 
-        }
-    
-   
+        return "food_item";
+    }
+
 }

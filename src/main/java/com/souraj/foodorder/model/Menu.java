@@ -5,6 +5,7 @@
 package com.souraj.foodorder.model;
 
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -15,12 +16,13 @@ import javax.persistence.Temporal;
  */
 @Entity
 @Table(name = "menu")
-public class Menu extends AbstractEntity{
+public class Menu extends AbstractEntity {
 
     private String name;
 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fromDate;
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date toDate;
 
@@ -49,6 +51,41 @@ public class Menu extends AbstractEntity{
 
     public void setToDate(Date toDate) {
         this.toDate = toDate;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 89 * hash + Objects.hashCode(this.name);
+        hash = 89 * hash + Objects.hashCode(this.fromDate);
+        hash = 89 * hash + Objects.hashCode(this.toDate);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Menu other = (Menu) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.fromDate, other.fromDate)) {
+            return false;
+        }
+        return Objects.equals(this.toDate, other.toDate);
+    }
+
+    @Override
+    public String toString() {
+        return "" + getId();
     }
 
     @Override

@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author ksouraj
  */
 @Stateless
-public class UserRoleRepository extends AbstractClass<UserRole> {
+public class UserRoleRepository extends GenericAbstractClasss<UserRole> {
 
     @PersistenceContext(name = "EPE")
     private EntityManager em;

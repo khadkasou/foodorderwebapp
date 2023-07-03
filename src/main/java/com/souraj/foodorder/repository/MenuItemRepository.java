@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author ksouraj
  */
 @Stateless
-public class MenuItemRepository extends AbstractClass<MenuItem> {
+public class MenuItemRepository extends GenericAbstractClasss<MenuItem> {
 
     @PersistenceContext(name = "EPE")
     private EntityManager em;

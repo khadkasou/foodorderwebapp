@@ -75,47 +75,50 @@
 
         <p:dialog header="Create/Edit FoodItems" widgetVar="dlg" modal="true">
             <h:form id="frm_edit_foodItems">
-                <br /><br />
-                <p:outputLabel value="Name" for="name" />
-                <p:inputText id="name" required="true" placeholder="Enter Name" 
-                             value="#{foodItemsController.foodItems.name}">
-                    <p:ajax update="@this" process="@this" />
-                </p:inputText>
-                <p:outputLabel value="Description" for="description" />
-                <p:inputText id="description" required="true" placeholder="Enter Description" 
-                             value="#{foodItemsController.foodItems.description}">
-                    <p:ajax update="@this" process="@this" />
-                </p:inputText>
-                <p:outputLabel value="Price" for="price" />
-                <p:inputText id="price" required="true" placeholder="Enter Price" 
-                             value="#{foodItemsController.foodItems.price}">
-                    <p:ajax update="@this" process="@this" />
-                </p:inputText>
-                <p:outputLabel value="Category" for="category" />
-                <p:selectOneMenu id="category" required="true" 
-                                 value="#{foodItemsController.allCategory}">
-                    <f:selectItem itemLabel="Select Category" itemValue="" />
-                    <f:selectItems value="#{categoryController.categoryList}" 
-                                   var="category" itemLabel="#{category.name}" 
-                                   itemValue="#{category.id}" />
-                </p:selectOneMenu>
-                <p:outputLabel value="Menu" for="menu" />
-                <p:selectOneMenu id="menu" required="true" 
-                                 value="#{foodItemsController.allMenu}">
-                    <f:selectItem itemLabel="Select Menu" itemValue="" />
-                    <f:selectItems value="#{menuController.mernuList}" 
-                                   var="menu" itemLabel="#{menu.name}" 
-                                   
-                                   itemValue="#{menu.id}" />
-                </p:selectOneMenu>
-                <br/><br/>
-                <p:commandButton value="Save" action="#{foodItemsController.addFoodItems()}" 
-                                 rendered="#{foodItemsController.foodItems.id eq null}"
-                                 update="frm_show_foodItems" 
-                                 oncomplete="PF('dlg').hide();"/>
-                <p:commandButton value="Update" actionListener="#{foodItemsController.update()}"
-                                 rendered="#{foodItemsController.foodItems.id ne null}"
-                                 update="frm_show_foodItems"  oncomplete="PF('dlg').hide();"/>
+                <p:panelGrid columns="2" >
+                    <p:outputLabel value="Name" for="name" />
+                    <p:inputText id="name" required="true" placeholder="Enter Name" 
+                                 value="#{foodItemsController.foodItems.name}">
+                        <p:ajax update="@this" process="@this" />
+                    </p:inputText>
+                    <p:outputLabel value="Description" for="description" />
+                    <p:inputText id="description" required="true" placeholder="Enter Description" 
+                                 value="#{foodItemsController.foodItems.description}">
+                        <p:ajax update="@this" process="@this" />
+                    </p:inputText>
+                    <p:outputLabel value="Price" for="price" />
+                    <p:inputText id="price" required="true" placeholder="Enter Price" 
+                                 value="#{foodItemsController.foodItems.price}">
+                        <p:ajax update="@this" process="@this" />
+                    </p:inputText>
+                    <p:selectOneMenu id="category" required="true" 
+                                     value="#{foodItemsController.foodItems.category}"
+                                     converter="catConverter">
+                        <f:selectItem itemLabel="Select Category" itemValue="" />
+                        <f:selectItems value="#{categoryController.categoryList}" 
+                                       var="cat" itemLabel="#{cat.name}" 
+                                       itemValue="#{cat}" />
+                    </p:selectOneMenu>
+
+                    <p:selectOneMenu id="menu" required="true" 
+                                     value="#{foodItemsController.foodItems.menu}"
+                                     converter="menConverter">
+                        <f:selectItem itemLabel="Select Menu" itemValue="" />
+                        <f:selectItems value="#{menuController.menuList}" 
+                                       var="me" itemLabel="#{me.name}" 
+                                       itemValue="#{me}" />
+                    </p:selectOneMenu>
+
+                    <p:commandButton value="Save" action="#{foodItemsController.addFoodItems()}" 
+                                     rendered="#{foodItemsController.foodItems.id eq null}"
+                                     update=":frm_show_foodItems" process="@this"
+                                     oncomplete="PF('dlg').hide();"/>
+
+                    <p:commandButton value="Update" actionListener="#{foodItemsController.update()}"
+                                     rendered="#{foodItemsController.foodItems.id ne null}"
+                                     update="frm_show_foodItems"  process="@this"
+                                     oncomplete="PF('dlg').hide();"/>
+                </p:panelGrid>
             </h:form>
         </p:dialog>
     </h:body>

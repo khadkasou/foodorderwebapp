@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author ksouraj
  */
 @Stateless
-public class UserTableRepository extends AbstractClass<UserTable>{
+public class UserTableRepository extends GenericAbstractClasss<UserTable>{
     
     @PersistenceContext(name = "EPE")
     private EntityManager em;

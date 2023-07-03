@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author ksouraj
  */
 @Stateless
-public class FoodItemsRepository extends AbstractClass<FoodItems>{
+public class FoodItemsRepository extends GenericAbstractClasss<FoodItems>{
 
     
     @PersistenceContext(name = "EPE")
@@ -24,10 +24,6 @@ public class FoodItemsRepository extends AbstractClass<FoodItems>{
         super(FoodItems.class);
     }
 
-    
-    
-    
-    
     @Override
     protected EntityManager getEntityManager() {
              return em;

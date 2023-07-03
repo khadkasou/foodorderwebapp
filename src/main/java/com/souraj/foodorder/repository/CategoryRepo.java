@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author ksouraj
  */
 @Stateless
-public class CategoryRepo extends AbstractClass<Category> {
+public class CategoryRepo extends GenericAbstractClasss<Category> {
 
     @PersistenceContext(name = "EPE")
     private EntityManager em;

@@ -4,7 +4,6 @@
  */
 package com.souraj.foodorder.repository;
 
-import java.sql.ResultSet;
 import java.util.List;
 /**
  *

@@ -55,6 +55,11 @@ public class Category extends AbstractEntity {
     }
 
     @Override
+    public String toString() {
+        return "" + getId();
+    }
+
+    @Override
     public String getTableName() {
         return "category";
     }

@@ -23,7 +23,7 @@ import javax.inject.Inject;
 public class MenuController implements Serializable {
 
     private Menu menu;
-    private List<Menu> mernuList;
+    private List<Menu> menuList;
 
     @Inject
     private MenuRepository menuRepository;
@@ -36,12 +36,12 @@ public class MenuController implements Serializable {
         this.menu = menu;
     }
 
-    public List<Menu> getMernuList() {
-        return mernuList;
+    public List<Menu> getMenuList() {
+        return menuList;
     }
 
-    public void setMernuList(List<Menu> mernuList) {
-        this.mernuList = mernuList;
+    public void setMenuList(List<Menu> menuList) {
+        this.menuList = menuList;
     }
 
     @PostConstruct
@@ -75,8 +75,8 @@ public class MenuController implements Serializable {
     }
 
     public void loadData() {
-        this.mernuList = new ArrayList<>();
-        this.mernuList = menuRepository.findAll();
+        this.menuList = new ArrayList<>();
+        this.menuList = menuRepository.findAll();
 
     }
 

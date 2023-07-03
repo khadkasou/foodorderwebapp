@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author ksouraj
  */
 @Stateless
-public class OrdersRepository extends AbstractClass<Orders> {
+public class OrdersRepository extends GenericAbstractClasss<Orders> {
 
     @PersistenceContext(name = "EPE")
     private EntityManager em;

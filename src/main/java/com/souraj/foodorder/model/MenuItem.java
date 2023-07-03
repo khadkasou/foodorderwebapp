@@ -21,9 +21,11 @@ public class MenuItem extends AbstractEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="menu")
     private Menu menu;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "food_items")
     private FoodItems foodItems;
+    
     private Double price;
 
     public MenuItem() {
