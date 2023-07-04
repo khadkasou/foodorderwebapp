@@ -93,20 +93,22 @@
                     </p:inputText>
                     <p:selectOneMenu id="category" required="true" 
                                      value="#{foodItemsController.foodItems.category}"
-                                     converter="catConverter">
+                                     converter="categoryConverter">
                         <f:selectItem itemLabel="Select Category" itemValue="" />
                         <f:selectItems value="#{categoryController.categoryList}" 
                                        var="cat" itemLabel="#{cat.name}" 
                                        itemValue="#{cat}" />
+                        <p:ajax update="@this" process="@this" />
                     </p:selectOneMenu>
 
                     <p:selectOneMenu id="menu" required="true" 
                                      value="#{foodItemsController.foodItems.menu}"
-                                     converter="menConverter">
+                                     converter="menuConverter">
                         <f:selectItem itemLabel="Select Menu" itemValue="" />
                         <f:selectItems value="#{menuController.menuList}" 
                                        var="me" itemLabel="#{me.name}" 
                                        itemValue="#{me}" />
+                        <p:ajax update="@this" process="@this" />
                     </p:selectOneMenu>
 
                     <p:commandButton value="Save" action="#{foodItemsController.addFoodItems()}" 
