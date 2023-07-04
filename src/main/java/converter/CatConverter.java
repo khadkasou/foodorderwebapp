@@ -24,6 +24,7 @@ public class CatConverter implements Converter {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
+        System.out.println("heloooo"+fc+","+uic+","+value);
         if (value == null || value.isEmpty() || value.length() == 0 || value.equals("")) {
             return null;
         }

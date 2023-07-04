@@ -37,6 +37,16 @@ public class FoodItems extends AbstractEntity {
 
     }
 
+    public FoodItems(String name, String description, Double price, Category category, Menu menu) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.category = category;
+        this.menu = menu;
+    }
+    
+    
+
     public String getName() {
         return name;
     }
