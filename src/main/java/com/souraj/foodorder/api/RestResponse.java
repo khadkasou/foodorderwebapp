@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
  * @author ksouraj
  */
 public class RestResponse {
-    
+
     private String success;
     private String code;
     private String message;
@@ -61,8 +61,7 @@ public class RestResponse {
     public void setResult(String result) {
         this.result = result;
     }
-    
-    
+
     public static Response responseBuilder(String success, String code, String message, String result) {
         JsonObject json = Json.createObjectBuilder()
                 .add("success", success)
@@ -72,5 +71,4 @@ public class RestResponse {
 
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
-    
 }

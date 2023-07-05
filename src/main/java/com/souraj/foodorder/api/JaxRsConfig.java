@@ -15,4 +15,5 @@ import javax.ws.rs.core.Application;
 public class JaxRsConfig extends Application{
     
     
+    
 }
