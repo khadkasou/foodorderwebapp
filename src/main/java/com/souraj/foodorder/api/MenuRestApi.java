@@ -14,6 +14,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import java.util.List;
+import javax.json.JsonObject;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -44,9 +45,8 @@ public class MenuRestApi {
 
         String str = mapper.writeValueAsString(menu);
 
-        return RestResponse.responseBuilder("true", "201",
-                "Menu added successfully", str);
-
+        return RestResponse.responseBuilder(true, "201", "Menu created successfully", 
+                (JsonObject) mapper.readTree(str));
     }
 
     @GET
@@ -57,7 +57,8 @@ public class MenuRestApi {
         ObjectMapper mapper = new ObjectMapper();
         String str = mapper.writeValueAsString(menuList);
 
-        return RestResponse.responseBuilder("true", "200", "List of menus", str);
+        return RestResponse.responseBuilder(true, "201", "Menu created successfully", 
+                (JsonObject) mapper.readTree(str));
     }
 
     @GET
@@ -66,13 +67,15 @@ public class MenuRestApi {
 
         Menu me = menuRepository.findById(id);
 
-        if (me == null) {
-            return RestResponse.responseBuilder("false", "404", "Menu with id " + id + " not found", null);
+         if (me == null) {
+            return RestResponse.responseBuilder(false, "404", "Menu with id " + id + " not found", null);
         }
+
         ObjectMapper mapper = new ObjectMapper();
-       String str = mapper.writeValueAsString(me);
-         //  return Response.ok().entity(me).build();
-        return RestResponse.responseBuilder("true", "200", "Menu with id " + id + " found", str);
+        String str = mapper.writeValueAsString(me);
+
+        return RestResponse.responseBuilder(true, "200", "Menu with id " + id + " found",
+                (JsonObject) mapper.readTree(str));
     }
 
     @PUT
@@ -80,21 +83,18 @@ public class MenuRestApi {
     public Response updateMenu(@PathParam("id") Long id, MenuDto menuDto) throws JsonProcessingException {
 
         Menu menu = menuRepository.findById(id);
-        if (menu == null) {
-            return RestResponse.responseBuilder("false", "404", "Menu with id " + id + " not found", null);
+       if (menu == null) {
+            return RestResponse.responseBuilder(false, "404", "Menu with id " + id + " not found", null);
         }
 
         menu.setName(menuDto.getName());
-        menu.setFromDate(menuDto.getFromDate());
-        menu.setToDate(menuDto.getToDate());
-
         menuRepository.update(menu);
 
-        //  return Response.ok().entity(menu).build();
         ObjectMapper mapper = new ObjectMapper();
         String str = mapper.writeValueAsString(menu);
 
-        return RestResponse.responseBuilder("true", "200", "Menu updated successfully", str);
+        return RestResponse.responseBuilder(true, "200", "Menu updated successfully", 
+                (JsonObject) mapper.readTree(str));
     }
 
     @DELETE
@@ -102,11 +102,13 @@ public class MenuRestApi {
     public Response deleteMenu(@PathParam("id") Long id) throws JsonProcessingException {
 
         Menu menu = menuRepository.findById(id);
-        if (menu == null) {
-            return RestResponse.responseBuilder("false", "404", "Menu with id " + id + " not found", null);
+          if (menu == null) {
+            return RestResponse.responseBuilder(false, "404", "Menu with id " + id + " not found", null);
         }
+
         menuRepository.delete(id);
-        return RestResponse.responseBuilder("true", "200", "Menu with id " + id + " deleted successfully", null);
+        return RestResponse.responseBuilder(true, "200", "Menu with id " + id + " deleted successfully", null);
     }
+    
 
 }

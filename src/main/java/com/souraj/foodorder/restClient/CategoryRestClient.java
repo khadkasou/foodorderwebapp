@@ -4,109 +4,101 @@
  */
 package com.souraj.foodorder.restClient;
 
-/**
- *
- * @author ksouraj
- */
 import com.souraj.foodorder.model.Category;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.List;
+import javax.enterprise.context.RequestScoped;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Response;
+
+@RequestScoped
 public class CategoryRestClient {
-    private static final String API_URL = "http://10.120.3.176:8080/foodorderwebapp-1.0-SNAPSHOT/api/category";
 
-    public static void main(String[] args) {
+    private static final String API_BASE_URL = "http://10.120.3.176:8080/foodorderwebapp-1.0-SNAPSHOT/api";
+    private static final String CATEGORY_RESOURCE_URL = "/category";
+
+    private final Client client;
+
+    public CategoryRestClient() {
+        client = ClientBuilder.newClient();
+    }
+
+    public List<Category> getAllCategories() {
+        Response response = client
+                .target(API_BASE_URL)
+                .path(CATEGORY_RESOURCE_URL)
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+
+        if (response.getStatus() != Response.Status.OK.getStatusCode()) {
+            throw new RuntimeException("Error retrieving categories. Status: " + response.getStatus());
+        }
+
+        List<Category> categoryList
+                = (List<Category>) response.readEntity(Category.class);
+        return categoryList;
+    }
+
+    public Category getCategoryById(Long id) {
+        Response response = client
+                .target(API_BASE_URL)
+                .path(CATEGORY_RESOURCE_URL)
+                .path(String.valueOf(id))
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+
+        if (response.getStatus() != Response.Status.OK.getStatusCode()) {
+            throw new RuntimeException("Error retrieving category. Status: " 
+                    + response.getStatus());
+        }
+
+        Category category = response.readEntity(Category.class);
+        return category;
+    }
+
+    public void createCategory(Category category) {
+        Response response = client
+                .target(API_BASE_URL)
+                .path(CATEGORY_RESOURCE_URL)
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(category,
+                        MediaType.APPLICATION_JSON));
+
+        if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
+            throw new RuntimeException("Error creating category. Status: "
+                    + response.getStatus());
+        }
         
-        // Retrieve all categories
-           retrieveAllCategories();
-
-        // Create a new category
-        Category newCategory = new Category();
-        createCategory(newCategory);
-
-        // Update an existing category
-        Category updatedCategory = new Category();
-        updateCategory(newCategory.getId(), updatedCategory);
-
-        // Delete a category
-        deleteCategory(newCategory.getId());
     }
 
-    private static void retrieveAllCategories() {
-        try {
-            URL url = new URL(API_URL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            int responseCode = connection.getResponseCode();
-            System.out.println("GET All Categories - Response Code: " + responseCode);
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                StringBuilder response;
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                    String line;
-                    response = new StringBuilder();
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line);
-                    }
-                }
-                System.out.println("GET All Categories - Response Body: " + response.toString());
-            }
-            connection.disconnect();
-        } catch (IOException e) {
+    public void updateCategory(Category category) {
+        Response response = client
+                .target(API_BASE_URL)
+                .path(CATEGORY_RESOURCE_URL)
+                .path(String.valueOf(category.getId()))
+                .request(MediaType.APPLICATION_JSON)
+                .put(Entity.entity(category,
+                        MediaType.APPLICATION_JSON));
+
+        if (response.getStatus() != Response.Status.OK.getStatusCode()) {
+            throw new RuntimeException("Error updating category. Status: "
+                    + response.getStatus());
         }
     }
 
-    private static void createCategory(Category category) {
-        try {
-            URL url = new URL(API_URL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setDoOutput(true);
-            String jsonBody = "{\"name\":\"" + category.getName() + "\"}";
-            try (OutputStream outputStream = connection.getOutputStream()) {
-                outputStream.write(jsonBody.getBytes());
-                outputStream.flush();
-            }
-            int responseCode = connection.getResponseCode();
-            System.out.println("Create Category - Response Code: " + responseCode);
-            connection.disconnect();
-        } catch (IOException e) {
-        }
-    }
+    public void deleteCategory(Long id) {
+        Response response = client.target(API_BASE_URL)
+                .path(CATEGORY_RESOURCE_URL)
+                .path(String.valueOf(id))
+                .request(MediaType.APPLICATION_JSON)
+                .delete();
 
-    private static void updateCategory(Long id, Category category) {
-        try {
-            URL url = new URL(API_URL + "/" + id);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("PUT");
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setDoOutput(true);
-            String jsonBody = "{\"name\":\"" + category.getName() + "\"}";
-            try (OutputStream outputStream = connection.getOutputStream()) {
-                outputStream.write(jsonBody.getBytes());
-                outputStream.flush();
-            }
-            int responseCode = connection.getResponseCode();
-            System.out.println("Update Category - Response Code: " + responseCode);
-            connection.disconnect();
-        } catch (IOException e) {
-        }
-    }
-
-    private static void deleteCategory(Long id) {
-        try {
-            URL url = new URL(API_URL + "/" + id);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("DELETE");
-            int responseCode = connection.getResponseCode();
-            System.out.println("Delete Category - Response Code: " + responseCode);
-            connection.disconnect();
-        } catch (IOException e) {
+        if (response.getStatus() != Response.Status.NO_CONTENT.getStatusCode()) {
+            throw new RuntimeException("Error deleting category. Status: "
+                    + response.getStatus());
         }
     }
 }
-

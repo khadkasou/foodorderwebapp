@@ -9,32 +9,28 @@ import javax.json.JsonObject;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-/**
- *
- * @author ksouraj
- */
 public class RestResponse {
 
-    private String success;
+    private boolean success;
     private String code;
     private String message;
-    private String result;
+    private JsonObject result;
 
     public RestResponse() {
     }
 
-    public RestResponse(String success, String code, String message, String result) {
+    public RestResponse(boolean success, String code, String message, JsonObject result) {
         this.success = success;
         this.code = code;
         this.message = message;
         this.result = result;
     }
 
-    public String getSuccess() {
+    public boolean isSuccess() {
         return success;
     }
 
-    public void setSuccess(String success) {
+    public void setSuccess(boolean success) {
         this.success = success;
     }
 
@@ -54,21 +50,25 @@ public class RestResponse {
         this.message = message;
     }
 
-    public String getResult() {
+    public JsonObject getResult() {
         return result;
     }
 
-    public void setResult(String result) {
+    public void setResult(JsonObject result) {
         this.result = result;
     }
 
-    public static Response responseBuilder(String success, String code, String message, String result) {
+    public static Response responseBuilder(boolean success, String code, String message, JsonObject result) {
         JsonObject json = Json.createObjectBuilder()
                 .add("success", success)
                 .add("code", code)
                 .add("message", message)
-                .add("result", result == null ? "" : result).build();
+                .add("result", result == null ? Json.createObjectBuilder().build() : result)
+                .build();
 
-        return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON)
+                .entity(json)
+                .build();
     }
 }

@@ -25,6 +25,7 @@
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/converter/GenericConverter.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/MenuItem.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/CategoryRepo.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/RupeeToNepaliWordsServlet.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/Orders.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/GenericRepo.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/controller/OrdersController.java
@@ -33,6 +34,7 @@
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/dto/CategoryDto.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/dto/MenuDto.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/dto/FoodItemsDto.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/restClient/CategoryRestClient.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/api/MenuRestApi.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/controller/FoodItemsController.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/Category.java

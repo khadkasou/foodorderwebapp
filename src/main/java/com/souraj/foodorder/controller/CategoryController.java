@@ -3,20 +3,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.souraj.foodorder.controller;
+
 import com.souraj.foodorder.model.Category;
-import com.souraj.foodorder.repository.CategoryRepo;
+import com.souraj.foodorder.restClient.CategoryRestClient;
+
+
+import javax.faces.view.ViewScoped;
+
+import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
 
-/**
- *
- * @author ksouraj
- */
+
 @Named(value = "categoryController")
 @ViewScoped
 public class CategoryController implements Serializable {
@@ -25,8 +25,9 @@ public class CategoryController implements Serializable {
     private List<Category> categoryList;
 
     @Inject
-    private CategoryRepo categoryRepo;
+    private CategoryRestClient categoryRestClient;
 
+    
     public Category getCategory() {
         return category;
     }
@@ -42,42 +43,33 @@ public class CategoryController implements Serializable {
     public void setCategoryList(List<Category> categoryList) {
         this.categoryList = categoryList;
     }
-
-    @PostConstruct
-    public void init() {
-        this.category = new Category();
-        loadData();
-    }
+  
 
     public void beforeCreate() {
         this.category = new Category();
     }
 
     public void beforeUpdate(Category ctg) {
-        this.category = categoryRepo.findById(ctg.getId());
+        this.category = categoryRestClient.getCategoryById(ctg.getId());
     }
 
     public void addCategory() {
-        categoryRepo.save(category);
+        categoryRestClient.createCategory(category);
         loadData();
     }
 
     public void update() {
-        categoryRepo.update(this.category);
+        categoryRestClient.updateCategory(this.category);
         loadData();
     }
 
     public void deleteById(Long id) {
-        categoryRepo.delete(id);
+        categoryRestClient.deleteCategory(id);
         loadData();
     }
 
     public void loadData() {
         this.categoryList = new ArrayList<>();
-        this.categoryList = categoryRepo.findAll();
+        this.categoryList = categoryRestClient.getAllCategories();
     }
-    
-   
-    
-   
 }

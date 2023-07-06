@@ -3,6 +3,7 @@ com/souraj/foodorder/controller/UserTableController.class
 com/souraj/foodorder/api/MenuRestApi.class
 com/souraj/foodorder/converter/MenuConverter.class
 com/souraj/foodorder/model/Orders.class
+com/souraj/foodorder/restClient/CategoryRestClient$1.class
 com/souraj/foodorder/repository/OrdersRepository.class
 com/souraj/foodorder/repository/MenuRepository.class
 com/souraj/foodorder/repository/GenericAbstractClasss.class
@@ -27,6 +28,7 @@ com/souraj/foodorder/repository/CategoryRepo.class
 com/souraj/foodorder/model/OrderDetails_.class
 com/souraj/foodorder/model/OrderDetails.class
 com/souraj/foodorder/controller/MenuItemController.class
+com/souraj/foodorder/restClient/CategoryRestClient.class
 com/souraj/foodorder/api/CategoryRestApi.class
 com/souraj/foodorder/model/IAbstractClass.class
 com/souraj/foodorder/controller/OrdersController.class

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.souraj.foodorder.model.FoodItems;
 import com.souraj.foodorder.repository.FoodItemsRepository;
 import javax.inject.Inject;
+import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -38,7 +39,8 @@ public class FoodItemsApi {
         
         String str = mapper.writeValueAsString(foodItems);
         
-        return RestResponse.responseBuilder("true", "201", "foodItems addes successfully", str);
+        return RestResponse.responseBuilder(true, "201", "FoodItems created successfully", 
+                (JsonObject) mapper.readTree(str));
         
     }
     
