@@ -6,6 +6,7 @@ package com.souraj.foodorder.controller;
 
 import com.souraj.foodorder.model.Category;
 import com.souraj.foodorder.restClient.CategoryRestClient;
+import java.io.IOException;
 
 import javax.inject.Named;
 import java.io.Serializable;
@@ -30,7 +31,6 @@ public class CategoryController implements Serializable {
 
     
     public Category getCategory() {
-        loadData();
         return this.category;
     }
 
@@ -39,6 +39,7 @@ public class CategoryController implements Serializable {
     }
 
     public List<Category> getCategoryList() {
+        loadData();
         return this.categoryList;
     }
 
@@ -58,24 +59,27 @@ public class CategoryController implements Serializable {
         categoryRestClient.createCategory(category);
         loadData();
     }
-//
-//    public void update() {
-//        categoryRestClient.updateCategory(this.category);
-//        loadData();
-//    }
-//
-//    public void deleteById(Long id) {
-//        categoryRestClient.deleteCategory(id);
-//        loadData();
-//    }
+
+    public void update() throws IOException {
+        categoryRestClient.updateCategory(this.category.getId(),this.category);
+        
+    }
+
+    public void deleteById(Long id) {
+        categoryRestClient.deleteCategoryById(id);
+        
+       
+    }
  public void loadData() {
         this.categoryList = new ArrayList<>();
-        this.categoryList = (List<Category>) categoryRestClient.getAllCategories();
+        this.categoryList = categoryRestClient.getAllCategories();
 
     }
     
 
-
+    public void beforeUpdate(Long id) {
+       this.category= this.categoryRestClient.getCategoryById(id);
+    }
    
 
 }

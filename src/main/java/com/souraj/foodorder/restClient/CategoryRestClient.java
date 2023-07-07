@@ -4,8 +4,10 @@
  */
 package com.souraj.foodorder.restClient;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.souraj.foodorder.api.RestResponse;
 import com.souraj.foodorder.model.Category;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -57,11 +59,38 @@ public class CategoryRestClient implements Serializable {
             throw new RuntimeException("Error retrieving categories. Status: " + response.getStatus());
         }
 
-        List<Category> categoryLists = response.readEntity(new GenericType<List<Category>>() {
+        categoryList = response.readEntity(new GenericType<List<Category>>() {
         });
 
-        return categoryLists;
+        return categoryList;
     }
+
+    public Category getCategoryById(Long id) {
+        Category apiResponse = client.target(BASE_URL).path(RESOURCE_URL)
+                .path("/{id}").resolveTemplate("id", id)
+                .request(MediaType.APPLICATION_JSON)
+                .get(Category.class);
+
+        return apiResponse;
+    }
+
+    public Response deleteCategoryById(Long id) {
+        client.target(BASE_URL).path(RESOURCE_URL)
+                .path("/{id}").resolveTemplate("id", id)
+                .request(MediaType.APPLICATION_JSON)
+                .delete();
+
+        return null;
+    }
+    
+     public Category updateCategory(Long id, Category category) throws IOException {
+         client.target(BASE_URL).path(RESOURCE_URL).path("/{id}")
+                .resolveTemplate("id", id)
+                .request(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .buildPut(Entity.json(category))
+                .invoke(Category.class);
+         return category;
+    }
+
 }
-
-

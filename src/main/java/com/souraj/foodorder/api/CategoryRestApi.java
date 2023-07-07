@@ -30,23 +30,25 @@ public class CategoryRestApi {
     }
 
     @GET
-    public Response getAllCategories() throws JsonProcessingException {
+    public List<Category> getAllCategories() throws JsonProcessingException {
         
-       List<Category> categoryList= categoryRepo.findAll();
+//       List<Category> categoryList= 
+            return categoryRepo.findAll();
 
-       return RestResponse.responseBuilder(true, "200", 
-               "List of categories", categoryList);
+//       return RestResponse.responseBuilder(true, "200", 
+//               "List of categories", categoryList);
     }
 
     @GET
     @Path("/{id}")
-    public Response getCategoryById(@PathParam("id") Long id) throws JsonProcessingException {
+    public Category getCategoryById(@PathParam("id") Long id) throws JsonProcessingException {
         Category cat = categoryRepo.findById(id);
-        if (cat == null) {
-            return RestResponse.responseBuilder(false, "404", "Category with id " + id + " not found", null);
-        }
-
-        return RestResponse.responseBuilder(true, "200", "Category with id " + id + " found", cat);
+        return  cat;
+//        if (cat == null) {
+//            return RestResponse.responseBuilder(false, "404", "Category with id " + id + " not found", null);
+//        }
+//
+//        return RestResponse.responseBuilder(true, "200", "Category with id " + id + " found", cat);
     }
 
     @PUT

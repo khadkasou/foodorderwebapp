@@ -1,5 +1,6 @@
 package com.souraj.foodorder.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -18,9 +19,11 @@ public abstract class AbstractEntity implements IAbstractClass, Serializable {
     private Long id;
 
     @Column(nullable = true)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime createdAt;
 
     @Column(nullable = true)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime updatedAt;
 
     @PrePersist
