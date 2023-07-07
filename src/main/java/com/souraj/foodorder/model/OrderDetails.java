@@ -80,13 +80,7 @@ public class OrderDetails extends AbstractEntity{
     }
     
    
-    
 
-    @Override
-    public String getTableName() {
-      return "order_details";
-      
-        }
     
     
 }

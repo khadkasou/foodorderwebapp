@@ -24,6 +24,4 @@ public interface IAbstractClass {
 
     void setUpdatedAt(LocalDateTime updatedAt);
 
-    String getTableName();
-
 }

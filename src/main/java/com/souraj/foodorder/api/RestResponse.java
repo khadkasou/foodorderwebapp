@@ -4,8 +4,8 @@
  */
 package com.souraj.foodorder.api;
 
-import javax.json.Json;
-import javax.json.JsonObject;
+import java.util.HashMap;
+import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -14,12 +14,12 @@ public class RestResponse {
     private boolean success;
     private String code;
     private String message;
-    private JsonObject result;
+    private Object result;
 
     public RestResponse() {
     }
 
-    public RestResponse(boolean success, String code, String message, JsonObject result) {
+    public RestResponse(boolean success, String code, String message, Object result) {
         this.success = success;
         this.code = code;
         this.message = message;
@@ -50,25 +50,25 @@ public class RestResponse {
         this.message = message;
     }
 
-    public JsonObject getResult() {
+    public Object getResult() {
         return result;
     }
 
-    public void setResult(JsonObject result) {
+    public void setResult(Object result) {
         this.result = result;
     }
 
-    public static Response responseBuilder(boolean success, String code, String message, JsonObject result) {
-        JsonObject json = Json.createObjectBuilder()
-                .add("success", success)
-                .add("code", code)
-                .add("message", message)
-                .add("result", result == null ? Json.createObjectBuilder().build() : result)
-                .build();
+    public static Response responseBuilder(boolean success, String code, String message, Object result) {
+        Map<String,Object> map = new HashMap<>();
+                map.put("success", success);
+                map.put("code", code);
+                map.put("message", message);
+                map.put("result", result);
+                
 
         return Response.status(Response.Status.OK)
                 .type(MediaType.APPLICATION_JSON)
-                .entity(json)
+                .entity(map)
                 .build();
     }
 }

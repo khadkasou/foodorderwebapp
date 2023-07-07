@@ -1,6 +1,5 @@
 com/souraj/foodorder/dto/FoodItemsDto.class
 com/souraj/foodorder/controller/UserTableController.class
-com/souraj/foodorder/api/MenuRestApi.class
 com/souraj/foodorder/converter/MenuConverter.class
 com/souraj/foodorder/model/Orders.class
 com/souraj/foodorder/restClient/CategoryRestClient$1.class

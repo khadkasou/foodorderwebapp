@@ -35,7 +35,6 @@
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/dto/MenuDto.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/dto/FoodItemsDto.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/restClient/CategoryRestClient.java
-/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/api/MenuRestApi.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/controller/FoodItemsController.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/Category.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/api/RestResponse.java

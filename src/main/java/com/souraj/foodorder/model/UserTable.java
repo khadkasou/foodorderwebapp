@@ -98,9 +98,5 @@ public class UserTable extends AbstractEntity{
         this.roles = roles;
     }
 
-    @Override
-    public String getTableName() {
-        return "user_table";
-    }
 
 }

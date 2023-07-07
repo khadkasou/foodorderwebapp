@@ -36,9 +36,4 @@ public class UserRole extends AbstractEntity{
         this.name = name;
     }
 
-    @Override
-    public String getTableName() {
-        return "user_role";
-    }
-
 }

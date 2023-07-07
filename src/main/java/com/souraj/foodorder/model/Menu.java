@@ -88,9 +88,4 @@ public class Menu extends AbstractEntity {
         return "" + getId();
     }
 
-    @Override
-    public String getTableName() {
-        return "menu";
-    }
-
 }

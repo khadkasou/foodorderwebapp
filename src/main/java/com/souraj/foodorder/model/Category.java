@@ -4,6 +4,7 @@
  */
 package com.souraj.foodorder.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,15 +16,17 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "category")
-public class Category extends AbstractEntity {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Category extends AbstractEntity{
 
     @Column(name = "name", unique = true)
     private String name;
-
+    
     public Category() {
 
     }
 
+    
     public String getName() {
         return name;
     }
@@ -32,6 +35,8 @@ public class Category extends AbstractEntity {
         this.name = name;
     }
 
+
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -58,10 +63,4 @@ public class Category extends AbstractEntity {
     public String toString() {
         return "" + getId();
     }
-
-    @Override
-    public String getTableName() {
-        return "category";
-    }
-
 }

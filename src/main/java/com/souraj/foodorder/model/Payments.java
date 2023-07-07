@@ -101,12 +101,7 @@ public class Payments extends AbstractEntity{
         this.total = total;
     }
     
-    
-    @Override
-    public String getTableName() {
-            return "payments";
-    }
-    
+
     
     
 }

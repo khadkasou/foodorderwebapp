@@ -59,14 +59,7 @@ public class MenuItem extends AbstractEntity{
     }
     
     
-    
-            
-            
-    @Override
-    public String getTableName() {
-        return "menu_item";
-               
-    }
+
     
     
     

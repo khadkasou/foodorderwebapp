@@ -129,9 +129,6 @@ public class FoodItems extends AbstractEntity {
         return "" + getId();
     }
 
-    @Override
-    public String getTableName() {
-        return "food_item";
-    }
+  
 
 }
