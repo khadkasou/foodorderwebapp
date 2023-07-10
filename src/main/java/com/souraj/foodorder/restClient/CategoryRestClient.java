@@ -4,8 +4,8 @@
  */
 package com.souraj.foodorder.restClient;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.souraj.foodorder.api.RestResponse;
+import com.souraj.foodorder.exceptions.CustomExceptions;
 import com.souraj.foodorder.model.Category;
 import java.io.IOException;
 import java.io.Serializable;
@@ -56,7 +56,8 @@ public class CategoryRestClient implements Serializable {
                 .get();
 
         if (response.getStatus() != Response.Status.OK.getStatusCode()) {
-            throw new RuntimeException("Error retrieving categories. Status: " + response.getStatus());
+//            throw new RuntimeException("Error retrieving categories. Status: " + response.getStatus());
+          throw new CustomExceptions("Error retrieving categories, Status "+ response.getStatus());
         }
 
         categoryList = response.readEntity(new GenericType<List<Category>>() {
@@ -66,8 +67,11 @@ public class CategoryRestClient implements Serializable {
     }
 
     public Category getCategoryById(Long id) {
-        Category apiResponse = client.target(BASE_URL).path(RESOURCE_URL)
-                .path("/{id}").resolveTemplate("id", id)
+        Category apiResponse = client
+                .target(BASE_URL)
+                .path(RESOURCE_URL)
+                .path("/{id}")
+                .resolveTemplate("id", id)
                 .request(MediaType.APPLICATION_JSON)
                 .get(Category.class);
 
@@ -75,22 +79,26 @@ public class CategoryRestClient implements Serializable {
     }
 
     public Response deleteCategoryById(Long id) {
-        client.target(BASE_URL).path(RESOURCE_URL)
-                .path("/{id}").resolveTemplate("id", id)
+        client.target(BASE_URL)
+                .path(RESOURCE_URL)
+                .path("/{id}")
+                .resolveTemplate("id", id)
                 .request(MediaType.APPLICATION_JSON)
                 .delete();
 
         return null;
     }
-    
-     public Category updateCategory(Long id, Category category) throws IOException {
-         client.target(BASE_URL).path(RESOURCE_URL).path("/{id}")
+
+    public Category updateCategory(Long id, Category category) throws IOException {
+        client.target(BASE_URL)
+                .path(RESOURCE_URL)
+                .path("/{id}")
                 .resolveTemplate("id", id)
                 .request(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .buildPut(Entity.json(category))
                 .invoke(Category.class);
-         return category;
+        return category;
     }
 
 }

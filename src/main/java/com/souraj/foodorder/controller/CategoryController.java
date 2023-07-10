@@ -51,9 +51,10 @@ public class CategoryController implements Serializable {
         this.category = new Category();
     }
 
-//    public void beforeUpdate(Category ctg) {
-//        this.categoryRestClient.findCategoryById(ctg.getId());
-//    }
+    
+    public void beforeUpdate(Long id) {
+       this.category= this.categoryRestClient.getCategoryById(id);
+    }
 
     public void addCategory() {
         categoryRestClient.createCategory(category);
@@ -77,9 +78,7 @@ public class CategoryController implements Serializable {
     }
     
 
-    public void beforeUpdate(Long id) {
-       this.category= this.categoryRestClient.getCategoryById(id);
-    }
+    
    
 
 }
