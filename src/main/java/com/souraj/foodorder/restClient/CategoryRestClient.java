@@ -10,7 +10,6 @@ import com.souraj.foodorder.model.Category;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
-
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -47,6 +46,7 @@ public class CategoryRestClient implements Serializable {
                 restResponse.getResult()
         );
     }
+    
 
     public List<Category> getAllCategories() {
         Response response = client
@@ -65,6 +65,7 @@ public class CategoryRestClient implements Serializable {
 
         return categoryList;
     }
+    
 
     public Category getCategoryById(Long id) {
         Category apiResponse = client
