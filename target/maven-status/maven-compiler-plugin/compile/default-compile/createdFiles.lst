@@ -13,6 +13,7 @@ com/souraj/foodorder/model/UserTable.class
 com/souraj/foodorder/repository/UserTableRepository.class
 com/souraj/foodorder/dto/CategoryDto.class
 com/souraj/foodorder/model/UserRole_.class
+com/souraj/foodorder/utils/Utils.class
 com/souraj/foodorder/converter/GenericConverter.class
 com/souraj/foodorder/model/FoodItems.class
 com/souraj/foodorder/repository/GenericRepo.class

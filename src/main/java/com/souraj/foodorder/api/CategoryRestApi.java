@@ -86,6 +86,7 @@ public class CategoryRestApi {
         }
 
         category.setName(categoryDto.getName());
+//        category.setImage(categoryDto.getImage());
         categoryRepo.update(category);
 
           //return Response.ok().entity(category).build();

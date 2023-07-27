@@ -20,6 +20,9 @@ public class Category extends AbstractEntity {
     @Column(name = "name", unique = true)
     private String name;
 
+    @Column(name = "image_data", length = 1000000)
+    private byte[] imageData;
+
     public Category() {
 
     }
@@ -30,6 +33,14 @@ public class Category extends AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public byte[] getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
     }
 
     @Override
@@ -62,6 +73,10 @@ public class Category extends AbstractEntity {
     @Override
     public String getTableName() {
         return "category";
+    }
+
+    public void setCategoryImage(byte[] imageData) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }
