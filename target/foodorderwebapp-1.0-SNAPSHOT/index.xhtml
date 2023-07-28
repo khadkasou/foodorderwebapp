@@ -44,16 +44,21 @@
                     <h:outputText value="#{c.updatedAt}" />
                 </p:column>
 
-                <p:column headerText="Action">
-                    <p:commandButton id="btn_edit_category" value="Edit" 
-                                     actionListener="#{categoryController.beforeUpdate(c)}"
-                                     update=":frm_edit_category" 
-                                     oncomplete="PF('dlg').show();">
+                <p:column headerText="Actions">
+                    <p:commandButton id="btn_view_category" value="View" icon="pi pi-eye" 
+                                     oncomplete="PF('viewDialog').show();" process="@this" update="@form">
+                        <f:setPropertyActionListener target="#{categoryController.category}" value="#{c}" />
                     </p:commandButton>
 
-                    <p:commandButton    id="btn_delete_category" value="Delete" 
-                                        update="frm_show_category" 
-                                        action="#{categoryController.deleteById(c.id)}"/>
+                    <p:commandButton id="btn_edit_category" value="Edit" 
+                                     actionListener="#{categoryController.beforeUpdate(c)}"
+                                     update=":frm_edit_category" oncomplete="PF('dlg').show();">
+                    </p:commandButton>
+
+                    <p:commandButton id="btn_delete_category" value="Delete" 
+                                     update="frm_show_category" 
+                                     action="#{categoryController.deleteById(c.id)}">
+                    </p:commandButton>
                 </p:column>
             </p:dataTable>
         </h:form>
@@ -67,35 +72,24 @@
                     <p:ajax update="@this" process="@this" />
                 </p:inputText>
                 <p:outputLabel value="File/Image" for="categoryImage" />
-                <p:fileUpload id="categoryImage" value="#{categoryController.imageFile}" 
-                              mode="simple" />
-
+                <p:fileUpload id="categoryImage" value="#{categoryController.imageFile}" mode="simple" />
                 <br/><br/>
                 <p:commandButton value="Save" action="#{categoryController.addCategory()}" 
                                  rendered="#{categoryController.category.id eq null}"
-                                 update="frm_show_category" 
-                                 oncomplete="PF('dlg').hide();"/>
+                                 update="frm_show_category" oncomplete="PF('dlg').hide();" />
                 <p:commandButton value="Update" actionListener="#{categoryController.update()}"
                                  rendered="#{categoryController.category.id ne null}"
-                                 update="frm_show_category"  oncomplete="PF('dlg').hide();"/>
-                
-               
+                                 update="frm_show_category" oncomplete="PF('dlg').hide();" />
+
+
             </h:form>
         </p:dialog>
-        <h2>Select and upload a file</h2>
-        <p>
-            <h:outputText value="#{fileUploadController.message}"
-                          rendered="#{!empty fileUploadController.message}"></h:outputText>
-            <h:form  enctype="multipart/form-data">
-                <h:panelGrid>
-                    <!-- input for files -->
-                    <h:inputFile value="#{fileUploadController.file1}"></h:inputFile>
-                    <h:inputFile value="#{fileUploadController.file2}"></h:inputFile>
-                    <!-- action which is responsible for uploading file(s) -->
-                    <h:commandButton action="#{fileUploadController.uploadFile()}"
-                                     value="Upload"></h:commandButton>
-                </h:panelGrid>
-            </h:form>
-        </p>
+        <p:dialog header="View Category Image" widgetVar="viewDialog" modal="true" resizable="false">
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:graphicImage value="#{request.contextPath}/#{categoryController.category.imagePath}"
+                                rendered="#{not empty categoryController.category.imagePath}" width="300" />
+                <h:outputText value="No image available." rendered="#{empty categoryController.category.imagePath}" />
+            </h:panelGrid>
+        </p:dialog>
     </h:body>
 </html>

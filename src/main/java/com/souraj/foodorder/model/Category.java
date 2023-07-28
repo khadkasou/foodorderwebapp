@@ -20,9 +20,9 @@ public class Category extends AbstractEntity {
     @Column(name = "name", unique = true)
     private String name;
 
-    @Column(name = "image_data", length = 1000000)
-    private byte[] imageData;
-
+   @Column(name = "image_path", length = 1000)
+    private String imagePath;
+    
     public Category() {
 
     }
@@ -35,12 +35,12 @@ public class Category extends AbstractEntity {
         this.name = name;
     }
 
-    public byte[] getImageData() {
-        return imageData;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setImageData(byte[] imageData) {
-        this.imageData = imageData;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     @Override
@@ -75,8 +75,6 @@ public class Category extends AbstractEntity {
         return "category";
     }
 
-    public void setCategoryImage(byte[] imageData) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    
 
 }
