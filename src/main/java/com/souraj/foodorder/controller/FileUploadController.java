@@ -8,12 +8,12 @@ import com.souraj.foodorder.model.File;
 import com.souraj.foodorder.model.FileRecords;
 import com.souraj.foodorder.repository.FileRecordsRepository;
 import com.souraj.foodorder.repository.FileRepository;
-import java.io.IOException;
 import java.io.Serializable;
+import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.event.FileUploadEvent;
 
 
 
@@ -26,45 +26,55 @@ import org.primefaces.model.UploadedFile;
 @ViewScoped
 public class FileUploadController implements Serializable {
  
-    private UploadedFile uploadedFile;
-    private String fileName;
-
-    @Inject
+     @Inject
     private FileRepository fileRepository;
-    
-    @Inject
-    private FileRecordsRepository recordsRepository;
 
-    // Getters and Setters (Omitted for brevity)
+     @Inject FileRecordsRepository fileRecordsRepository;
+    private FileRecords selectedFile;
+    private byte[] uploadedFile;
 
-    public void handleFileUpload() throws Exception {
-        try {
-            String basePath = "ksouraj/home/Documents/"; 
-            String location = basePath + fileName;
+    @PostConstruct
+    public void init() {
+        selectedFile = new FileRecords();
+    }
 
-           
-            uploadedFile.write(basePath + fileName);
+    public void handleFileUpload(FileUploadEvent event) {
+        uploadedFile = event.getFile().getContents();
+        selectedFile.setFileName(event.getFile().getFileName());
+        selectedFile.setFileSize(uploadedFile.length);
+        String fileLocation = "ksouraj/home/Document/" + selectedFile.getFileName();
+        selectedFile.setLocation(fileLocation);
+    }
 
-            
-             File file = new File();
-               file.setFileName(fileName);
-               file.setFileSize((int) uploadedFile.getSize());
-               file.setFilePath(basePath);
-               fileRepository.save(file);
-               
-            
-             FileRecords fileRecord = new FileRecords();
-             fileRecord.setFile(file);
-             fileRecord.setFileName(fileName);
-             fileRecord.setLocation(location);
-             recordsRepository.save(fileRecord);
+    public FileRecords getSelectedFile() {
+        return selectedFile;
+    }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            
-        }
+    public void setSelectedFile(FileRecords selectedFile) {
+        this.selectedFile = selectedFile;
+    }
+
+    public byte[] getUploadedFile() {
+        return uploadedFile;
+    }
+
+    public void setUploadedFile(byte[] uploadedFile) {
+        this.uploadedFile = uploadedFile;
+    }
+
+    public void saveFileRecord() {
+        File file = new File();
+        file.setFileName(selectedFile.getFileName());
+        file.setFileSize(selectedFile.getFileSize());
+        file.setFilePath(selectedFile.getLocation());
+
+        fileRepository.save(file);
+
+        selectedFile.setFile(file);
+        fileRecordsRepository.save(selectedFile);
     }
 }
+
 
     
 

@@ -45,11 +45,6 @@
                 </p:column>
 
                 <p:column headerText="Actions">
-                    <p:commandButton id="btn_view_category" value="View" icon="pi pi-eye" 
-                                     oncomplete="PF('viewDialog').show();" process="@this" update="@form">
-                        <f:setPropertyActionListener target="#{categoryController.category}" value="#{c}" />
-                    </p:commandButton>
-
                     <p:commandButton id="btn_edit_category" value="Edit" 
                                      actionListener="#{categoryController.beforeUpdate(c)}"
                                      update=":frm_edit_category" oncomplete="PF('dlg').show();">
@@ -59,6 +54,11 @@
                                      update="frm_show_category" 
                                      action="#{categoryController.deleteById(c.id)}">
                     </p:commandButton>
+
+                    <p:commandButton value="ViewFile" icon="pi pi-search" onclick="PF('viewFileDialog').show();">
+                        <f:setPropertyActionListener target="#{fileUploadController.selectedFile}" value="#{c}" />
+                    </p:commandButton>
+                
                 </p:column>
             </p:dataTable>
         </h:form>
@@ -66,24 +66,19 @@
         <p:dialog header="Create Edit Category" widgetVar="dlg" modal="true">
             <h:form id="frm_edit_category">
                 <br /><br />
+
                 <p:outputLabel value="Name" for="name" />
                 <p:inputText id="name" required="true" placeholder="Enter Name" 
                              value="#{categoryController.category.name}">
                     <p:ajax update="@this" process="@this" />
                 </p:inputText>
-                <p:fileUpload fileUploadListener="#{fileUploadController.handleFileUpload()}"
-                                  mode="advanced"
-                                  dragDropSupport="false"
-                                  update="message"
-                                  sizeLimit="10000000"  
-                                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/> 
+                 <p:fileUpload fileUploadListener="#{fileUploadController.handleFileUpload}"
+                          mode="advanced"
+                          label="Upload Image"
+                          auto="true"
+                          sizeLimit="1000000"
+                          update="frm_show_category"/>
 
-                    <p:commandButton value="Upload" ajax="false"/>
-                    <p:outputPanel id="message">
-                        <h:outputText value="File uploaded successfully!" rendered="#{not empty fileUploadController.handleFileUpload()}"/>
-                    </p:outputPanel>
-            
-                
                 <p:commandButton value="Save" action="#{categoryController.addCategory()}" 
                                  rendered="#{categoryController.category.id eq null}"
                                  update="frm_show_category" oncomplete="PF('dlg').hide();" />
@@ -94,5 +89,19 @@
 
             </h:form>
         </p:dialog>
+        
+        <p:dialog header="View File" widgetVar="viewFileDialog" modal="true">
+    <h:form>
+        <p:outputLabel value="File Name:" />
+        <h:outputText value="#{fileUploadController.selectedFile.fileName}" />
+
+        <p:outputLabel value="File Size:" />
+        <h:outputText value="#{fileUploadController.selectedFile.fileSize}" />
+
+        <!-- You can display the other file properties here if needed -->
+
+        <p:graphicImage value="#{fileUploadController.selectedFile.location}" />
+    </h:form>
+</p:dialog>
     </h:body>
 </html>
