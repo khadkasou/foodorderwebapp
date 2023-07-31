@@ -1,81 +1,58 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.souraj.foodorder.controller;
 
 import com.souraj.foodorder.model.File;
 import com.souraj.foodorder.model.FileRecords;
-import com.souraj.foodorder.repository.FileRecordsRepository;
 import com.souraj.foodorder.repository.FileRepository;
-import java.io.Serializable;
+
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.primefaces.event.FileUploadEvent;
-
-
-
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- *
- * @author ksouraj
+ * FileUploadController to handle file upload and manage file records.
  */
 @Named(value = "fileUploadController")
 @ViewScoped
 public class FileUploadController implements Serializable {
- 
-     @Inject
-    private FileRepository fileRepository;
 
-     @Inject FileRecordsRepository fileRecordsRepository;
-    private FileRecords selectedFile;
-    private byte[] uploadedFile;
+    private List<FileRecords> fileRecordsList;
+    private List<File> uploadedFiles;
+
+    @Inject
+    private FileRepository fileRepository;
 
     @PostConstruct
     public void init() {
-        selectedFile = new FileRecords();
+        fileRecordsList = new ArrayList<>();
+        uploadedFiles = new ArrayList<>();
     }
 
-    public void handleFileUpload(FileUploadEvent event) {
-        uploadedFile = event.getFile().getContents();
-        selectedFile.setFileName(event.getFile().getFileName());
-        selectedFile.setFileSize(uploadedFile.length);
-        String fileLocation = "ksouraj/home/Document/" + selectedFile.getFileName();
-        selectedFile.setLocation(fileLocation);
-    }
-
-    public FileRecords getSelectedFile() {
-        return selectedFile;
-    }
-
-    public void setSelectedFile(FileRecords selectedFile) {
-        this.selectedFile = selectedFile;
-    }
-
-    public byte[] getUploadedFile() {
-        return uploadedFile;
-    }
-
-    public void setUploadedFile(byte[] uploadedFile) {
-        this.uploadedFile = uploadedFile;
-    }
-
-    public void saveFileRecord() {
+    public void handleFileUpload(org.primefaces.event.FileUploadEvent event) {
+        org.primefaces.model.UploadedFile uploadedFile = event.getFile();
         File file = new File();
-        file.setFileName(selectedFile.getFileName());
-        file.setFileSize(selectedFile.getFileSize());
-        file.setFilePath(selectedFile.getLocation());
+        file.setFileName(uploadedFile.getFileName());
+        file.setFileSize((int) uploadedFile.getSize());
+        file.setFilePath("ksouraj/home/fileUpload"); 
+        uploadedFiles.add(file);
+    }
 
-        fileRepository.save(file);
+    public void uploadFiles() {
+        for (File file : uploadedFiles) {
+            fileRepository.save(file); 
+            FileRecords fileRecord = new FileRecords();
+            fileRecord.setFile(file);
+            fileRecord.setLocation(file.getFilePath());
+            fileRecord.setFileName(file.getFileName());
+            fileRecordsList.add(fileRecord);
+        }
+        uploadedFiles.clear();
+    }
 
-        selectedFile.setFile(file);
-        fileRecordsRepository.save(selectedFile);
+    public List<FileRecords> getFileRecordsList() {
+        return fileRecordsList;
     }
 }
-
-
-    
-
-
