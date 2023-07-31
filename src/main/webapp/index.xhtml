@@ -71,9 +71,19 @@
                              value="#{categoryController.category.name}">
                     <p:ajax update="@this" process="@this" />
                 </p:inputText>
-                <p:outputLabel value="File/Image" for="categoryImage" />
-                <p:fileUpload id="categoryImage" value="#{categoryController.imageFile}" mode="simple" />
-                <br/><br/>
+                <p:fileUpload fileUploadListener="#{fileUploadController.handleFileUpload()}"
+                                  mode="advanced"
+                                  dragDropSupport="false"
+                                  update="message"
+                                  sizeLimit="10000000"  
+                                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/> 
+
+                    <p:commandButton value="Upload" ajax="false"/>
+                    <p:outputPanel id="message">
+                        <h:outputText value="File uploaded successfully!" rendered="#{not empty fileUploadController.handleFileUpload()}"/>
+                    </p:outputPanel>
+            
+                
                 <p:commandButton value="Save" action="#{categoryController.addCategory()}" 
                                  rendered="#{categoryController.category.id eq null}"
                                  update="frm_show_category" oncomplete="PF('dlg').hide();" />
@@ -83,13 +93,6 @@
 
 
             </h:form>
-        </p:dialog>
-        <p:dialog header="View Category Image" widgetVar="viewDialog" modal="true" resizable="false">
-            <h:panelGrid columns="2" cellpadding="5">
-                <p:graphicImage value="#{request.contextPath}/#{categoryController.category.imagePath}"
-                                rendered="#{not empty categoryController.category.imagePath}" width="300" />
-                <h:outputText value="No image available." rendered="#{empty categoryController.category.imagePath}" />
-            </h:panelGrid>
         </p:dialog>
     </h:body>
 </html>
