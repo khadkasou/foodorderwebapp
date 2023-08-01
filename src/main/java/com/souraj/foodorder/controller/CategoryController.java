@@ -1,50 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.souraj.foodorder.controller;
+
 import com.souraj.foodorder.model.Category;
+import com.souraj.foodorder.model.File;
 import com.souraj.foodorder.repository.CategoryRepo;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.primefaces.model.UploadedFile;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import org.primefaces.event.FileUploadEvent;
 
-
-/**
- *
- * @author ksouraj
- */
 @Named(value = "categoryController")
 @ViewScoped
 public class CategoryController implements Serializable {
 
     private Category category;
     private List<Category> categoryList;
-    
-    private UploadedFile imageFile;
+
+    @Inject
+    private FileUploadController fileUploadController;
 
     @Inject
     private CategoryRepo categoryRepo;
 
-    public UploadedFile getImageFile() {
-        return imageFile;
-    }
-
-    public void setImageFile(UploadedFile imageFile) {
-        this.imageFile = imageFile;
-    }
-
-    
-    
     public Category getCategory() {
         return category;
     }
@@ -75,25 +56,30 @@ public class CategoryController implements Serializable {
         this.category = categoryRepo.findById(ctg.getId());
     }
 
+    public void handleFileUpload(FileUploadEvent event) {
+        fileUploadController.handleFileUpload(event);
+    }
+
     public void addCategory() {
-        
-        if (imageFile != null) {
-            try {
-                InputStream inputStream = imageFile.getInputstream();
-                String imageFileName = "category_Id" + category.getId() + "_" + imageFile.getFileName();
-                Files.copy(inputStream, Paths.get("home/ksouraj/uploaded", imageFileName));
-                category.setImagePath("home/ksouraj/uploaded/" + imageFileName);
-            } catch (IOException e) {
-            }
+        if (!fileUploadController.getUploadedFiles().isEmpty()) {
+            File savedFile = fileUploadController.getUploadedFiles().get(0);
+            category.setFilePath(savedFile.getFilePath() + "/" + savedFile.getFileName());
         }
 
         categoryRepo.save(category);
-        loadData();
+        category = new Category();
+        fileUploadController.uploadFiles(); 
     }
 
     public void update() {
-        categoryRepo.update(this.category);
-        loadData();
+        if (!fileUploadController.getUploadedFiles().isEmpty()) {
+            File savedFile = fileUploadController.getUploadedFiles().get(0);
+            category.setFilePath(savedFile.getFilePath() + "/" + savedFile.getFileName());
+        }
+
+        categoryRepo.update(category);
+        category = new Category();
+        fileUploadController.uploadFiles(); 
     }
 
     public void deleteById(Long id) {
@@ -105,9 +91,4 @@ public class CategoryController implements Serializable {
         this.categoryList = new ArrayList<>();
         this.categoryList = categoryRepo.findAll();
     }
-    
-    
-   
-    
-   
 }

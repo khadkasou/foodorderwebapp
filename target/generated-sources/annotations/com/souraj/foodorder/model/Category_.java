@@ -4,11 +4,11 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.7.10.v20211216-rNA", date="2023-07-31T13:44:03")
+@Generated(value="EclipseLink-2.7.10.v20211216-rNA", date="2023-08-01T13:04:09")
 @StaticMetamodel(Category.class)
 public class Category_ extends AbstractEntity_ {
 
-    public static volatile SingularAttribute<Category, String> imagePath;
+    public static volatile SingularAttribute<Category, String> filePath;
     public static volatile SingularAttribute<Category, String> name;
 
 }

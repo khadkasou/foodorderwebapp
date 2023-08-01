@@ -1,6 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
@@ -15,8 +13,7 @@
                              update=":frm_edit_category"
                              actionListener="#{categoryController.beforeCreate()}"
                              oncomplete="PF('dlg').show();"
-                             style="margin-right: 15px;"/>
-
+                             style="margin-right: 15px;" />
         </h:form>
         <br /><br />
         <h:form id="frm_show_category">
@@ -24,14 +21,12 @@
                          rowIndexVar="rowIndex">
                 <p:column>
                     <f:facet name="header">ID</f:facet>
-                    <h:outputText value="#{rowIndex + 1}"/>
+                    <h:outputText value="#{rowIndex + 1}" />
                 </p:column>
 
                 <p:column>
                     <f:facet name="header">Name</f:facet>
-                    <h:outputText value="#{c.name}"/>
-
-
+                    <h:outputText value="#{c.name}" />
                 </p:column>
 
                 <p:column>
@@ -44,18 +39,21 @@
                     <h:outputText value="#{c.updatedAt}" />
                 </p:column>
 
+                <p:column>
+                    <f:facet name="header">File Path</f:facet>
+                    <h:outputText value="#{c.filePath}" />
+                </p:column>
+
                 <p:column headerText="Actions">
                     <p:commandButton id="btn_edit_category" value="Edit" 
                                      actionListener="#{categoryController.beforeUpdate(c)}"
-                                     update=":frm_edit_category" oncomplete="PF('dlg').show();">
-                    </p:commandButton>
-
+                                     update=":frm_edit_category" oncomplete="PF('dlg').show();" />
                     <p:commandButton id="btn_delete_category" value="Delete" 
                                      update="frm_show_category" 
-                                     action="#{categoryController.deleteById(c.id)}">
-                    </p:commandButton>
-
-                   
+                                     action="#{categoryController.deleteById(c.id)}" />
+                    <p:commandButton value="View" icon="pi pi-image" 
+                                     actionListener="#{fileUploadController.viewFile(fileRecord)}"
+                                     oncomplete="PF('viewFileDlg').show();" />
 
                 </p:column>
             </p:dataTable>
@@ -69,6 +67,9 @@
                              value="#{categoryController.category.name}">
                     <p:ajax update="@this" process="@this" />
                 </p:inputText>
+                <p:fileUpload fileUploadListener="#{categoryController.handleFileUpload}" 
+                              mode="advanced" dragDropSupport="false" accept="image/*, application/pdf"/>
+
 
                 <p:commandButton value="Save" action="#{categoryController.addCategory()}"
                                  rendered="#{categoryController.category.id eq null}"
@@ -79,6 +80,14 @@
             </h:form>
         </p:dialog>
 
+        <p:dialog header="View File" widgetVar="viewFileDlg" modal="true" height="auto" width="auto">
+            <p:outputPanel autoUpdate="true">
 
+                <p:media value="#{fileUploadController.streamedContent}" 
+                         rendered="#{not empty fileUploadController.streamedContent}" />
+                <h:outputText value="No file to display." 
+                              rendered="#{empty fileUploadController.streamedContent}" />
+            </p:outputPanel>
+        </p:dialog>
     </h:body>
 </html>

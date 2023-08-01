@@ -19,9 +19,8 @@ public class Category extends AbstractEntity {
 
     @Column(name = "name", unique = true)
     private String name;
-
-   @Column(name = "image_path", length = 1000)
-    private String imagePath;
+    
+    private String filePath;
     
     public Category() {
 
@@ -35,13 +34,16 @@ public class Category extends AbstractEntity {
         this.name = name;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
+
+    
+  
 
     @Override
     public int hashCode() {
