@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>File Upload</title>
+</h:head>
+<h:body>
+    <h:form id="fileUploadForm" enctype="multipart/form-data">
+        <p:fileUpload fileUploadListener="#{fileUploadController.handleFileUpload}" mode="advanced" dragDropSupport="false"
+                      update="fileList" />
+        <p:commandButton value="Upload" action="#{fileUploadController.uploadFiles}" update="fileList" />
+        
+        <h:panelGroup id="fileList">
+            <h:dataTable value="#{fileUploadController.fileRecordsList}" var="fileRecord">
+                <h:column>
+                    <f:facet name="header">File Name</f:facet>
+                    #{fileRecord.fileName}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">File Location</f:facet>
+                    #{fileRecord.location}
+                </h:column>
+            </h:dataTable>
+        </h:panelGroup>
+    </h:form>
+</h:body>
+</html>
