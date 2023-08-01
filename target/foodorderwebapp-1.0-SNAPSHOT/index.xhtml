@@ -51,7 +51,7 @@
                     <p:commandButton id="btn_delete_category" value="Delete" 
                                      update="frm_show_category" 
                                      action="#{categoryController.deleteById(c.id)}" />
-                    <p:commandButton value="View" icon="pi pi-image" 
+                    <p:commandButton id="btn_view_file" value="View"
                                      actionListener="#{fileUploadController.viewFile(fileRecord)}"
                                      oncomplete="PF('viewFileDlg').show();" />
 
@@ -67,8 +67,10 @@
                              value="#{categoryController.category.name}">
                     <p:ajax update="@this" process="@this" />
                 </p:inputText>
-                <p:fileUpload fileUploadListener="#{categoryController.handleFileUpload}" 
-                              mode="advanced" dragDropSupport="false" accept="image/*, application/pdf"/>
+
+                <p:fileUpload fileUploadListener="#{fileUploadController.handleFileUpload}"
+                              mode="advanced" dragDropSupport="false" accept="*"/>
+
 
 
                 <p:commandButton value="Save" action="#{categoryController.addCategory()}"
@@ -80,14 +82,12 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog header="View File" widgetVar="viewFileDlg" modal="true" height="auto" width="auto">
+        <p:dialog header="View File" widgetVar="viewFileDlg" modal="true" height="500" width="500">
             <p:outputPanel autoUpdate="true">
-
-                <p:media value="#{fileUploadController.streamedContent}" 
+                <p:media value="#{fileUploadController.streamedContent}" width="100%" height="100%"
                          rendered="#{not empty fileUploadController.streamedContent}" />
-                <h:outputText value="No file to display." 
-                              rendered="#{empty fileUploadController.streamedContent}" />
             </p:outputPanel>
         </p:dialog>
+
     </h:body>
 </html>

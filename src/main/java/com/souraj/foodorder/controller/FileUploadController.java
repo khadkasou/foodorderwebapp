@@ -57,35 +57,37 @@ public class FileUploadController implements Serializable {
         return streamedContent;
     }
 
-    public void handleFileUpload(FileUploadEvent event) {
-        UploadedFile uploadedFile = event.getFile();
-        File file = new File();
-        file.setFileName(uploadedFile.getFileName());
-        file.setFileSize((int) uploadedFile.getSize());
+   public void handleFileUpload(FileUploadEvent event) {
+    UploadedFile uploadedFile = event.getFile();
+    File file = new File();
+    file.setFileName(uploadedFile.getFileName());
+    file.setFileSize((int) uploadedFile.getSize());
 
-        String uploadFolderPath = "/home/ksouraj/Uploads";
+    String uploadFolderPath = "/home/ksouraj/Uploads";
 
-        try {
-            Path folderPath = Paths.get(uploadFolderPath);
-            Files.createDirectories(folderPath);
+    try {
+        Path folderPath = Paths.get(uploadFolderPath);
+        Files.createDirectories(folderPath);
 
-            String uniqueFileName = UUID.randomUUID().toString() + "_" + uploadedFile.getFileName();
+        String uniqueFileName = uploadedFile.getFileName();
 
-            Path filePath = folderPath.resolve(uniqueFileName);
-            try (InputStream inputStream = uploadedFile.getInputstream();
-                 OutputStream outputStream = new FileOutputStream(filePath.toFile())) {
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, bytesRead);
-                }
+        Path filePath = folderPath.resolve(uniqueFileName);
+        try (InputStream inputStream = uploadedFile.getInputstream();
+             OutputStream outputStream = new FileOutputStream(filePath.toFile())) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
             }
-
-            file.setFilePath(uploadFolderPath + "/" + uniqueFileName);
-            uploadedFiles.add(file);
-        } catch (IOException e) {
         }
+
+        file.setFilePath(uploadFolderPath + "/" + uniqueFileName);
+
+        uploadedFiles.add(file);
+    } catch (IOException e) {
     }
+}
+
 
     public void viewFile(FileRecords fileRecord) {
         String filePath = fileRecord.getFile().getFilePath();
@@ -95,7 +97,6 @@ public class FileUploadController implements Serializable {
             String contentType = Files.probeContentType(Paths.get(filePath));
             streamedContent = new DefaultStreamedContent(inputStream, contentType);
         } catch (IOException e) {
-            streamedContent = null; 
         }
     }
 

@@ -68,7 +68,6 @@ public class CategoryController implements Serializable {
 
         categoryRepo.save(category);
         category = new Category();
-        fileUploadController.uploadFiles(); 
     }
 
     public void update() {
@@ -79,7 +78,6 @@ public class CategoryController implements Serializable {
 
         categoryRepo.update(category);
         category = new Category();
-        fileUploadController.uploadFiles(); 
     }
 
     public void deleteById(Long id) {
