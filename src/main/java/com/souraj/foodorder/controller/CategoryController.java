@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 
 @Named(value = "categoryController")
 @ViewScoped
@@ -19,6 +20,7 @@ public class CategoryController implements Serializable {
 
     private Category category;
     private List<Category> categoryList;
+    private UploadedFile uploadedFile; 
 
     @Inject
     private FileUploadController fileUploadController;
@@ -42,6 +44,14 @@ public class CategoryController implements Serializable {
         this.categoryList = categoryList;
     }
 
+    public UploadedFile getUploadedFile() {
+        return uploadedFile;
+    }
+
+    public void setUploadedFile(UploadedFile uploadedFile) {
+        this.uploadedFile = uploadedFile;
+    }
+
     @PostConstruct
     public void init() {
         this.category = new Category();
@@ -57,27 +67,37 @@ public class CategoryController implements Serializable {
     }
 
     public void handleFileUpload(FileUploadEvent event) {
-        fileUploadController.handleFileUpload(event);
+        uploadedFile = event.getFile(); 
     }
 
     public void addCategory() {
-        if (!fileUploadController.getUploadedFiles().isEmpty()) {
-            File savedFile = fileUploadController.getUploadedFiles().get(0);
-            category.setFilePath(savedFile.getFilePath() + "/" + savedFile.getFileName());
+        if (uploadedFile != null) {
+            File file = new File();
+            file.setFileName(uploadedFile.getFileName());
+            file.setFileSize((int) uploadedFile.getSize());
+            String savedFilePath = fileUploadController.saveFile(uploadedFile);
+
+            
+            category.setFilePath(savedFilePath);
         }
 
         categoryRepo.save(category);
         category = new Category();
+        uploadedFile = null; 
     }
 
     public void update() {
-        if (!fileUploadController.getUploadedFiles().isEmpty()) {
-            File savedFile = fileUploadController.getUploadedFiles().get(0);
-            category.setFilePath(savedFile.getFilePath() + "/" + savedFile.getFileName());
+        if (uploadedFile != null) {
+            File file = new File();
+            file.setFileName(uploadedFile.getFileName());
+            file.setFileSize((int) uploadedFile.getSize());
+            String savedFilePath = fileUploadController.saveFile(uploadedFile);
+            category.setFilePath(savedFilePath);
         }
 
         categoryRepo.update(category);
         category = new Category();
+        uploadedFile = null; 
     }
 
     public void deleteById(Long id) {

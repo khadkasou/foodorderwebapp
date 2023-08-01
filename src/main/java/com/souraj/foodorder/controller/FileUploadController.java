@@ -13,7 +13,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -57,37 +56,41 @@ public class FileUploadController implements Serializable {
         return streamedContent;
     }
 
-   public void handleFileUpload(FileUploadEvent event) {
-    UploadedFile uploadedFile = event.getFile();
-    File file = new File();
-    file.setFileName(uploadedFile.getFileName());
-    file.setFileSize((int) uploadedFile.getSize());
+    public void handleFileUpload(FileUploadEvent event) {
+        uploadedFiles.clear(); // Clear previous uploaded files if any
 
-    String uploadFolderPath = "/home/ksouraj/Uploads";
-
-    try {
-        Path folderPath = Paths.get(uploadFolderPath);
-        Files.createDirectories(folderPath);
-
-        String uniqueFileName = uploadedFile.getFileName();
-
-        Path filePath = folderPath.resolve(uniqueFileName);
-        try (InputStream inputStream = uploadedFile.getInputstream();
-             OutputStream outputStream = new FileOutputStream(filePath.toFile())) {
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
-        }
-
-        file.setFilePath(uploadFolderPath + "/" + uniqueFileName);
-
+        UploadedFile uploadedFile = event.getFile();
+        File file = new File();
+        file.setFileName(uploadedFile.getFileName());
+        file.setFileSize((int) uploadedFile.getSize());
+        String savedFilePath = saveFile(uploadedFile);
+        file.setFilePath(savedFilePath);
         uploadedFiles.add(file);
-    } catch (IOException e) {
     }
-}
+    public String saveFile(UploadedFile uploadedFile) {
+        String uploadFolderPath = "/home/ksouraj/Uploads"; // Update with your desired folder path
+        try {
+            Path folderPath = Paths.get(uploadFolderPath);
+            Files.createDirectories(folderPath);
 
+            String uniqueFileName = UUID.randomUUID().toString() + "_" + uploadedFile.getFileName();
+
+            Path filePath = folderPath.resolve(uniqueFileName);
+            try (InputStream inputStream = uploadedFile.getInputstream();
+                 OutputStream outputStream = Files.newOutputStream(filePath)) {
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+            }
+
+            return uploadFolderPath + "/" + uniqueFileName;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public void viewFile(FileRecords fileRecord) {
         String filePath = fileRecord.getFile().getFilePath();
@@ -97,6 +100,7 @@ public class FileUploadController implements Serializable {
             String contentType = Files.probeContentType(Paths.get(filePath));
             streamedContent = new DefaultStreamedContent(inputStream, contentType);
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
