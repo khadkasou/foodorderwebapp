@@ -9,9 +9,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import org.primefaces.event.FileUploadEvent;
 
 @Named(value = "categoryController")
 @ViewScoped
@@ -50,34 +48,37 @@ public class CategoryController implements Serializable {
 
     public void beforeCreate() {
         this.category = new Category();
+        fileUploadController.clearUploadedFiles();
     }
 
     public void beforeUpdate(Category ctg) {
         this.category = categoryRepo.findById(ctg.getId());
     }
 
-    public void handleFileUpload(FileUploadEvent event) {
-        fileUploadController.handleFileUpload(event);
-    }
-
     public void addCategory() {
         if (!fileUploadController.getUploadedFiles().isEmpty()) {
             File savedFile = fileUploadController.getUploadedFiles().get(0);
-            category.setFilePath(savedFile.getFilePath() + "/" + savedFile.getFileName());
+            category.setFilePath(savedFile.getFilePath());
         }
 
         categoryRepo.save(category);
         category = new Category();
+        fileUploadController.clearUploadedFiles();
     }
 
     public void update() {
         if (!fileUploadController.getUploadedFiles().isEmpty()) {
+            if (category.getFilePath() != null && !category.getFilePath().isEmpty()) {
+                fileUploadController.deleteFileByPath(category.getFilePath());
+            }
+
             File savedFile = fileUploadController.getUploadedFiles().get(0);
-            category.setFilePath(savedFile.getFilePath() + "/" + savedFile.getFileName());
+            category.setFilePath(savedFile.getFilePath());
         }
 
         categoryRepo.update(category);
         category = new Category();
+        fileUploadController.clearUploadedFiles();
     }
 
     public void deleteById(Long id) {
@@ -85,8 +86,14 @@ public class CategoryController implements Serializable {
         loadData();
     }
 
+    public void saveOrUpdateCategory() {
+        if (category.getId() == null) {
+            addCategory();
+        } else {
+            update();
+        }
+    }
     public void loadData() {
-        this.categoryList = new ArrayList<>();
         this.categoryList = categoryRepo.findAll();
     }
 }

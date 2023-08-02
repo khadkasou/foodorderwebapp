@@ -52,9 +52,8 @@
                                      update="frm_show_category" 
                                      action="#{categoryController.deleteById(c.id)}" />
                     <p:commandButton id="btn_view_file" value="View"
-                                     actionListener="#{fileUploadController.viewFile(fileRecord)}"
+                                     actionListener="#{fileUploadController.viewFile(c)}"
                                      oncomplete="PF('viewFileDlg').show();" />
-
                 </p:column>
             </p:dataTable>
         </h:form>
@@ -71,14 +70,14 @@
                 <p:fileUpload fileUploadListener="#{fileUploadController.handleFileUpload}"
                               mode="advanced" dragDropSupport="false" accept="*"/>
 
+                <h:panelGroup rendered="#{not empty fileUploadController.uploadedFiles}">
+                    <p:outputLabel value="Uploaded File:" />
+                    <h:outputText value="#{fileUploadController.uploadedFiles.size() > 0 ? fileUploadController.uploadedFiles: ''}" />
+                </h:panelGroup>
 
+                <p:commandButton value="Save" actionListener="#{categoryController.addCategory()}"
+                                 update="frm_show_category" oncomplete="PF('dlg').hide();" />
 
-                <p:commandButton value="Save" action="#{categoryController.addCategory()}"
-                                 rendered="#{categoryController.category.id eq null}"
-                                 update="frm_show_category" oncomplete="PF('dlg').hide();" />
-                <p:commandButton value="Update" actionListener="#{categoryController.update()}"
-                                 rendered="#{categoryController.category.id ne null}"
-                                 update="frm_show_category" oncomplete="PF('dlg').hide();" />
             </h:form>
         </p:dialog>
 

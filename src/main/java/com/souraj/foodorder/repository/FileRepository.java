@@ -1,21 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.souraj.foodorder.repository;
 
 import com.souraj.foodorder.model.File;
-import com.souraj.foodorder.model.FileRecords;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
-/**
- *
- * @author ksouraj
- */
 @Stateless
-public class FileRepository extends GenericAbstractClasss<File>{
+public class FileRepository extends GenericAbstractClasss<File> {
 
     @PersistenceContext(name = "EPE")
     private EntityManager em;
@@ -23,13 +15,29 @@ public class FileRepository extends GenericAbstractClasss<File>{
     public FileRepository() {
         super(File.class);
     }
-    
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
-}
+    }
 
-    
-}
-    
+    public boolean existsByFilePath(String filePath) {
+        Query query = em.createQuery("SELECT COUNT(f) FROM File f WHERE f.filePath = :filePath");
+        query.setParameter("filePath", filePath);
+        Long count = (Long) query.getSingleResult();
+        return count > 0;
+    }
 
+    public File findByFilePath(String filePath) {
+        Query query = em.createQuery("SELECT f FROM File f WHERE f.filePath = :filePath", File.class);
+        query.setParameter("filePath", filePath);
+        return (File) query.getSingleResult();
+    }
+
+    public void delete(File file) {
+        if (file != null && file.getId() != null) {
+            file = em.find(File.class, file.getId());
+            em.remove(file);
+        }
+    }
+}

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.souraj.foodorder.model;
 
 import java.util.Objects;
@@ -9,10 +5,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-/**
- *
- * @author ksouraj
- */
 @Entity
 @Table(name = "category")
 public class Category extends AbstractEntity {
@@ -41,9 +33,6 @@ public class Category extends AbstractEntity {
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
-
-    
-  
 
     @Override
     public int hashCode() {
@@ -76,7 +65,4 @@ public class Category extends AbstractEntity {
     public String getTableName() {
         return "category";
     }
-
-    
-
 }
