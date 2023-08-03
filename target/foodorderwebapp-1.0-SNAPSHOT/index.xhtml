@@ -59,20 +59,22 @@
         </h:form>
 
         <p:dialog header="Create/Edit Category" widgetVar="dlg_create_edit_category" modal="true">
-            <h:form id="frm_edit_category">
+            <h:form id="frm_edit_category" enctype="multipart/form-data">
                 <p:panelGrid columns="2">
                     <p:outputLabel value="Name" for="name" />
-                    <p:inputText id="name" required="true" placeholder="Enter Name"
+                    <p:inputText id="name" 
                                  value="#{categoryController.category.name}">
                         <p:ajax update="@this" process="@this" />
                     </p:inputText>
 
                     <p:outputLabel value="File" for="fileUpload" />
-                    <p:fileUpload id="fileUpload" mode="simple" skinSimple="true" 
-                                  fileUploadListener="#{categoryController.listen}"/>
-
+                    <h:panelGroup>
+                        <p:fileUpload fileUploadListener="#{categoryController.listen}" mode="advanced" id="fileUpload"
+                                      multiple="false" update="frm_edit_category" auto="true" sizeLimit="10000000"/> 
+                        <p:outputLabel value="#{categoryController.uploadedFile.fileName}" rendered="#{categoryController.uploadedFile ne null}"/>
+                    </h:panelGroup>
                     <p:commandButton value="Save" action="#{categoryController.saveOrUpdate()}"
-                                     update="frm_show_category" oncomplete="" />
+                                     update="frm_show_category" oncomplete="PF('dlg_create_edit_category').hide()" />
                 </p:panelGrid>
             </h:form>
         </p:dialog>

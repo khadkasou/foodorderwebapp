@@ -8,7 +8,6 @@ import com.souraj.foodorder.model.File;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.primefaces.model.UploadedFile;
 
 /**
  *
