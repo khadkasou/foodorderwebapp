@@ -18,6 +18,7 @@ public class File extends AbstractEntity {
     private String fileName;
     private int fileSize;
     private String filePath;
+   
 
     public File() {
     }
@@ -45,6 +46,7 @@ public class File extends AbstractEntity {
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
+
 
     @Override
     public String getTableName() {
