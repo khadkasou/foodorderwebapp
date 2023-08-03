@@ -1,7 +1,7 @@
 package com.souraj.foodorder.controller;
 
+import com.souraj.foodorder.controller.FileUploadController;
 import com.souraj.foodorder.model.Category;
-import com.souraj.foodorder.model.File;
 import com.souraj.foodorder.repository.CategoryRepo;
 
 import javax.annotation.PostConstruct;
@@ -11,7 +11,6 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import org.primefaces.event.FileUploadEvent;
 
 @Named(value = "categoryController")
 @ViewScoped
@@ -56,31 +55,30 @@ public class CategoryController implements Serializable {
         this.category = categoryRepo.findById(ctg.getId());
     }
 
-    public void handleFileUpload(FileUploadEvent event) {
-        fileUploadController.handleFileUpload(event);
-    }
+    public void saveOrUpdate() {
+        fileUploadController.saveUploadedFile();
 
-    public void addCategory() {
-        if (!fileUploadController.getUploadedFiles().isEmpty()) {
-            File savedFile = fileUploadController.getUploadedFiles().get(0);
-            category.setFilePath(savedFile.getFilePath() + "/" + savedFile.getFileName());
+        String uploadedFilePath = fileUploadController.getUploadedFilePath();
+        if (uploadedFilePath != null) {
+            category.setFilePath(uploadedFilePath); // Set the file path in the category object
         }
 
-        categoryRepo.save(category);
-        category = new Category();
-    }
-
-    public void update() {
-        if (!fileUploadController.getUploadedFiles().isEmpty()) {
-            File savedFile = fileUploadController.getUploadedFiles().get(0);
-            category.setFilePath(savedFile.getFilePath() + "/" + savedFile.getFileName());
+        if (category.getId() == null) {
+            categoryRepo.save(category);
+        } else {
+            categoryRepo.update(category);
         }
 
-        categoryRepo.update(category);
         category = new Category();
+        fileUploadController.getUploadedFiles().clear();
     }
 
     public void deleteById(Long id) {
+        Category categoryToDelete = categoryRepo.findById(id);
+        String filePath = categoryToDelete.getFilePath();
+        if (filePath != null) {
+            fileUploadController.deleteFile(filePath);
+        }
         categoryRepo.delete(id);
         loadData();
     }

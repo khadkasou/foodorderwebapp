@@ -10,12 +10,12 @@
     <h:body>
         <h:form id="frm_add_category" style="text-align: right;">
             <p:commandButton id="btn_add_category" value="Add Category" 
-                             update=":frm_edit_category"
-                             actionListener="#{categoryController.beforeCreate()}"
-                             oncomplete="PF('dlg').show();"
+                             update=":frm_show_category"
+                             oncomplete="PF('dlg_create_edit_category').show();"
                              style="margin-right: 15px;" />
         </h:form>
         <br /><br />
+
         <h:form id="frm_show_category">
             <p:dataTable value="#{categoryController.categoryList}" var="c" 
                          rowIndexVar="rowIndex">
@@ -47,46 +47,39 @@
                 <p:column headerText="Actions">
                     <p:commandButton id="btn_edit_category" value="Edit" 
                                      actionListener="#{categoryController.beforeUpdate(c)}"
-                                     update=":frm_edit_category" oncomplete="PF('dlg').show();" />
+                                     oncomplete="PF('dlg_create_edit_category').show();" />
                     <p:commandButton id="btn_delete_category" value="Delete" 
                                      update="frm_show_category" 
                                      action="#{categoryController.deleteById(c.id)}" />
                     <p:commandButton id="btn_view_file" value="View"
-                                     actionListener="#{fileUploadController.viewFile(fileRecord)}"
-                                     oncomplete="PF('viewFileDlg').show();" />
-
+                                     actionListener="#{fileUploadController.viewFile(c)}"
+                                     oncomplete="PF('dlg_view_file').show();" />
                 </p:column>
             </p:dataTable>
         </h:form>
 
-        <p:dialog header="Create/Edit Category" widgetVar="dlg" modal="true">
+        <p:dialog header="Create/Edit Category" widgetVar="dlg_create_edit_category" modal="true">
             <h:form id="frm_edit_category">
-                <br /><br />
-                <p:outputLabel value="Name" for="name" />
-                <p:inputText id="name" required="true" placeholder="Enter Name"
-                             value="#{categoryController.category.name}">
-                    <p:ajax update="@this" process="@this" />
-                </p:inputText>
+                <p:panelGrid columns="2">
+                    <p:outputLabel value="Name" for="name" />
+                    <p:inputText id="name" required="true" placeholder="Enter Name"
+                                 value="#{categoryController.category.name}">
+                        <p:ajax update="@this" process="@this" />
+                    </p:inputText>
 
-                <p:fileUpload fileUploadListener="#{fileUploadController.handleFileUpload}"
-                              mode="advanced" dragDropSupport="false" accept="*"/>
+                    <p:outputLabel value="File" for="fileUpload" />
+                    <p:fileUpload id="fileUpload" mode="simple" skinSimple="true" value="#{fileUploadController.uploadedFile}" />
 
-
-
-                <p:commandButton value="Save" action="#{categoryController.addCategory()}"
-                                 rendered="#{categoryController.category.id eq null}"
-                                 update="frm_show_category" oncomplete="PF('dlg').hide();" />
-                <p:commandButton value="Update" actionListener="#{categoryController.update()}"
-                                 rendered="#{categoryController.category.id ne null}"
-                                 update="frm_show_category" oncomplete="PF('dlg').hide();" />
+                    <p:commandButton value="Save" action="#{categoryController.saveOrUpdate()}"
+                                     update=":frm_show_category" oncomplete="PF('dlg_create_edit_category').hide();" />
+                </p:panelGrid>
             </h:form>
         </p:dialog>
 
-        <p:dialog header="View File" widgetVar="viewFileDlg" modal="true" height="500" width="500">
-            <p:outputPanel autoUpdate="true">
-                <p:media value="#{fileUploadController.streamedContent}" width="100%" height="100%"
-                         rendered="#{not empty fileUploadController.streamedContent}" />
-            </p:outputPanel>
+        <p:dialog header="View File" widgetVar="dlg_view_file" modal="true">
+            <h:form>
+                <p:media value="#{fileUploadController.streamedContent}" width="100%" player="pdf" />
+            </h:form>
         </p:dialog>
 
     </h:body>
