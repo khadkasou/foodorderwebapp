@@ -5,10 +5,10 @@
 package com.souraj.foodorder.repository;
 
 import com.souraj.foodorder.model.File;
-import com.souraj.foodorder.model.FileRecords;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -28,6 +28,8 @@ public class FileRepository extends GenericAbstractClasss<File>{
     protected EntityManager getEntityManager() {
         return em;
 }
+
+    
 
     
 }
