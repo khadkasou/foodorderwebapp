@@ -1,30 +1,21 @@
-
 package com.souraj.foodorder.controller;
 
-import com.souraj.foodorder.repository.FileRepository;
-import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
-import java.util.UUID;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.DefaultUploadedFile;
 
 @ManagedBean(name = "fileUploadController")
 @SessionScoped
@@ -33,9 +24,7 @@ public class FileUploadController implements Serializable {
     private List<UploadedFile> uploadedFiles;
     private StreamedContent streamedContent;
     private UploadedFile uploadedFile;
-
-    @Inject
-    private FileRepository fileRepository;
+    private String streamedContents;
 
     @PostConstruct
     public void init() {
@@ -58,37 +47,54 @@ public class FileUploadController implements Serializable {
         this.uploadedFile = uploadedFile;
     }
 
+    public String getStreamedContents() {
+        return streamedContents;
+    }
 
-   public String saveUploadedFile(UploadedFile uploadedFile) {
-        System.out.println("uploadedFile :" + uploadedFile);
-        InputStream input = null;
-        if (uploadedFile != null) {
+    public void setStreamedContents(String streamedContents) {
+        this.streamedContents = streamedContents;
+    }
+
+    public String saveUploadedFile(UploadedFile uploadedFile) {
+        if (uploadedFile != null && isFileTypeAllowed(uploadedFile)) {
+
             try {
                 String uploadFolderPath = "/home/ksouraj/Uploads";
                 Path folderPath = Paths.get(uploadFolderPath);
                 Files.createDirectories(folderPath);
-                System.out.println("uploadFolderPath"+uploadFolderPath);
-                
-                System.out.println("UploadedFile"+uploadedFile.getFileName());
+
                 OutputStream output = new FileOutputStream(new File(uploadFolderPath, uploadedFile.getFileName()));
-                System.out.println("errorrrroooooo");
-               
-                System.out.println("okkkkkkkk"+input);
-                
                 IOUtils.copy(uploadedFile.getInputstream(), output);
-                System.out.println("Completed");
+
                 return "/Uploads/" + uploadedFile.getFileName();
             } catch (IOException e) {
-                
+
                 FacesMessage message = new FacesMessage("Error", "Error while uploading the file.");
                 FacesContext.getCurrentInstance().addMessage(null, message);
             }
+
+        } else {
+            FacesMessage message = new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, "Invalid file type.", "Please upload .pdf or .jpg files only.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
         }
+
         return null;
     }
-   
+
+    private boolean isFileTypeAllowed(UploadedFile uploadedFile) {
+        String fileName = uploadedFile.getFileName().toLowerCase();
+        if ((fileName.endsWith(".pdf")) || (fileName.endsWith(".jpg"))) {
+            return true;
+        }
+        return false;
+    }
+
     public void deleteFile(String filePath) {
         try {
+            if (filePath.equals(streamedContent)) {
+                streamedContent = null;
+            }
             Path fileToDelete = Paths.get(filePath);
             Files.deleteIfExists(fileToDelete);
         } catch (IOException e) {
@@ -97,14 +103,18 @@ public class FileUploadController implements Serializable {
         }
     }
 
-    public void viewFile(String filePath) {
+    public String viewFileContent(String filePath) {
         try {
             InputStream inputStream = Files.newInputStream(Paths.get(filePath));
+            byte[] fileBytes = IOUtils.toByteArray(inputStream);
+            String base64Encoded = Base64.getEncoder().encodeToString(fileBytes);
             String contentType = Files.probeContentType(Paths.get(filePath));
-            streamedContent = new DefaultStreamedContent(inputStream, contentType);
+            return "data:" + contentType + ";base64," + base64Encoded;
         } catch (IOException e) {
-            FacesMessage message = new FacesMessage("Error", "Error while viewing the file.");
+            FacesMessage message = new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, "Error", "Error while viewing the file.");
             FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
         }
     }
 

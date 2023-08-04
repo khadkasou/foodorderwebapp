@@ -54,6 +54,7 @@
                     <p:commandButton id="btn_view_file" value="View"
                                      actionListener="#{categoryController.viewFile(c)}"
                                      oncomplete="PF('dlg_view_file').show();" />
+
                 </p:column>
             </p:dataTable>
         </h:form>
@@ -70,17 +71,26 @@
                     <p:outputLabel value="File" for="fileUpload" />
                     <h:panelGroup>
                         <p:fileUpload fileUploadListener="#{categoryController.listen}" mode="advanced" id="fileUpload"
-                                      multiple="false" update="frm_edit_category" auto="true" sizeLimit="10000000"/> 
-                        <p:outputLabel value="#{categoryController.uploadedFile.fileName}" rendered="#{categoryController.uploadedFile ne null}"/>
+                                      multiple="false" update="frm_edit_category" auto="true" sizeLimit="10000000"
+                                      allowTypes="/(\.|\/)(pdf|jpg)$/"/> 
+                        <p:outputLabel value="#{categoryController.uploadedFile.fileName}" 
+                                       rendered="#{categoryController.uploadedFile ne null}"/>
                     </h:panelGroup>
                     <p:commandButton value="Save" action="#{categoryController.saveOrUpdate()}"
-                                     update="frm_show_category" oncomplete="PF('dlg_create_edit_category').hide()" />
+                                     update="frm_show_category" onstart="resetFileName();" 
+                                     oncomplete="PF('dlg_create_edit_category').hide()"/>
+
+
+
                 </p:panelGrid>
             </h:form>
         </p:dialog>
-
         <p:dialog header="View File" widgetVar="dlg_view_file" modal="true">
-
+            <iframe id="fileViewer" width="100%" height="600" frameborder="0" src="#{categoryController.selectedFileContent}" />
         </p:dialog>
+        
+        <h:form id="frm_view_file">
+
+        </h:form>
     </h:body>
 </html>

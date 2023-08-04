@@ -41,16 +41,4 @@ public class CategoryRepo extends GenericAbstractClasss<Category> {
 
     }
 
-    
-
-    public void deleteFile(String filePath) {
-        try {
-            Path fileToDelete = Paths.get(filePath);
-            Files.deleteIfExists(fileToDelete);
-        } catch (IOException e) {
-            FacesMessage message = new FacesMessage("Error", "Error while deleting the file.");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-        }
-    }
-
 }
