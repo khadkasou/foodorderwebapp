@@ -3,7 +3,6 @@ package com.souraj.foodorder.controller;
 import com.souraj.foodorder.model.Category;
 import com.souraj.foodorder.repository.CategoryRepo;
 import org.primefaces.model.UploadedFile;
-
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.List;
@@ -68,11 +67,11 @@ public class CategoryController implements Serializable {
         this.selectedCategory = selectedCategory;
     }
 
-//    public void listen(FileUploadEvent event) {
-//        if (event != null) {
-//            this.uploadedFile = event.getFile();
-//        }
-//    }
+    public void listen(FileUploadEvent event) {
+        if (event != null) {
+            this.uploadedFile = event.getFile();
+        }
+    }
     @PostConstruct
     public void init() {
         this.category = new Category();
@@ -85,14 +84,16 @@ public class CategoryController implements Serializable {
 
     public void beforeUpdate(Category ctg) {
         this.category = categoryRepo.findById(ctg.getId());
+        uploadedFile = null;
     }
-
-    public void listen(FileUploadEvent event) {
-        uploadedFile = event.getFile();
-    }
+//
+//    public void listen(FileUploadEvent event) {
+//        uploadedFile = event.getFile();
+//    }
 
     public void saveOrUpdate() {
-        String filePath = fileUploadController.saveUploadedFile(uploadedFile);
+        System.out.println("uploadedfileeee"+uploadedFile);
+        fileUploadController.saveUploadedFile(uploadedFile);
         if (uploadedFile != null) {
             category.setFilePath(uploadedFile.getFileName());
         }
@@ -102,8 +103,9 @@ public class CategoryController implements Serializable {
 
         } else {
             categoryRepo.update(category);
-            uploadedFile = null;
+            
         }
+        uploadedFile = null;
         category = new Category();
         loadData();
     }

@@ -53,7 +53,7 @@ public class FileUploadController implements Serializable {
 
     public void setStreamedContents(String streamedContents) {
         this.streamedContents = streamedContents;
-    }
+    } 
 
     public String saveUploadedFile(UploadedFile uploadedFile) {
         if (uploadedFile != null && isFileTypeAllowed(uploadedFile)) {
@@ -81,11 +81,49 @@ public class FileUploadController implements Serializable {
 
         return null;
     }
+    
+    
+    
+    
+    
 
-    private boolean isFileTypeAllowed(UploadedFile uploadedFile) {
-        String fileName = uploadedFile.getFileName().toLowerCase();
-        if ((fileName.endsWith(".pdf")) || (fileName.endsWith(".jpg"))) {
-            return true;
+//    public String saveUploadedFile(UploadedFile uploadedFile) {
+//        System.out.println("uploadedFile :" + uploadedFile);
+//        if (uploadedFile != null) {
+//            String uploadFolderPath = "/home/ksouraj/Uploads/";
+//            Path folderPath = Paths.get(uploadFolderPath);
+//            InputStream in = null;
+//            try {
+//                Files.createDirectories(folderPath);
+//
+//                String str = uploadedFile.getFileName();
+//                in = uploadedFile.getInputstream();
+//                try (OutputStream out = new FileOutputStream(new File(uploadFolderPath + str))) {
+//                    int read = 0;
+//                    byte[] bytes = new byte[1024];
+//                    while ((read = in.read(bytes)) != -1) {
+//                        out.write(bytes, 0, read);
+//                    }
+//                    in.close();
+//                    out.flush();
+//                }
+//            } catch (IOException ex) {
+//            } finally {
+//                try {
+//                    in.close();
+//                } catch (IOException ex) {
+//                }
+//            }
+//            return "/Uploads/" + uploadedFile.getFileName();
+//
+//        }
+//        return null;
+//    }
+    public boolean isFileTypeAllowed(UploadedFile uploadedFile) {
+        String fileName = uploadedFile.getFileName();
+        if (fileName != null) {
+            String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
+            return "jpg".equalsIgnoreCase(extension) || "pdf".equalsIgnoreCase(extension);
         }
         return false;
     }

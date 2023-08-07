@@ -6,7 +6,6 @@ package com.souraj.foodorder.model;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -18,13 +17,11 @@ import javax.persistence.Table;
 public class FileRecords extends AbstractEntity {
 
     
-//    @JoinColumn(name = "file_id", nullable = false)
     @ManyToOne
     private File file;
     private String location;
     private String fileName;
-    @OneToOne
-    private Category category;
+  
 
     public FileRecords() {
     }
@@ -52,15 +49,6 @@ public class FileRecords extends AbstractEntity {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-    
     
 
     @Override
