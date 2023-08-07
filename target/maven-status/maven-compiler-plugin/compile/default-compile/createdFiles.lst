@@ -37,6 +37,7 @@ com/souraj/foodorder/model/IAbstractClass.class
 com/souraj/foodorder/controller/OrdersController.class
 com/souraj/foodorder/model/Payments_.class
 com/souraj/foodorder/converter/CategoryConverter.class
+com/souraj/foodorder/controller/FileServlet.class
 com/souraj/foodorder/controller/LoginController.class
 com/souraj/foodorder/model/Orders_.class
 com/souraj/foodorder/model/UserRole.class

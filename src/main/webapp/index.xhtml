@@ -52,11 +52,13 @@
                                      update="frm_show_category" 
                                      action="#{categoryController.deleteById(c.id)}" />
                     <p:commandButton id="btn_view_file" value="View"
+                                     update="frm_show_category"
                                      actionListener="#{categoryController.viewFile(c)}"
                                      oncomplete="PF('dlg_view_file').show();" />
 
                 </p:column>
             </p:dataTable>
+           
         </h:form>
 
         <p:dialog header="Create/Edit Category" widgetVar="dlg_create_edit_category" modal="true">
@@ -90,6 +92,9 @@
         </p:dialog>
         
         <h:form id="frm_view_file">
+             <div class="col-md-12">
+                <h:graphicImage class="img-responsive img-thumbnail" value="/image/#{categoryController.image}" />
+            </div>
 
         </h:form>
     </h:body>

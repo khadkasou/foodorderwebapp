@@ -92,7 +92,7 @@ public class CategoryController implements Serializable {
     }
 
     public void saveOrUpdate() {
-        String filePath = fileUploadController.saveUploadedFile(uploadedFile);
+        fileUploadController.saveUploadedFile(uploadedFile);
         if (uploadedFile != null) {
             category.setFilePath(uploadedFile.getFileName());
         }
