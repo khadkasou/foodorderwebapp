@@ -11,6 +11,7 @@ com/souraj/foodorder/model/Menu.class
 com/souraj/foodorder/model/MenuItem_.class
 com/souraj/foodorder/model/FileRecords_.class
 com/souraj/foodorder/model/UserTable.class
+com/souraj/foodorder/controller/FileUtils.class
 com/souraj/foodorder/repository/UserTableRepository.class
 com/souraj/foodorder/repository/FileRepository.class
 com/souraj/foodorder/dto/CategoryDto.class
@@ -48,6 +49,7 @@ com/souraj/foodorder/model/FoodItems_.class
 com/souraj/foodorder/controller/FileUploadController.class
 com/souraj/foodorder/api/RestResponse.class
 com/souraj/foodorder/model/File_.class
+com/souraj/foodorder/utils/FileUtil.class
 com/souraj/foodorder/model/Menu_.class
 com/souraj/foodorder/controller/CategoryController.class
 com/souraj/foodorder/api/JaxRsConfig.class

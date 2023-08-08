@@ -4,10 +4,12 @@
  */
 package com.souraj.foodorder.model;
 
+import java.io.InputStream;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -19,9 +21,24 @@ public class Category extends AbstractEntity {
 
     @Column(name = "name", unique = true)
     private String name;
-    
+
     private String filePath;
     
+    @Transient
+    private byte[] file;
+    
+    @Transient 
+    private String fileName;
+    
+    @Transient
+    private InputStream inputStream;
+    
+    @Transient
+    private String imageBytes;
+    
+    @Transient
+    private String tempFileName;
+
     public Category() {
 
     }
@@ -42,8 +59,48 @@ public class Category extends AbstractEntity {
         this.filePath = filePath;
     }
 
-    
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
+    }
+
+    public String getImageBytes() {
+        return imageBytes;
+    }
+
+    public void setImageBytes(String imageBytes) {
+        this.imageBytes = imageBytes;
+    }
+
+    public String getTempFileName() {
+        return tempFileName;
+    }
+
+    public void setTempFileName(String tempFileName) {
+        this.tempFileName = tempFileName;
+    }
+
   
+    
 
     @Override
     public int hashCode() {
@@ -76,7 +133,5 @@ public class Category extends AbstractEntity {
     public String getTableName() {
         return "category";
     }
-
-    
 
 }

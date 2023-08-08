@@ -29,8 +29,8 @@
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/UserRole.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/controller/UserTableController.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/IAbstractClass.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/utils/FileUtil.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/UserTable.java
-/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/utils/FileUtill.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/converter/CategoryConverter.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/AbstractEntity.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/OrdersRepository.java
@@ -41,7 +41,9 @@
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/CategoryRepo.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/Orders.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/GenericRepo.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/controller/FileUtils.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/FileRecords.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/utils/FileUtills.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/OrderDetails.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/controller/FileServlet.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/dto/MenuDto.java

@@ -9,7 +9,10 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
-import org.primefaces.event.FileUploadEvent;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 @ManagedBean(name = "categoryController")
 @SessionScoped
@@ -67,14 +70,10 @@ public class CategoryController implements Serializable {
         this.selectedCategory = selectedCategory;
     }
 
-    public void listen(FileUploadEvent event) {
-        if (event != null) {
-            this.uploadedFile = event.getFile();
-        }
-    }
     @PostConstruct
     public void init() {
         this.category = new Category();
+        this.selectedCategory = new Category();
         loadData();
     }
 
@@ -86,26 +85,29 @@ public class CategoryController implements Serializable {
         this.category = categoryRepo.findById(ctg.getId());
         uploadedFile = null;
     }
-//
-//    public void listen(FileUploadEvent event) {
-//        uploadedFile = event.getFile();
-//    }
 
     public void saveOrUpdate() {
-        System.out.println("uploadedfileeee"+uploadedFile);
-        fileUploadController.saveUploadedFile(uploadedFile);
-        if (uploadedFile != null) {
-            category.setFilePath(uploadedFile.getFileName());
+        if (fileUploadController != null && fileUploadController.getUploadedFile() != null) {
+            try {
+                String fileName = fileUploadController.getUploadedFile().getFileName();
+                InputStream input = fileUploadController.getUploadedFile().getInputstream();
+
+                String filePath = fileUploadController.saveFileToFolder(input, fileName);
+                category.setFilePath(filePath);
+            } catch (IOException e) {
+                FacesMessage message = new FacesMessage(
+                        FacesMessage.SEVERITY_ERROR, "Error", "Error while saving file.");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
         }
 
         if (category.getId() == null) {
             categoryRepo.save(category);
-
         } else {
             categoryRepo.update(category);
-            
         }
-        uploadedFile = null;
+
+        fileUploadController.setUploadedFile(null);
         category = new Category();
         loadData();
     }
