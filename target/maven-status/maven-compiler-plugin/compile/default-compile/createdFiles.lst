@@ -37,7 +37,6 @@ com/souraj/foodorder/model/IAbstractClass.class
 com/souraj/foodorder/controller/OrdersController.class
 com/souraj/foodorder/model/Payments_.class
 com/souraj/foodorder/converter/CategoryConverter.class
-com/souraj/foodorder/controller/FileServlet.class
 com/souraj/foodorder/controller/LoginController.class
 com/souraj/foodorder/model/Orders_.class
 com/souraj/foodorder/model/UserRole.class
@@ -52,6 +51,5 @@ com/souraj/foodorder/model/Menu_.class
 com/souraj/foodorder/controller/CategoryController.class
 com/souraj/foodorder/api/JaxRsConfig.class
 com/souraj/foodorder/model/Category_.class
-com/souraj/foodorder/exceptions/CustomException.class
 com/souraj/foodorder/repository/MenuItemRepository.class
 com/souraj/foodorder/model/AbstractEntity.class

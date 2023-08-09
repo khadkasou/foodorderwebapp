@@ -53,40 +53,66 @@ public class FileUploadController implements Serializable {
 
     public void setStreamedContents(String streamedContents) {
         this.streamedContents = streamedContents;
-    } 
+    }
 
+//    public String saveUploadedFile(UploadedFile uploadedFile) {
+//        if (uploadedFile != null && isFileTypeAllowed(uploadedFile)) {
+//
+//            try {
+//                String uploadFolderPath = "/home/ksouraj/Uploads";
+//                Path folderPath = Paths.get(uploadFolderPath);
+//                Files.createDirectories(folderPath);
+//
+//                OutputStream output = new FileOutputStream(new File(uploadFolderPath, uploadedFile.getFileName()));
+//                IOUtils.copy(uploadedFile.getInputstream(), output);
+//
+//                return "/Uploads/" + uploadedFile.getFileName();
+//            } catch (IOException e) {
+//
+//                FacesMessage message = new FacesMessage("Error", "Error while uploading the file.");
+//                FacesContext.getCurrentInstance().addMessage(null, message);
+//            }
+//
+//        } else {
+//            FacesMessage message = new FacesMessage(
+//                    FacesMessage.SEVERITY_ERROR, "Invalid file type.", "Please upload .pdf or .jpg files only.");
+//            FacesContext.getCurrentInstance().addMessage(null, message);
+//        }
+//
+//        return null;
+//    }
+    
     public String saveUploadedFile(UploadedFile uploadedFile) {
-        if (uploadedFile != null && isFileTypeAllowed(uploadedFile)) {
+    if (uploadedFile != null && isFileTypeAllowed(uploadedFile)) {
+        try {
+            String uploadFolderPath = "/home/ksouraj/Uploads";
+            Path folderPath = Paths.get(uploadFolderPath);
+            Files.createDirectories(folderPath);
 
-            try {
-                String uploadFolderPath = "/home/ksouraj/Uploads";
-                Path folderPath = Paths.get(uploadFolderPath);
-                Files.createDirectories(folderPath);
+            String fileName = uploadedFile.getFileName();
+            Path filePath = folderPath.resolve(fileName);
 
-                OutputStream output = new FileOutputStream(new File(uploadFolderPath, uploadedFile.getFileName()));
-                IOUtils.copy(uploadedFile.getInputstream(), output);
+            try (OutputStream output = new BufferedOutputStream(new FileOutputStream(filePath.toFile()));
+                 InputStream input = new BufferedInputStream(uploadedFile.getInputstream())) {
 
-                return "/Uploads/" + uploadedFile.getFileName();
-            } catch (IOException e) {
-
-                FacesMessage message = new FacesMessage("Error", "Error while uploading the file.");
-                FacesContext.getCurrentInstance().addMessage(null, message);
+                IOUtils.copy(input, output);
             }
 
-        } else {
-            FacesMessage message = new FacesMessage(
-                    FacesMessage.SEVERITY_ERROR, "Invalid file type.", "Please upload .pdf or .jpg files only.");
+            return "/Uploads/" + fileName;
+        } catch (IOException e) {
+            FacesMessage message = new FacesMessage("Error", "Error while uploading the file.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
-
-        return null;
+    } else {
+        FacesMessage message = new FacesMessage(
+                FacesMessage.SEVERITY_ERROR, "Invalid file type.", "Please upload .pdf or .jpg files only.");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
-    
-    
-    
-    
 
+    return null;
+}
+
+    
 //    public String saveUploadedFile(UploadedFile uploadedFile) {
 //        System.out.println("uploadedFile :" + uploadedFile);
 //        if (uploadedFile != null) {
@@ -108,10 +134,14 @@ public class FileUploadController implements Serializable {
 //                    out.flush();
 //                }
 //            } catch (IOException ex) {
+//                FacesMessage message = new FacesMessage("Error", "Error while uploading the file.");
+//                FacesContext.getCurrentInstance().addMessage(null, message);
 //            } finally {
 //                try {
 //                    in.close();
 //                } catch (IOException ex) {
+//                    FacesMessage message = new FacesMessage("Error", "Error while uploading the file.");
+//                    FacesContext.getCurrentInstance().addMessage(null, message);
 //                }
 //            }
 //            return "/Uploads/" + uploadedFile.getFileName();
@@ -119,6 +149,7 @@ public class FileUploadController implements Serializable {
 //        }
 //        return null;
 //    }
+
     public boolean isFileTypeAllowed(UploadedFile uploadedFile) {
         String fileName = uploadedFile.getFileName();
         if (fileName != null) {
