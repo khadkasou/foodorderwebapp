@@ -73,40 +73,46 @@ public class FileUploadController implements Serializable {
         this.streamedContents = streamedContents;
     }
 
-    public String saveFileToFolder(InputStream input, String fileName) throws IOException {
-        String uploadFolderPath = "/home/ksouraj/Uploads";
+public String saveFileToFolder(InputStream input, String fileName) throws IOException {
+    String uploadFolderPath = "/home/ksouraj/Uploads";
 
-        if (uploadFolderPath == null || uploadFolderPath.isEmpty()) {
-            throw new CustomException("Please configure the file path");
-        }
-
-        byte[] fileBytes = IOUtils.toByteArray(input);
-
-        Path fileToSave = Paths.get(uploadFolderPath, fileName);
-        Files.write(fileToSave, fileBytes);
-
-        return fileName;
+    if (uploadFolderPath == null || uploadFolderPath.isEmpty()) {
+        throw new CustomException("Please configure the file path");
     }
 
-    public void saveUploadedFile(FileUploadEvent event) {
-        if (event != null && event.getFile() != null) {
-            uploadedFile = event.getFile();
-            String fileName = uploadedFile.getFileName();
+    byte[] fileBytes = IOUtils.toByteArray(input);
 
-            try {
-                InputStream input = uploadedFile.getInputstream();
-                String filePath = saveFileToFolder(input, fileName);
-
-                category.setFilePath(filePath);
-                category.setFileName(fileName);
-            } catch (IOException e) {
-                FacesMessage message = new FacesMessage(
-                        FacesMessage.SEVERITY_ERROR, "Error", "Error while saving file.");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-            }
-        }
+    Path folderPath = Paths.get(uploadFolderPath);
+    if (!Files.exists(folderPath)) {
+        Files.createDirectories(folderPath);
     }
 
+    Path fileToSave = folderPath.resolve(fileName);
+    Files.write(fileToSave, fileBytes);
+
+    return fileToSave.toString(); 
+}
+
+
+public void saveUploadedFile(FileUploadEvent event) {
+    if (event != null && event.getFile() != null) {
+        UploadedFile uploadedFile = event.getFile();
+        String fileName = uploadedFile.getFileName();
+
+        try (InputStream input = uploadedFile.getInputstream()) {
+            String filePath = saveFileToFolder(input, fileName);
+
+            category.setFilePath(filePath);
+            category.setFileName(fileName);
+        } catch (IOException e) {
+            FacesMessage message = new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, "Error", "Error while saving file.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+    }
+}
+
+    
     public boolean isFileTypeAllowed(UploadedFile uploadedFile) {
         String fileName = uploadedFile.getFileName();
         if (fileName != null) {

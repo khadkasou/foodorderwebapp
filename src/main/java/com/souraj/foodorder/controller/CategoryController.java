@@ -86,31 +86,33 @@ public class CategoryController implements Serializable {
         uploadedFile = null;
     }
 
-    public void saveOrUpdate() {
-        if (fileUploadController != null && fileUploadController.getUploadedFile() != null) {
-            try {
-                String fileName = fileUploadController.getUploadedFile().getFileName();
-                InputStream input = fileUploadController.getUploadedFile().getInputstream();
+   public void saveOrUpdate() {
+    if (fileUploadController != null && fileUploadController.getUploadedFile() != null) {
+        try {
+            String fileName = fileUploadController.getUploadedFile().getFileName();
+            InputStream input = fileUploadController.getUploadedFile().getInputstream();
 
-                String filePath = fileUploadController.saveFileToFolder(input, fileName);
-                category.setFilePath(filePath);
-            } catch (IOException e) {
-                FacesMessage message = new FacesMessage(
-                        FacesMessage.SEVERITY_ERROR, "Error", "Error while saving file.");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-            }
+            String filePath = fileUploadController.saveFileToFolder(input, fileName);
+            category.setFilePath(filePath);
+        } catch (IOException e) {
+            FacesMessage message = new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, "Error", "Error while saving file.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return; 
         }
-
-        if (category.getId() == null) {
-            categoryRepo.save(category);
-        } else {
-            categoryRepo.update(category);
-        }
-
-        fileUploadController.setUploadedFile(null);
-        category = new Category();
-        loadData();
     }
+
+    if (category.getId() == null) {
+        categoryRepo.save(category);
+    } else {
+        categoryRepo.update(category);
+    }
+
+    fileUploadController.setUploadedFile(null);
+    category = new Category();
+    loadData();
+}
+
 
     public void deleteById(Long id) {
         Category categoryToDelete = categoryRepo.findById(id);
