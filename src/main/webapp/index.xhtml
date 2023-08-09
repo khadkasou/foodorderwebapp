@@ -70,15 +70,17 @@
 
                     <p:outputLabel value="File" for="fileUpload" />
                     <h:panelGroup>
-                        <p:fileUpload fileUploadListener="#{categoryController.listen}" mode="advanced" id="fileUpload"
+                        <p:fileUpload fileUploadListener="#{categoryController.saveUploadedFile}" mode="advanced" id="fileUpload"
                                       multiple="false" update="frm_edit_category" auto="true" sizeLimit="10000000"
-                                      allowTypes="/(\.|\/)(pdf|jpg)$/"/> 
+                                      allowTypes="/(\.|\/)(pdf|jpg)$/"
+                                      value="#{categoryController.uploadedFile}"/> 
                         <p:outputLabel value="#{categoryController.uploadedFile.fileName}" 
                                        rendered="#{categoryController.uploadedFile ne null}"/>
                     </h:panelGroup>
-                    <p:commandButton value="Save" action="#{categoryController.saveOrUpdate()}"
+                    <p:commandButton value="Save" action="#{categoryController.saveData()}"
                                      update="frm_show_category" onstart="resetFileName();" 
-                                     oncomplete="PF('dlg_create_edit_category').hide()"/>
+                                     oncomplete="PF('dlg_create_edit_category').hide()"
+                                     />
 
 
 

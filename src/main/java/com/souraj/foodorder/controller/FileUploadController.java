@@ -1,5 +1,8 @@
 package com.souraj.foodorder.controller;
 
+
+import com.souraj.foodorder.model.Category;
+import com.souraj.foodorder.repository.CategoryRepo;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
@@ -15,6 +18,7 @@ import java.util.Base64;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.inject.Inject;
 import org.apache.commons.io.IOUtils;
 
 @ManagedBean(name = "fileUploadController")
@@ -25,10 +29,26 @@ public class FileUploadController implements Serializable {
     private StreamedContent streamedContent;
     private UploadedFile uploadedFile;
     private String streamedContents;
+    
+    
+     private  Category category;
+     
+     @Inject
+     private CategoryRepo categoryRepo;
+
+    public Category getCategory() {
+        return category;
+    }
+
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     @PostConstruct
     public void init() {
         uploadedFiles = new ArrayList<>();
+        
     }
 
     public List<UploadedFile> getUploadedFiles() {
@@ -55,109 +75,11 @@ public class FileUploadController implements Serializable {
         this.streamedContents = streamedContents;
     }
 
-//    public String saveUploadedFile(UploadedFile uploadedFile) {
-//        if (uploadedFile != null && isFileTypeAllowed(uploadedFile)) {
-//
-//            try {
-//                String uploadFolderPath = "/home/ksouraj/Uploads";
-//                Path folderPath = Paths.get(uploadFolderPath);
-//                Files.createDirectories(folderPath);
-//
-//                OutputStream output = new FileOutputStream(new File(uploadFolderPath, uploadedFile.getFileName()));
-//                IOUtils.copy(uploadedFile.getInputstream(), output);
-//
-//                return "/Uploads/" + uploadedFile.getFileName();
-//            } catch (IOException e) {
-//
-//                FacesMessage message = new FacesMessage("Error", "Error while uploading the file.");
-//                FacesContext.getCurrentInstance().addMessage(null, message);
-//            }
-//
-//        } else {
-//            FacesMessage message = new FacesMessage(
-//                    FacesMessage.SEVERITY_ERROR, "Invalid file type.", "Please upload .pdf or .jpg files only.");
-//            FacesContext.getCurrentInstance().addMessage(null, message);
-//        }
-//
-//        return null;
-//    }
     
-    public String saveUploadedFile(UploadedFile uploadedFile) {
-    if (uploadedFile != null && isFileTypeAllowed(uploadedFile)) {
-        try {
-            String uploadFolderPath = "/home/ksouraj/Uploads";
-            Path folderPath = Paths.get(uploadFolderPath);
-            Files.createDirectories(folderPath);
-
-            String fileName = uploadedFile.getFileName();
-            Path filePath = folderPath.resolve(fileName);
-
-            try (OutputStream output = new BufferedOutputStream(new FileOutputStream(filePath.toFile()));
-                 InputStream input = new BufferedInputStream(uploadedFile.getInputstream())) {
-
-                IOUtils.copy(input, output);
-            }
-
-            return "/Uploads/" + fileName;
-        } catch (IOException e) {
-            FacesMessage message = new FacesMessage("Error", "Error while uploading the file.");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-        }
-    } else {
-        FacesMessage message = new FacesMessage(
-                FacesMessage.SEVERITY_ERROR, "Invalid file type.", "Please upload .pdf or .jpg files only.");
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
-
-    return null;
-}
-
     
-//    public String saveUploadedFile(UploadedFile uploadedFile) {
-//        System.out.println("uploadedFile :" + uploadedFile);
-//        if (uploadedFile != null) {
-//            String uploadFolderPath = "/home/ksouraj/Uploads/";
-//            Path folderPath = Paths.get(uploadFolderPath);
-//            InputStream in = null;
-//            try {
-//                Files.createDirectories(folderPath);
-//
-//                String str = uploadedFile.getFileName();
-//                in = uploadedFile.getInputstream();
-//                try (OutputStream out = new FileOutputStream(new File(uploadFolderPath + str))) {
-//                    int read = 0;
-//                    byte[] bytes = new byte[1024];
-//                    while ((read = in.read(bytes)) != -1) {
-//                        out.write(bytes, 0, read);
-//                    }
-//                    in.close();
-//                    out.flush();
-//                }
-//            } catch (IOException ex) {
-//                FacesMessage message = new FacesMessage("Error", "Error while uploading the file.");
-//                FacesContext.getCurrentInstance().addMessage(null, message);
-//            } finally {
-//                try {
-//                    in.close();
-//                } catch (IOException ex) {
-//                    FacesMessage message = new FacesMessage("Error", "Error while uploading the file.");
-//                    FacesContext.getCurrentInstance().addMessage(null, message);
-//                }
-//            }
-//            return "/Uploads/" + uploadedFile.getFileName();
-//
-//        }
-//        return null;
-//    }
+     
+      
 
-    public boolean isFileTypeAllowed(UploadedFile uploadedFile) {
-        String fileName = uploadedFile.getFileName();
-        if (fileName != null) {
-            String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
-            return "jpg".equalsIgnoreCase(extension) || "pdf".equalsIgnoreCase(extension);
-        }
-        return false;
-    }
 
     public void deleteFile(String filePath) {
         try {
@@ -191,4 +113,5 @@ public class FileUploadController implements Serializable {
 
         uploadedFiles.clear();
     }
+    
 }

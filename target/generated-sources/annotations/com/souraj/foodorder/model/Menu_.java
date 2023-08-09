@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.7.10.v20211216-rNA", date="2023-08-09T11:12:15")
+@Generated(value="EclipseLink-2.7.10.v20211216-rNA", date="2023-08-09T13:59:56")
 @StaticMetamodel(Menu.class)
 public class Menu_ extends AbstractEntity_ {
 
