@@ -67,10 +67,7 @@ public class Category extends AbstractEntity {
         return Objects.equals(this.name, other.name);
     }
 
-    @Override
-    public String toString() {
-        return "" + getId();
-    }
+   
 
     @Override
     public String getTableName() {

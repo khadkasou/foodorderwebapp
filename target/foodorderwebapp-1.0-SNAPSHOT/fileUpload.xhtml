@@ -1,31 +1,85 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-<h:head>
-    <title>File Upload</title>
-</h:head>
-<h:body>
-    <h:form id="fileUploadForm" enctype="multipart/form-data">
-        <p:fileUpload fileUploadListener="#{fileUploadController.handleFileUpload}" mode="advanced" dragDropSupport="false"
-                      update="fileList" />
-        <p:commandButton value="Upload" action="#{fileUploadController.uploadFiles}" update="fileList" />
-        
-        <h:panelGroup id="fileList">
-            <h:dataTable value="#{fileUploadController.fileRecordsList}" var="fileRecord">
-                <h:column>
-                    <f:facet name="header">File Name</f:facet>
-                    #{fileRecord.fileName}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">File Location</f:facet>
-                    #{fileRecord.location}
-                </h:column>
-            </h:dataTable>
-        </h:panelGroup>
-    </h:form>
-</h:body>
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" 
+              integrity="sha384-KyZXEAg3QhqLMpG8r+VEmnEJs7Scjz3u9d9FAusE4yL4hCqzrL7hVPaEdBZb1" crossorigin="anonymous">
+
+        </link>
+
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:commandButton style="float:right; font-size: 10px;" icon="fa fa-plus"
+                             title="Add File" 
+                             actionListener="#{fileUploadController.beforeCreate()}" 
+                             process="@this" 
+                             onclick="PF('uploadDialog').show();" />
+        </h:form>
+        <br /><br />
+
+        <h:form id="show_category">
+            <p:dataTable value="#{fileUploadController.uploadedFileList}" var="c" rowIndexVar="rowIndex">
+                <p:column headerText="S.N">
+                    #{rowIndex + 1}
+                </p:column>
+                <p:column headerText="File">
+                    #{c.fileName}
+                </p:column>
+                <p:column headerText="Created At">
+                    #{c.createdAt}
+                </p:column>
+                <p:column headerText="Updated At">
+                    #{c.updatedAt}
+                </p:column>
+                <p:column headerText="FileName ID">
+                    #{c.fileNameId}
+                </p:column>
+                <p:column headerText="Created By">
+                    #{c.createdBy}
+                </p:column>
+                <p:column headerText="Created Date">
+                    #{c.createdDate}
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+
+
+
+
+        <h:form id="uploadForm" enctype="multipart/form-data">
+            <p:dialog id="uploadDialog" header="Upload File" widgetVar="uploadDialog" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:panelGrid columns="2">
+                    <h:outputLabel value="File Name"/>
+                    <h:selectOneMenu id="fileList" value="#{selectorView.fileList}" required="true" label="Text 3">
+                        <f:selectItem itemLabel="Select File" itemValue="" noSelectionOption="true"/>
+                        <f:selectItem itemLabel="Option 1" itemValue="1"/>
+                        <f:selectItem itemLabel="Option 2" itemValue="2"/>
+                        <f:selectItem itemLabel="Option 3" itemValue="3"/>
+                    </h:selectOneMenu>
+                    <p:message for="fileList"/>
+                        <h:outputLabel value="File"/>
+                        <p:fileUpload fileUploadListener="#{fileUploadController}" 
+                                      mode="simple" skinSimple="true" multiple="true"
+                                      sizeLimit="1000000" allowTypes="/(\.|\/)(pdf|jpg)$/"/>
+                    <h:outputLabel value="Remarks"/>
+                    <p:inputText/>
+                </p:panelGrid>
+                <p:spacer width="1" height="1" />
+                <p:commandButton value="Save" action="#{fileUploadController}"
+                                 update="show_category" onstart="resetFileName();" 
+                                 oncomplete="PF('dlg_create_edit_category').hide()"
+                                 style="margin: 0 auto; display: block;" />
+            </p:dialog>
+
+
+        </h:form>
+
+
+    </h:body>
 </html>

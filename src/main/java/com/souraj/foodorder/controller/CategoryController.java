@@ -2,6 +2,7 @@ package com.souraj.foodorder.controller;
 
 import com.souraj.foodorder.model.Category;
 import com.souraj.foodorder.repository.CategoryRepo;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import org.primefaces.model.UploadedFile;
@@ -26,25 +27,15 @@ public class CategoryController implements Serializable {
     private Category category;
     private List<Category> categoryList;
     private UploadedFile uploadedFile;
-    private Category selectedCategory;
-    private String selectedFileContent;
+    byte[] selectedFileContent;
+
     byte[] file;
     @Inject
     private CategoryRepo categoryRepo;
 
-    @Inject
-    private FileUploadController fileUploadController;
 
     public Category getCategory() {
         return category;
-    }
-
-    public String getSelectedFileContent() {
-        return selectedFileContent;
-    }
-
-    public void setSelectedFileContent(String selectedFileContent) {
-        this.selectedFileContent = selectedFileContent;
     }
 
     public void setCategory(Category category) {
@@ -59,20 +50,20 @@ public class CategoryController implements Serializable {
         this.categoryList = categoryList;
     }
 
+    public byte[] getSelectedFileContent() {
+        return selectedFileContent;
+    }
+
+    public void setSelectedFileContent(byte[] selectedFileContent) {
+        this.selectedFileContent = selectedFileContent;
+    }
+
     public UploadedFile getUploadedFile() {
         return uploadedFile;
     }
 
     public void setUploadedFile(UploadedFile uploadedFile) {
         this.uploadedFile = uploadedFile;
-    }
-
-    public Category getSelectedCategory() {
-        return selectedCategory;
-    }
-
-    public void setSelectedCategory(Category selectedCategory) {
-        this.selectedCategory = selectedCategory;
     }
 
     @PostConstruct
@@ -99,36 +90,109 @@ public class CategoryController implements Serializable {
 
     public void saveData() {
         if (this.file != null) {
+            long fileSize = uploadedFile.getSize();
+
+            if (fileSize > 1000000) {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "File size exceeds the limit (1MB).", null);
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return;
+            }
 
             try {
                 String uploadFolderPath = "/home/ksouraj/Uploads/";
                 Path folderPath = Paths.get(uploadFolderPath);
                 Path destinationPath = folderPath.resolve(uploadedFile.getFileName());
                 Files.write(destinationPath, file);
+
                 if (uploadedFile != null) {
                     category.setFilePath(uploadedFile.getFileName());
-
-                    categoryRepo.save(category);
                 }
             } catch (IOException e) {
+                // Error handling for file upload
                 e.printStackTrace();
                 FacesMessage message = new FacesMessage("Error",
                         "Error while uploading the file.");
                 FacesContext.getCurrentInstance().addMessage(null, message);
+                return;
+            }
+        }
+
+        try {
+            if (category.getId() == null) {
+                categoryRepo.save(category);
+            } else {
+                category = categoryRepo.findById(category.getId());
+                categoryRepo.update(category);
             }
 
-        } else {
-            FacesMessage message = new FacesMessage(
-                    FacesMessage.SEVERITY_ERROR, "Invalid file type.",
-                    "Please upload .pdf or .jpg files only.");
+            FacesMessage successMessage = new FacesMessage("Category Saved Successfully");
+            FacesContext.getCurrentInstance().addMessage(null, successMessage);
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            FacesMessage message = new FacesMessage("Error",
+                    "Error while saving the category.");
             FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
         }
+
+        // Clear uploaded file and reset category
         uploadedFile = null;
         category = new Category();
-        loadData();
 
+        // Load data
+        loadData();
     }
 
+//    public void saveData() {
+//        if (this.file != null) {
+//            long fileSize = uploadedFile.getSize();
+//
+//            if (fileSize > 1000000) {
+//                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+//                        "File size exceeds the limit (1MB).", null);
+//                FacesContext.getCurrentInstance().addMessage(null, message);
+//                return;
+//            }
+//
+//            try {
+//                String uploadFolderPath = "/home/ksouraj/Uploads/";
+//                Path folderPath = Paths.get(uploadFolderPath);
+//                Path destinationPath = folderPath.resolve(uploadedFile.getFileName());
+//                Files.write(destinationPath, file);
+//                if (uploadedFile != null) {
+//                    category.setFilePath(uploadedFile.getFileName());
+//                }
+//                if (category.getId() == null) {
+//                    categoryRepo.save(category);
+//
+//                } else {
+//                    categoryRepo.update(category);
+//
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                FacesMessage message = new FacesMessage("Error",
+//                        "Error while uploading the file.");
+//                FacesContext.getCurrentInstance().addMessage(null, message);
+//            }
+//
+//        } else {
+//            FacesMessage message = new FacesMessage(
+//                    FacesMessage.SEVERITY_ERROR, "Invalid file type.",
+//                    "Please upload .pdf or .jpg files only.");
+//            FacesContext.getCurrentInstance().addMessage(null, message);
+//        }
+//        FacesMessage successMessage = new FacesMessage("File Uploaded Successfully");
+//        FacesContext.getCurrentInstance().addMessage(null, successMessage);
+//
+//        RequestContext.getCurrentInstance().update("frm_show_category:growl");
+//        uploadedFile = null;
+//        category = new Category();
+//        loadData();
+//
+//    }
     public boolean isFileTypeAllowed(UploadedFile uploadedFile) {
         String fileName = uploadedFile.getFileName();
         if (fileName != null) {
@@ -138,23 +202,73 @@ public class CategoryController implements Serializable {
         return false;
     }
 
-    public void deleteById(Long id) {
-        Category categoryToDelete = categoryRepo.findById(id);
-        String filePath = categoryToDelete.getFilePath();
-        if (filePath != null) {
-            fileUploadController.deleteFile(filePath);
+ public void viewFile(String filePath) {
+    if (filePath != null && !filePath.isEmpty()) {
+        try {
+            String uploadFolderPath = "/home/ksouraj/Uploads/";
+            String fileFullPath = uploadFolderPath + filePath;
+
+            InputStream inputStream = new FileInputStream(fileFullPath);
+            selectedFileContent = IOUtils.toByteArray(inputStream);
+
+            inputStream.close();
+        } catch (IOException e) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error reading file", e.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            selectedFileContent = null;
         }
+    } else {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "File path is empty", null);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        selectedFileContent = null;
+    }
+}
+
+    
+       public boolean isImageFile(byte[] fileContent) {
+        if (fileContent != null) {
+            String extension = getFileExtension(fileContent);
+            return "jpg".equalsIgnoreCase(extension) || "jpeg".equalsIgnoreCase(extension) || "png".equalsIgnoreCase(extension);
+        }
+        return false;
+    }
+       
+        public boolean isPdfFile(byte[] fileContent) {
+        if (fileContent != null) {
+            String extension = getFileExtension(fileContent);
+            return "pdf".equalsIgnoreCase(extension);
+        }
+        return false;
+    }
+    
+    
+    public String getFileExtension(byte[] fileContent) {
+    if (isImageFile(fileContent)) {
+        return "jpg"; 
+    } else if (isPdfFile(fileContent)) {
+        return "pdf";
+    } else {
+        
+        return "";
+    }
+}
+
+    
+    
+    
+        public void deleteById(Long id) {
         categoryRepo.delete(id);
         loadData();
     }
 
-    public void viewFile(Category category) {
-        selectedCategory = category;
-        selectedFileContent = fileUploadController.viewFileContent(category.getFilePath());
-    }
+    
+    
+    
 
     public void loadData() {
         this.categoryList = categoryRepo.findAll();
     }
+
+   
 
 }
