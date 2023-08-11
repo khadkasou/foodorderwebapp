@@ -121,9 +121,6 @@ public class CategoryController implements Serializable {
         try {
             if (category.getId() == null) {
                 categoryRepo.save(category);
-            } else {
-                category = categoryRepo.findById(category.getId());
-                categoryRepo.update(category);
             }
 
             FacesMessage successMessage = new FacesMessage("Category Saved Successfully");
