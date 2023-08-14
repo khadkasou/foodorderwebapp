@@ -61,23 +61,9 @@
                         <p:tooltip for="name" value="Enter file name" position="top"/>
                         <p:ajax update="@this" process="@this" />
                     </p:inputText>
-                    <p:outputLabel value="Size" for="fSize"/>
-                    <p:inputText id ="fSize" required="true"
-                                 value ="#{fileNameController.fileName.fsize}"
-                                 validator="#{fileNameController.validateFileSize(uploadedFile)}">
-                        <p:tooltip for="fSize" value="Enter your file size" position="top"/>
-                        <p:ajax update="@this" process="@this"/>
-                    </p:inputText>
-                    <p:outputLabel value="AllowedTpe" for="allowedType"/>
-                    <p:inputText id ="allowedType" required="true"
-                                 value ="#{fileNameController.fileName.allowedType}"
-                                 validator="#{fileNameController.validateFileType}">
-                        <p:tooltip for="allowedType" value="Enter file type" position="top"/>
-                        <p:ajax update="@this" process="@this"/>
-                    </p:inputText>
                     <p:outputLabel value="File" for="fileUpload" />
                     <h:panelGroup>
-                        <p:fileUpload fileUploadListener="#{fileNameController.saveUploadedFile}" mode="advanced" id="fileUpload"
+                        <p:fileUpload fileUploadListener="#{fileNameController.fileUploadHandler}" mode="advanced" id="fileUpload"
                                       multiple="false" update="frm_file" auto="true" sizeLimit="1000000"
                                       allowTypes="/(\.|\/)(pdf|jpg|jpeg|png|xls)$/"
                                       value="#{fileNameController.uploadedFile}"/> 
@@ -87,7 +73,7 @@
 
                 </p:panelGrid>
                 <div style="text-align: center; margin-top: 10px;">
-                    <p:commandButton value="Save" action="#{fileNameController.saveData()}"
+                    <p:commandButton value="Save" action="#{fileNameController.saveFile()}"
                                      update="frm_show_file" onstart="resetFileName();" 
                                      oncomplete="PF('dlg_create_file').hide()"/>
                 </div>

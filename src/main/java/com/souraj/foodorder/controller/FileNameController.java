@@ -37,7 +37,6 @@ public class FileNameController implements Serializable {
     private UploadedFile uploadedFile;
     byte[] selectedFileContent;
     byte[] file;
-   
 
     @Inject
     private FileNameRepository fileNameRepository;
@@ -88,49 +87,115 @@ public class FileNameController implements Serializable {
         this.fileName = fileNameRepository.findById(fl.getId());
     }
 
-   public void saveUploadedFile(FileUploadEvent event) throws IOException {
-        this.uploadedFile = event.getFile();
+//    public void saveUploadedFile(FileUploadEvent event) throws IOException {
+//        this.uploadedFile = event.getFile();
+//        if (!validateFileType(uploadedFile) || !validateFileSize(uploadedFile)) {
+//            return;
+//        }
+//        InputStream inputs = event.getFile().getInputstream();
+//        this.file = IOUtils.toByteArray(inputs);
+//    }
+//
+//    public void saveData() throws IOException {
+//        if (this.file != null) {
+//
+//            try {
+//                String uploadFolderPath = "/home/ksouraj/Uploads/Files/";
+//                Path folderPath = Paths.get(uploadFolderPath);
+//                Path destinationPath = folderPath.resolve(uploadedFile.getFileName());
+//                Files.write(destinationPath, file);
+//                String fileExtension = getFileExtension(uploadedFile.getFileName()).toLowerCase();
+//                if (uploadedFile != null) {
+//                    FileName newFileName = new FileName();
+//                    newFileName.setName(fileName.getName());
+//                    newFileName.setLocation(destinationPath.toString());
+//                    newFileName.setAllowedType(fileExtension);
+//                    int fileSize = uploadedFile.getInputstream().available();
+//                    newFileName.setFsize(fileSize);
+//
+//                    fileNameRepository.save(newFileName);
+//
+//                }
+//            } catch (IOException e) {
+//                FacesMessage message = new FacesMessage("Error",
+//                        "Error while uploading the file.");
+//                FacesContext.getCurrentInstance().addMessage(null, message);
+//                return;
+//            }
+//        }
+//
+//        uploadedFile = null;
+//        fileName = new FileName();
+//        loadData();
+//    }
+    public void fileUploadHandler(FileUploadEvent event) throws IOException {
+        uploadedFile = event.getFile();
         if (!validateFileType(uploadedFile) || !validateFileSize(uploadedFile)) {
             return;
         }
-        InputStream inputs = event.getFile().getInputstream();
-        this.file = IOUtils.toByteArray(inputs);
-    }
 
-    public void saveData() {
-        if (this.file != null) {
+        try {
+            String uploadFolderPath = "/home/ksouraj/Uploads/Files/";
+            Path folderPath = Paths.get(uploadFolderPath);
+            Path destinationPath = folderPath.resolve(uploadedFile.getFileName());
+            byte[] fileBytes = IOUtils.toByteArray(uploadedFile.getInputstream());
 
-            try {
-                String uploadFolderPath = "/home/ksouraj/uploaded/Files/";
-                Path folderPath = Paths.get(uploadFolderPath);
-                Path destinationPath = folderPath.resolve(uploadedFile.getFileName());
-                Files.write(destinationPath, file);
-                fileName.setLocation(destinationPath.toString());
-                fileName.setAllowedType(getFileExtension(fileName.getName()).toLowerCase());
+            Files.write(destinationPath, fileBytes);
+            String fileExtension = getFileExtension(uploadedFile.getFileName()).toLowerCase();
 
-                if (uploadedFile != null) {
-                    fileName.setName(uploadedFile.getFileName());
-                    fileName.setFsize(uploadedFile.getSize());
-                    fileName.setLocation(uploadFolderPath);
+            this.fileName.setName(fileName.getName());
+            this.fileName.setLocation(destinationPath.toString());
+            this.fileName.setAllowedType(fileExtension);
+            int fileSize = event.getFile().getInputstream().available();
+            this.fileName.setFsize(fileSize);
 
-                    fileNameRepository.save(fileName);
-
-                }
-            } catch (IOException e) {
-                FacesMessage message = new FacesMessage("Error",
-                        "Error while uploading the file.");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-                return;
-            }
+        } catch (IOException e) {
+            FacesMessage message = new FacesMessage("Error", "Error while uploading the file.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
         }
 
-        
-        uploadedFile = null;
-        fileName = new FileName();
         loadData();
     }
 
-   public boolean validateFileType(UploadedFile uploadedFile) {
+    public void saveFile() {
+        fileNameRepository.save(this.fileName);
+        loadData();
+
+    }
+
+//    public void saveData(FileUploadEvent event) throws IOException {
+//         uploadedFile = event.getFile();
+//        if (!validateFileType(uploadedFile) || !validateFileSize(uploadedFile)) {
+//            return;
+//        }
+//
+//        try {
+//            String uploadFolderPath = "/home/ksouraj/Uploads/Files/";
+//            Path folderPath = Paths.get(uploadFolderPath);
+//            Path destinationPath = folderPath.resolve(uploadedFile.getFileName());
+//            byte[] fileBytes = IOUtils.toByteArray(uploadedFile.getInputstream());
+//
+//            Files.write(destinationPath, fileBytes);
+//            String fileExtension = getFileExtension(uploadedFile.getFileName()).toLowerCase();
+//
+//            FileName newFileName = new FileName();
+//            newFileName.setName(fileName.getName());
+//            newFileName.setLocation(destinationPath.toString());
+//            newFileName.setAllowedType(fileExtension);
+//            int fileSize = event.getFile().getInputstream().available();
+//            newFileName.setFsize(fileSize);
+//
+//            fileNameRepository.save(newFileName);
+//        } catch (IOException e) {
+//            FacesMessage message = new FacesMessage("Error", "Error while uploading the file.");
+//            FacesContext.getCurrentInstance().addMessage(null, message);
+//            return;
+//        }
+//
+//        loadData();
+//    }
+    public boolean validateFileType(UploadedFile uploadedFile) {
         String f = uploadedFile.getFileName();
         String extension = f.substring(f.lastIndexOf(".")).toLowerCase();
         List<String> allowedFileTypes = Arrays.asList(".jpg", ".png", ".jpeg", ".pdf", ".xls");
@@ -152,7 +217,7 @@ public class FileNameController implements Serializable {
             case "jpg":
             case "png":
             case "jpeg":
-                maxSize = 1000;
+                maxSize = 1000000;
                 break;
             case "pdf":
                 maxSize = 2000000;
@@ -173,8 +238,12 @@ public class FileNameController implements Serializable {
         return true;
     }
 
-    private String getFileExtension(String fileName) {
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
+    public String getFileExtension(String fileName) {
+        int lastDotIndex = fileName.lastIndexOf(".");
+        if (lastDotIndex >= 0) {
+            return fileName.substring(lastDotIndex + 1);
+        }
+        return ""; 
     }
 
     public void loadData() {
