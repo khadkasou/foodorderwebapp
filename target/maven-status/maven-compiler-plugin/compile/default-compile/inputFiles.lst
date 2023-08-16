@@ -5,6 +5,7 @@
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/converter/FileNameConverter.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/converter/MenuConverter.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/controller/CategoryController.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/converter/ConfigurationConverter.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/api/FoodItemsApi.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/controller/FileUpload.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/UserTableRepository.java
@@ -24,14 +25,18 @@
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/MenuRepository.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/FileName.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/FoodItemsRepository.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/ConfigurationRepository.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/converter/CatConverter.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/controller/MenuController.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/Configuration.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/GenericAbstractClasss.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/DocTypeConst.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/UserRole.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/controller/UserTableController.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/IAbstractClass.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/UserTable.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/converter/CategoryConverter.java
+/home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/controller/ConfigurationController.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/model/AbstractEntity.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/OrdersRepository.java
 /home/ksouraj/NetBeansProjects/foodorderwebapp/src/main/java/com/souraj/foodorder/controller/LoginController.java

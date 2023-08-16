@@ -5,6 +5,7 @@
 package com.souraj.foodorder.model;
 
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,10 +24,11 @@ public class FileUpload extends AbstractEntity {
     @JoinColumn(name = "file_name_id")
     private FileName fileNameId;
     private String Remarks;
-    private String fileName;
+    @Column(name = "file_name")
+    private String fName;
     private String createdBy;
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date createdDate;
+    private String location;
+    
 
     public FileUpload() {
     }
@@ -47,12 +49,12 @@ public class FileUpload extends AbstractEntity {
         this.Remarks = Remarks;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getfName() {
+        return fName;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setfName(String fName) {
+        this.fName = fName;
     }
 
     public String getCreatedBy() {
@@ -63,17 +65,16 @@ public class FileUpload extends AbstractEntity {
         this.createdBy = createdBy;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public String getLocation() {
+        return location;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setLocation(String location) {
+        this.location = location;
     }
     
-    
-    
-    
+
+
     @Override
     public String getTableName() {
         return "file_upload";

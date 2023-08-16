@@ -7,7 +7,6 @@ package com.souraj.foodorder.controller;
 import com.souraj.foodorder.model.FileName;
 import com.souraj.foodorder.repository.FileNameRepository;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,8 +34,6 @@ public class FileNameController implements Serializable {
     private FileName fileName;
     private List<FileName> fileNameList;
     private UploadedFile uploadedFile;
-    byte[] selectedFileContent;
-    byte[] file;
 
     @Inject
     private FileNameRepository fileNameRepository;
@@ -65,14 +62,6 @@ public class FileNameController implements Serializable {
         this.uploadedFile = uploadedFile;
     }
 
-    public byte[] getSelectedFileContent() {
-        return selectedFileContent;
-    }
-
-    public void setSelectedFileContent(byte[] selectedFileContent) {
-        this.selectedFileContent = selectedFileContent;
-    }
-
     @PostConstruct
     public void init() {
         this.fileName = new FileName();
@@ -87,47 +76,6 @@ public class FileNameController implements Serializable {
         this.fileName = fileNameRepository.findById(fl.getId());
     }
 
-//    public void saveUploadedFile(FileUploadEvent event) throws IOException {
-//        this.uploadedFile = event.getFile();
-//        if (!validateFileType(uploadedFile) || !validateFileSize(uploadedFile)) {
-//            return;
-//        }
-//        InputStream inputs = event.getFile().getInputstream();
-//        this.file = IOUtils.toByteArray(inputs);
-//    }
-//
-//    public void saveData() throws IOException {
-//        if (this.file != null) {
-//
-//            try {
-//                String uploadFolderPath = "/home/ksouraj/Uploads/Files/";
-//                Path folderPath = Paths.get(uploadFolderPath);
-//                Path destinationPath = folderPath.resolve(uploadedFile.getFileName());
-//                Files.write(destinationPath, file);
-//                String fileExtension = getFileExtension(uploadedFile.getFileName()).toLowerCase();
-//                if (uploadedFile != null) {
-//                    FileName newFileName = new FileName();
-//                    newFileName.setName(fileName.getName());
-//                    newFileName.setLocation(destinationPath.toString());
-//                    newFileName.setAllowedType(fileExtension);
-//                    int fileSize = uploadedFile.getInputstream().available();
-//                    newFileName.setFsize(fileSize);
-//
-//                    fileNameRepository.save(newFileName);
-//
-//                }
-//            } catch (IOException e) {
-//                FacesMessage message = new FacesMessage("Error",
-//                        "Error while uploading the file.");
-//                FacesContext.getCurrentInstance().addMessage(null, message);
-//                return;
-//            }
-//        }
-//
-//        uploadedFile = null;
-//        fileName = new FileName();
-//        loadData();
-//    }
     public void fileUploadHandler(FileUploadEvent event) throws IOException {
         uploadedFile = event.getFile();
         if (!validateFileType(uploadedFile) || !validateFileSize(uploadedFile)) {
@@ -141,13 +89,14 @@ public class FileNameController implements Serializable {
             byte[] fileBytes = IOUtils.toByteArray(uploadedFile.getInputstream());
 
             Files.write(destinationPath, fileBytes);
-            String fileExtension = getFileExtension(uploadedFile.getFileName()).toLowerCase();
+            //       String fileExtension = getFileExtension(uploadedFile.getFileName()).toLowerCase();
 
             this.fileName.setName(fileName.getName());
-            this.fileName.setLocation(destinationPath.toString());
-            this.fileName.setAllowedType(fileExtension);
-            int fileSize = event.getFile().getInputstream().available();
-            this.fileName.setFsize(fileSize);
+            this.fileName.setLocation(folderPath.toString());
+ //           this.fileName.setLocation(destinationPath.toString());
+  //          this.fileName.setAllowedType(fileExtension);
+//            int fileSize = uploadedFile.getInputstream().available();
+//            this.fileName.setFsize(fileSize);
 
         } catch (IOException e) {
             FacesMessage message = new FacesMessage("Error", "Error while uploading the file.");
@@ -164,37 +113,6 @@ public class FileNameController implements Serializable {
 
     }
 
-//    public void saveData(FileUploadEvent event) throws IOException {
-//         uploadedFile = event.getFile();
-//        if (!validateFileType(uploadedFile) || !validateFileSize(uploadedFile)) {
-//            return;
-//        }
-//
-//        try {
-//            String uploadFolderPath = "/home/ksouraj/Uploads/Files/";
-//            Path folderPath = Paths.get(uploadFolderPath);
-//            Path destinationPath = folderPath.resolve(uploadedFile.getFileName());
-//            byte[] fileBytes = IOUtils.toByteArray(uploadedFile.getInputstream());
-//
-//            Files.write(destinationPath, fileBytes);
-//            String fileExtension = getFileExtension(uploadedFile.getFileName()).toLowerCase();
-//
-//            FileName newFileName = new FileName();
-//            newFileName.setName(fileName.getName());
-//            newFileName.setLocation(destinationPath.toString());
-//            newFileName.setAllowedType(fileExtension);
-//            int fileSize = event.getFile().getInputstream().available();
-//            newFileName.setFsize(fileSize);
-//
-//            fileNameRepository.save(newFileName);
-//        } catch (IOException e) {
-//            FacesMessage message = new FacesMessage("Error", "Error while uploading the file.");
-//            FacesContext.getCurrentInstance().addMessage(null, message);
-//            return;
-//        }
-//
-//        loadData();
-//    }
     public boolean validateFileType(UploadedFile uploadedFile) {
         String f = uploadedFile.getFileName();
         String extension = f.substring(f.lastIndexOf(".")).toLowerCase();
@@ -243,7 +161,7 @@ public class FileNameController implements Serializable {
         if (lastDotIndex >= 0) {
             return fileName.substring(lastDotIndex + 1);
         }
-        return ""; 
+        return "";
     }
 
     public void loadData() {

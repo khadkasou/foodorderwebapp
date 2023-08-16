@@ -7,7 +7,6 @@ package com.souraj.foodorder.controller;
 import com.souraj.foodorder.model.Menu;
 import com.souraj.foodorder.repository.MenuRepository;
 import java.io.Serializable;
-import java.util.ArrayList;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.util.List;
@@ -75,7 +74,6 @@ public class MenuController implements Serializable {
     }
 
     public void loadData() {
-        this.menuList = new ArrayList<>();
         this.menuList = menuRepository.findAll();
 
     }

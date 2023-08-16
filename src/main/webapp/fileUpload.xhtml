@@ -4,12 +4,6 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" 
-              integrity="sha384-KyZXEAg3QhqLMpG8r+VEmnEJs7Scjz3u9d9FAusE4yL4hCqzrL7hVPaEdBZb1" crossorigin="anonymous">
-
-        </link>
-
     </h:head>
     <h:body>
         <h:form>
@@ -22,57 +16,73 @@
         <br /><br />
 
         <h:form id="show_file">
-            <p:dataTable value="#{fileUploadController.uploadedFileList}" var="c" rowIndexVar="rowIndex">
-                <p:column headerText="S.N">
-                    #{rowIndex + 1}
+            <p:dataTable value="#{fileUploadController.fileUploadList}" var="c" rowIndexVar="rowIndex">
+
+                <p:column>
+                    <f:facet name="header">ID</f:facet>
+                    <h:outputText value="#{rowIndex + 1}" />
                 </p:column>
-                <p:column headerText="File">
-                    #{c.fileName}
+                <p:column>
+                    <f:facet name="header">File ID</f:facet>
+                    <h:outputText value="#{c.fileNameId.id}" />
                 </p:column>
-                <p:column headerText="Created At">
-                    #{c.createdAt}
+                <p:column>
+                    <f:facet name="header">Created At</f:facet>
+                    <h:outputText value="#{c.createdAt}" />
                 </p:column>
-                <p:column headerText="Updated At">
-                    #{c.updatedAt}
+                <p:column>
+                    <f:facet name="header">Updated At</f:facet>
+                    <h:outputText value="#{c.updatedAt}" />
                 </p:column>
-                <p:column headerText="FileName ID">
-                    #{c.fileNameId}
+                <p:column>
+                    <f:facet name="header">Remarks</f:facet>
+                    <h:outputText value="#{c.remarks}" />
                 </p:column>
-                <p:column headerText="Created By">
-                    #{c.createdBy}
+                <p:column>
+                    <f:facet name="header">Created By</f:facet>
+                    <h:outputText value="#{c.createdBy}" />
                 </p:column>
-                <p:column headerText="Created Date">
-                    #{c.createdDate}
+                <p:column>
+                    <f:facet name="header">File Name</f:facet>
+                    <h:outputText value="#{c.fileNameId.name}" />
                 </p:column>
+               
 
             </p:dataTable>
         </h:form>
-        
-            <p:dialog header="Upload File" widgetVar="dlg_create_file" 
-                      modal="true" showEffect="fade" hideEffect="fade">
-                <h:form id="frm_file" enctype="multipart/form-data">
+
+        <p:dialog header="Upload File" widgetVar="dlg_create_file" 
+                  modal="true" showEffect="fade" hideEffect="fade">
+            <h:form id="frm_file" enctype="multipart/form-data">
                 <p:panelGrid columns="2">
                     <h:outputLabel value="File Name"/>
-                    <h:selectOneMenu id="fileList" value="#{fileNameController.fileNameList}" required="true" label="Text 3">
+                    <h:selectOneMenu id="fileList" value="#{configurationController.configuration}"  required="true" 
+                                     converter="configurationConverter" 
+                                     valueChangeListener="#{configurationController.configuration.fsize}">
                         <f:selectItem itemLabel="Select File" itemValue="" noSelectionOption="true"/>
-                        <f:selectItem itemLabel="Citizenship" itemValue=""/>
-                        <f:selectItem itemLabel="Passport" itemValue=""/>
-                        <f:selectItem itemLabel="" itemValue=""/>
+                        <f:selectItems value="#{configurationController.configurationsList}" var="item"
+                                       itemLabel="#{item.name}" itemValue="#{item}"/>
+                           
                     </h:selectOneMenu>
-                    <p:message for="fileList"/>
-                    <p:fileUpload fileUploadListener="#{fileNameController.saveUploadedFile}" 
-                                      mode="simple" skinSimple="true" multiple="true"
-                                      sizeLimit="1000000" allowTypes="/(\.|\/)(pdf|jpg)$/"/>
+                    <p:outputLabel value="File" for="fileUpload" />
+                    <h:panelGroup>
+                        <p:fileUpload fileUploadListener="#{fileUploadController.fileUploadHandler}" mode="advanced" id="fileUpload"
+                                      multiple="false" update="frm_file" auto="true" sizeLimit="1000000"
+                                      allowTypes="/(\.|\/)(pdf|jpg|jpeg|png|xls)$/"
+                                      value="#{fileUploadController.uploadedFile}"/> 
+                        <p:outputLabel value="#{fileUploadController.uploadedFile.fileName}" 
+                                       rendered="#{fileUploadController.uploadedFile ne null}"/>
+                    </h:panelGroup>
                     <h:outputLabel value="Remarks"/>
                     <p:inputText/>
                 </p:panelGrid>
                 <p:spacer width="1" height="1" />
-                <p:commandButton value="Save" action="#{fileNameController.saveData()}"
+                <p:commandButton value="Save" action="#{fileUploadController.saveFile()}"
                                  update="show_file" onstart="resetFileName();" 
                                  oncomplete="PF('dlg_create_file').hide()"
                                  style="margin: 0 auto; display: block;" />
-                 </h:form>
-            </p:dialog>
-       
+            </h:form>
+        </p:dialog>
+
     </h:body>
 </html>

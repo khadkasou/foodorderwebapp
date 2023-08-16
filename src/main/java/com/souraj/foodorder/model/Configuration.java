@@ -5,6 +5,7 @@
 package com.souraj.foodorder.model;
 
 import jakarta.validation.constraints.NotEmpty;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -14,11 +15,10 @@ import javax.persistence.Table;
  * @author ksouraj
  */
 @Entity
-@Table(name = "file_name")
+@Table(name = "configuration")
+public class Configuration extends AbstractEntity {
 
-public class FileName extends AbstractEntity {
-
-    @Column(name = "name")
+    @Column(name = "file_name")
     @NotEmpty(message = "Name cannot be empty")
     private String name;
     @Column(name = "file_size")
@@ -26,10 +26,9 @@ public class FileName extends AbstractEntity {
     @Column(name = "file_location")
     private String location;
     @Column(name = "allowed_File_Type")
-    private String allowedType;
+    private List<String> allowedType;
 
-    public FileName() {
-
+    public Configuration() {
     }
 
     public String getName() {
@@ -47,7 +46,6 @@ public class FileName extends AbstractEntity {
     public void setFsize(int fsize) {
         this.fsize = fsize;
     }
-      
 
     public String getLocation() {
         return location;
@@ -57,17 +55,19 @@ public class FileName extends AbstractEntity {
         this.location = location;
     }
 
-    public String getAllowedType() {
+    public List<String> getAllowedType() {
         return allowedType;
     }
 
-    public void setAllowedType(String allowedType) {
+    public void setAllowedType(List<String> allowedType) {
         this.allowedType = allowedType;
     }
 
+
+
     @Override
     public String getTableName() {
-        return "file_name";
+        return "configuration";
     }
 
 }

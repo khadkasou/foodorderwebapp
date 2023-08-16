@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:commandButton style="float:right; font-size: 10px;" icon="fa fa-plus"
+                             title="Add File" 
+                             actionListener="#{configurationController.beforeCreate}" 
+                             process="@this" 
+                             onclick="PF('dlg_create_file').show();" />
+        </h:form>
+        <br /><br />
+
+
+        <h:form id="frm_show_file">
+            <p:dataTable value="#{configurationController.configurationsList}" var="c" 
+                         rowIndexVar="rowIndex">
+                <p:column>
+                    <f:facet name="header">ID</f:facet>
+                    <h:outputText value="#{rowIndex + 1}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">Name</f:facet>
+                    <h:outputText value="#{c.name}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">Created At</f:facet>
+                    <h:outputText value="#{c.createdAt}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">Updated At</f:facet>
+                    <h:outputText value="#{c.updatedAt}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">Size</f:facet>
+                    <h:outputText value="#{c.fsize}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">allowed Type</f:facet>
+                    <h:outputText value="#{c.allowedType}" />
+                </p:column>
+                <p:column headerText="Action">
+                    <div class="menu-actions">
+                        <p:commandButton id="btn_edit_file" value="Edit" 
+                                         actionListener="#{configurationController.beforeUpdate(c)}"
+                                         update=":frm_file" 
+                                         oncomplete="PF('dlg_create_file').show();"
+                                         styleClass="file-action-button" />
+
+                        <p:commandButton id="btn_delete_file" value="Delete" 
+                                         update="frm_show_file" 
+                                         action="#{configurationController.delete(c.id)}"
+                                         styleClass="file-action-button" />
+                    </div>
+                </p:column>
+            </p:dataTable>
+
+            <p:growl id="growl" showDetail="false" life="3000" />
+        </h:form>
+        <p:dialog header="Upload File" widgetVar="dlg_create_file" modal="true">
+            <h:form id="frm_file" enctype="multipart/form-data">
+                <p:panelGrid columns="2">
+                    <p:outputLabel value="Name" for="name" />
+                    <p:inputText id="name" required="true"
+                                 value="#{configurationController.configuration.name}">
+                        <p:ajax update="@this" process="@this" />
+                    </p:inputText>
+
+                    <p:outputLabel value="Size" for="size" />
+                    <p:inputText id="size" required="true"
+                                 value="#{configurationController.configuration.fsize}">
+                        <p:ajax update="@this" process="@this" />
+                    </p:inputText>
+
+                    <p:outputLabel value="Allowed Types" for="allowedTypes" />
+                    <p:selectManyCheckbox id="allowedTypes" required="true"
+                                          value="#{configurationController.configuration.allowedType}"
+                                          converter="configurationConverter">
+                        <f:selectItems value="#{configurationController.allowedTypesList}" />
+                        <p:ajax update="@this" process="@this" />
+                    </p:selectManyCheckbox>
+                </p:panelGrid>
+                <p:commandButton value="Save" action="#{configurationController.saveData()}" 
+                                 rendered="#{configurationController.configuration.id eq null}"
+                                 update="frm_show_file" onstart="resetConfiguration();" 
+                                 oncomplete="PF('dlg_create_file').hide();" />
+
+                <p:commandButton value="Update" action="#{configurationController.update}" 
+                                 rendered="#{configurationController.configuration.id ne null}"
+                                 update="frm_show_file" 
+                                 oncomplete="PF('dlg_create_file').hide();" />
+            </h:form>
+        </p:dialog>
+
+        <div class="card">
+            <p:link outcome="fileUpload" value="fileUpload">
+                <f:param name="show_file"/>
+            </p:link>
+        </div>
+        <div class="card">
+            <p:link outcome="fileName" value="fileName">
+                <f:param name="show_file"/>
+            </p:link>
+        </div>
+
+    </h:body>
+</html>
