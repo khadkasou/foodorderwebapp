@@ -15,10 +15,10 @@ import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
@@ -27,8 +27,8 @@ import org.primefaces.model.UploadedFile;
  *
  * @author ksouraj
  */
-@ManagedBean(name = "fileNameController")
-@SessionScoped
+@Named(value = "fileNameController")
+@ViewScoped
 public class FileNameController implements Serializable {
 
     private FileName fileName;
@@ -93,10 +93,10 @@ public class FileNameController implements Serializable {
 
             this.fileName.setName(fileName.getName());
             this.fileName.setLocation(folderPath.toString());
- //           this.fileName.setLocation(destinationPath.toString());
-  //          this.fileName.setAllowedType(fileExtension);
-//            int fileSize = uploadedFile.getInputstream().available();
-//            this.fileName.setFsize(fileSize);
+            this.fileName.setLocation(destinationPath.toString());
+   //         this.fileName.setAllowedType(fileExtension);
+            int fileSize = uploadedFile.getInputstream().available();
+            this.fileName.setFsize(fileSize);
 
         } catch (IOException e) {
             FacesMessage message = new FacesMessage("Error", "Error while uploading the file.");

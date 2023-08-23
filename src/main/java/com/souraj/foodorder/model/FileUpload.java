@@ -4,13 +4,11 @@
  */
 package com.souraj.foodorder.model;
 
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
 
 /**
  *
@@ -21,34 +19,37 @@ import javax.persistence.Temporal;
 public class FileUpload extends AbstractEntity {
 
     @ManyToOne
-    @JoinColumn(name = "file_name_id")
-    private FileName fileNameId;
-    private String Remarks;
+    @JoinColumn(name = "configuration_id")
+    private Configuration configuration;
+    
+    @Column(name = "Remarks")
+    private String remarks;
+    
     @Column(name = "file_name")
     private String fName;
     private String createdBy;
     private String location;
-    
 
     public FileUpload() {
     }
 
-    public FileName getFileNameId() {
-        return fileNameId;
+    public Configuration getConfiguration() {
+        return configuration;
     }
 
-    public void setFileNameId(FileName fileNameId) {
-        this.fileNameId = fileNameId;
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
     }
 
     public String getRemarks() {
-        return Remarks;
+        return remarks;
     }
 
-    public void setRemarks(String Remarks) {
-        this.Remarks = Remarks;
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
+    
     public String getfName() {
         return fName;
     }
@@ -72,8 +73,6 @@ public class FileUpload extends AbstractEntity {
     public void setLocation(String location) {
         this.location = location;
     }
-    
-
 
     @Override
     public String getTableName() {

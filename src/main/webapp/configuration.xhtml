@@ -5,8 +5,12 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
+        <title>Configuration File</title>
     </h:head>
     <h:body>
+        <div class="middle-header">
+            <h2>Configuration Files</h2>
+        </div>
         <h:form>
             <p:commandButton style="float:right; font-size: 10px;" icon="fa fa-plus"
                              title="Add File" 
@@ -42,7 +46,7 @@
                 </p:column>
                 <p:column>
                     <f:facet name="header">allowed Type</f:facet>
-                    <h:outputText value="#{c.allowedType}" />
+                    <h:outputText value="#{c.allowedTypes}" />
                 </p:column>
                 <p:column headerText="Action">
                     <div class="menu-actions">
@@ -78,12 +82,10 @@
                     </p:inputText>
 
                     <p:outputLabel value="Allowed Types" for="allowedTypes" />
-                    <p:selectManyCheckbox id="allowedTypes" required="true"
-                                          value="#{configurationController.configuration.allowedType}"
-                                          converter="configurationConverter">
-                        <f:selectItems value="#{configurationController.allowedTypesList}" />
-                        <p:ajax update="@this" process="@this" />
-                    </p:selectManyCheckbox>
+                    <p:inputTextarea id="allowedTypes" required="true"
+                                     value="#{configurationController.configuration.allowedTypes}"
+                                     rows="5" />
+
                 </p:panelGrid>
                 <p:commandButton value="Save" action="#{configurationController.saveData()}" 
                                  rendered="#{configurationController.configuration.id eq null}"

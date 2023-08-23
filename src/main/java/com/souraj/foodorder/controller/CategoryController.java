@@ -13,15 +13,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
 import org.primefaces.event.FileUploadEvent;
 
-@ManagedBean(name = "categoryController")
-@SessionScoped
+@Named(value = "categroryController")
+@ViewScoped
 public class CategoryController implements Serializable {
 
     private Category category;

@@ -15,13 +15,14 @@ import javax.inject.Inject;
  * @author ksouraj
  */
 @FacesConverter(value = "configurationConverter", forClass = Configuration.class)
+
 public class ConfigurationConverter extends GenericConverter{
     @Inject
-    private ConfigurationRepository configurationRepository;
+    private ConfigurationRepository configurationRepo;
 
     @Override
     protected GenericAbstractClasss getAbstractRepo() {
-            return configurationRepository;
+            return configurationRepo;
     }
     
     

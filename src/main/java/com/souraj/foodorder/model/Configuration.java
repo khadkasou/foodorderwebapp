@@ -5,7 +5,7 @@
 package com.souraj.foodorder.model;
 
 import jakarta.validation.constraints.NotEmpty;
-import java.util.List;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -21,12 +21,13 @@ public class Configuration extends AbstractEntity {
     @Column(name = "file_name")
     @NotEmpty(message = "Name cannot be empty")
     private String name;
-    @Column(name = "file_size")
+    @Column(name="file_size")
     private int fsize;
+    
     @Column(name = "file_location")
     private String location;
     @Column(name = "allowed_File_Type")
-    private List<String> allowedType;
+    private String allowedTypes;
 
     public Configuration() {
     }
@@ -55,15 +56,38 @@ public class Configuration extends AbstractEntity {
         this.location = location;
     }
 
-    public List<String> getAllowedType() {
-        return allowedType;
+    public String getAllowedTypes() {
+        return allowedTypes;
     }
 
-    public void setAllowedType(List<String> allowedType) {
-        this.allowedType = allowedType;
+    public void setAllowedTypes(String allowedTypes) {
+        this.allowedTypes = allowedTypes;
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.name);
+        return hash;
     }
 
-
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Configuration other = (Configuration) obj;
+        return Objects.equals(this.name, other.name);
+    }
+    
+    
+    
 
     @Override
     public String getTableName() {

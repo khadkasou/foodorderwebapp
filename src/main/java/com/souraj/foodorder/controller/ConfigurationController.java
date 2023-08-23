@@ -6,24 +6,28 @@ package com.souraj.foodorder.controller;
 
 import com.souraj.foodorder.model.Configuration;
 import com.souraj.foodorder.repository.ConfigurationRepository;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
+
+
 
 /**
  *
  * @author ksouraj
- */
-@ManagedBean(name = "configurationController")
-@SessionScoped
-public class ConfigurationController {
+*/
+
+@Named(value = "configurationController")
+@ViewScoped
+public class ConfigurationController implements Serializable{
 
     private Configuration configuration;
     private List<Configuration> configurationsList;
-    private List<String> allowedTypesList;
+
     @Inject
     private ConfigurationRepository configurationRepository;
 
@@ -42,21 +46,10 @@ public class ConfigurationController {
     public void setConfigurationsList(List<Configuration> configurationsList) {
         this.configurationsList = configurationsList;
     }
-
-    public List<String> getAllowedTypesList() {
-        return allowedTypesList;
-    }
-
-    public void setAllowedTypesList(List<String> allowedTypesList) {
-        this.allowedTypesList = allowedTypesList;
-    }
-    
-
     @PostConstruct
     public void init() {
         this.configuration = new Configuration();
         loadData();
-        loadAllowedTypes();
     }
 
     public void beforeCreate() {
@@ -66,6 +59,9 @@ public class ConfigurationController {
     public void beforeUpdate(Configuration con) {
         this.configuration = configurationRepository.findById(con.getId());
     }
+    
+ 
+
 
     public void saveData() {
 
@@ -73,12 +69,14 @@ public class ConfigurationController {
         loadData();
         this.configuration = new Configuration();
     }
+  
 
     public void update() {
         configurationRepository.update(this.configuration);
         loadData();
         this.configuration = new Configuration();
     }
+    
 
     public void delete(Long id) {
         configurationRepository.delete(id);
@@ -89,14 +87,9 @@ public class ConfigurationController {
         this.configurationsList = new ArrayList<>();
         this.configurationsList = configurationRepository.findAll();
     }
-
-    public void loadAllowedTypes() {
-        this.allowedTypesList = new ArrayList<>();
-        this.allowedTypesList.add(".jpg");
-        this.allowedTypesList.add(".jpeg");
-        this.allowedTypesList.add(".png");
-        this.allowedTypesList.add(".pdf");
-        this.allowedTypesList.add(".xls");     
-    }
+    
+  
+    
+    
 
 }

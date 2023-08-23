@@ -4,8 +4,13 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
+        <title>Uploaded File List</title>
     </h:head>
     <h:body>
+        <div class="middle-header">
+            <h2>Uploaded File List</h2>
+        </div>
+        <p:growl id="growl" showDetail="true" />
         <h:form>
             <p:commandButton style="float:right; font-size: 10px;" icon="fa fa-plus"
                              title="Add File" 
@@ -14,75 +19,90 @@
                              onclick="PF('dlg_create_file').show();" />
         </h:form>
         <br /><br />
-
         <h:form id="show_file">
             <p:dataTable value="#{fileUploadController.fileUploadList}" var="c" rowIndexVar="rowIndex">
-
                 <p:column>
                     <f:facet name="header">ID</f:facet>
                     <h:outputText value="#{rowIndex + 1}" />
-                </p:column>
-                <p:column>
-                    <f:facet name="header">File ID</f:facet>
-                    <h:outputText value="#{c.fileNameId.id}" />
                 </p:column>
                 <p:column>
                     <f:facet name="header">Created At</f:facet>
                     <h:outputText value="#{c.createdAt}" />
                 </p:column>
                 <p:column>
-                    <f:facet name="header">Updated At</f:facet>
-                    <h:outputText value="#{c.updatedAt}" />
-                </p:column>
-                <p:column>
                     <f:facet name="header">Remarks</f:facet>
                     <h:outputText value="#{c.remarks}" />
                 </p:column>
                 <p:column>
-                    <f:facet name="header">Created By</f:facet>
-                    <h:outputText value="#{c.createdBy}" />
-                </p:column>
-                <p:column>
                     <f:facet name="header">File Name</f:facet>
-                    <h:outputText value="#{c.fileNameId.name}" />
+                    <h:outputText value="#{c.configuration.name}" />
                 </p:column>
-               
+                <p:column headerText="Action">
+                    <div class="menu-actions">
+                        <p:commandButton title="Delete File" icon="ui-icon-trash" 
+                                         update="show_file" 
+                                         action="#{fileUploadController.delete(c.id)}"
+                                         styleClass="file-action-button" />
+                        <p:commandButton title="Show Details" icon="ui-icon-person" 
+                                         action="#{fileUploadController.imageForFile()}" 
+                                         oncomplete="PF('fileDetailsDlg').show();" 
+                                         process="@this" update="@(.fileDetailsFrm1)" id="ufShowDetBtn"/>
+
+                    </div>
+                </p:column>
 
             </p:dataTable>
-        </h:form>
 
-        <p:dialog header="Upload File" widgetVar="dlg_create_file" 
-                  modal="true" showEffect="fade" hideEffect="fade">
+            <p:dialog widgetVar="fileDetailsDlg" modal="true" dynamic="true" 
+                      appendTo="@(body)" closable="true" closeOnEscape="true"
+                      styleClass="fileDetailsFrm1" id="showFileDetails" header="File Details"
+                      style="max-width: 80%; max-height: 90%; margin-top: 2%; margin-left: 15%; overflow: auto" 
+                      position="left top">
+                <h:form id="fileDetailsFrm">
+                    <h:panelGrid>
+                        <p:graphicImage value="#{fileUploadController.viewedFileData}" cache="false" id="grpImage" />
+                    </h:panelGrid>
+                </h:form>
+            </p:dialog>
+
+
+        </h:form>
+        <p:dialog header="Upload File" widgetVar="dlg_create_file" modal="true">
             <h:form id="frm_file" enctype="multipart/form-data">
+                <p:messages id="fileMessages" showDetail="true" autoUpdate="true" closable="true" />
                 <p:panelGrid columns="2">
-                    <h:outputLabel value="File Name"/>
-                    <h:selectOneMenu id="fileList" value="#{configurationController.configuration}"  required="true" 
-                                     converter="configurationConverter" 
-                                     valueChangeListener="#{configurationController.configuration.fsize}">
-                        <f:selectItem itemLabel="Select File" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{configurationController.configurationsList}" var="item"
-                                       itemLabel="#{item.name}" itemValue="#{item}"/>
-                           
-                    </h:selectOneMenu>
+                    <p:outputLabel id="file_config" value="Configuration File" for="som_file"/>
+                    <p:selectOneMenu  id="som_file" required="true" converter="configurationConverter"
+                                      value="#{fileUploadController.fileUploads.configuration}">
+                        <f:selectItem itemLabel="Select File" itemValue="" />
+                        <f:selectItems value="#{configurationController.configurationsList}" 
+                                       var="item" itemLabel="#{item.name}" 
+                                       itemValue="#{item}"/>
+                        <p:ajax update="@this" process="@this" />
+                    </p:selectOneMenu>
                     <p:outputLabel value="File" for="fileUpload" />
                     <h:panelGroup>
-                        <p:fileUpload fileUploadListener="#{fileUploadController.fileUploadHandler}" mode="advanced" id="fileUpload"
-                                      multiple="false" update="frm_file" auto="true" sizeLimit="1000000"
-                                      allowTypes="/(\.|\/)(pdf|jpg|jpeg|png|xls)$/"
+                        <p:fileUpload id="fileUpload" fileUploadListener="#{fileUploadController.fileUploadHandler}" 
+                                      mode="advanced" multiple="false" update="frm_file" auto="true"
                                       value="#{fileUploadController.uploadedFile}"/> 
                         <p:outputLabel value="#{fileUploadController.uploadedFile.fileName}" 
                                        rendered="#{fileUploadController.uploadedFile ne null}"/>
                     </h:panelGroup>
-                    <h:outputLabel value="Remarks"/>
-                    <p:inputText/>
+                    <p:outputLabel value="Remarks" for="remarks" />
+                    <p:inputText id="remarks" required="true" placeholder="Enter remarks" 
+                                 value="#{fileUploadController.fileUploads.remarks}">
+                        <p:ajax update="@this" process="@this" />
+                    </p:inputText>
                 </p:panelGrid>
                 <p:spacer width="1" height="1" />
-                <p:commandButton value="Save" action="#{fileUploadController.saveFile()}"
-                                 update="show_file" onstart="resetFileName();" 
+                <p:commandButton value="Save" action="#{fileUploadController.saveFile}"
+                                 update="show_file fileMessages" process="@this"
                                  oncomplete="PF('dlg_create_file').hide()"
                                  style="margin: 0 auto; display: block;" />
             </h:form>
         </p:dialog>
+
+
 
     </h:body>
 </html>
