@@ -6,16 +6,12 @@ package com.souraj.foodorder.controller;
 
 import com.souraj.foodorder.model.Configuration;
 import com.souraj.foodorder.model.FileUpload;
-import static com.souraj.foodorder.model.FileUpload_.remarks;
 import com.souraj.foodorder.repository.ConfigurationRepository;
 import com.souraj.foodorder.repository.FileUploadRepository;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,11 +20,12 @@ import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.ServletContext;
 import org.apache.commons.io.IOUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
@@ -47,16 +44,50 @@ public class FileUploadController implements Serializable {
     private FileUpload fileUploads;
     private List<FileUpload> fileUploadList;
     private UploadedFile uploadedFile;
-    private Configuration configs;
+    private Configuration selectedConfiguration;
     private List<Configuration> configurationList;
     byte[] file;
     private byte[] viewedFileData;
+    private StreamedContent viewedFileContent;
+    private InputStream inputStream;
+    private String updateValue;
+    
+     private StreamedContent streamContent;
 
     @Inject
     private FileUploadRepository fileUploadRepository;
 
     @Inject
     private ConfigurationRepository configurationRepository;
+
+    public StreamedContent getStreamContent() {
+        return streamContent;
+    }
+
+    public void setStreamContent(StreamedContent streamContent) {
+        this.streamContent = streamContent;
+    }
+
+    
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
+    }
+
+    public String getUpdateValue() {
+        return updateValue;
+    }
+
+    public void setUpdateValue(String updateValue) {
+        this.updateValue = updateValue;
+    }
+
+    public StreamedContent getViewedFileContent() {
+        return viewedFileContent;
+    }
 
     public byte[] getViewedFileData() {
         return viewedFileData;
@@ -67,11 +98,11 @@ public class FileUploadController implements Serializable {
     }
 
     public Configuration getConfigs() {
-        return configs;
+        return selectedConfiguration;
     }
 
     public void setConfigs(Configuration configs) {
-        this.configs = configs;
+        this.selectedConfiguration = configs;
     }
 
     public FileUploadController() {
@@ -111,8 +142,9 @@ public class FileUploadController implements Serializable {
 
     @PostConstruct
     public void init() {
+        updateValue = "www";
         this.fileUploads = new FileUpload();
-        configs = new Configuration();
+        selectedConfiguration = new Configuration();
         this.configurationList = configurationRepository.findAll();
 
         loadData();
@@ -151,10 +183,8 @@ public class FileUploadController implements Serializable {
 
                         fileUploadRepository.save(this.fileUploads);
                         loadData();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        FacesMessage message = new FacesMessage("Error", "Error while uploading the file.");
-                        FacesContext.getCurrentInstance().addMessage(null, message);
+                    } catch (IOException e) {
+                        addErrorMessage("Error while uploading the file.");
                         return;
 
                     }
@@ -168,9 +198,8 @@ public class FileUploadController implements Serializable {
         String extension = f.substring(f.lastIndexOf(".")).toLowerCase();
 
         if (!allowedFileTypes.contains(extension)) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "Invalid file type.", null);
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            addErrorMessage("Invalid file type.");
+
             return false;
         }
         return true;
@@ -181,9 +210,7 @@ public class FileUploadController implements Serializable {
         long maxSize = limit.longValue();
 
         if (fileSize > maxSize) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "File size exceeds the limit.", null);
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            addErrorMessage("File size exceeds the limit.");
             return false;
         }
         return true;
@@ -194,37 +221,30 @@ public class FileUploadController implements Serializable {
         loadData();
     }
 
-    public StreamedContent getImageForFile() throws IOException {
-        FacesContext context = FacesContext.getCurrentInstance();
+    public void loadFileData(Long id) throws FileNotFoundException, IOException {
+        this.fileUploads = new FileUpload();
+        if (id != null) {
+            fileUploads = fileUploadRepository.findById(id);
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.execute("PF('viewDocDlg').show();");
 
-        if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
-            return new DefaultStreamedContent();
-        } else {
-
-            String filePath = uploadedFile.getFileName();
-            String uploadFolderPath = "/home/synergy/Uploads/Files/" + filePath;
-            Path folderPath = Paths.get(uploadFolderPath);
-            File file = new File(filePath);
-            InputStream inputStream = new FileInputStream(file);
-            byte[] bytes = Files.readAllBytes(file.toPath());
-            return new DefaultStreamedContent(new ByteArrayInputStream(bytes), "*/*");
-            
-            
-//            String fileID = context.getExternalContext().getRequestParameterMap().get("fileid");
-//
-//            if (fileID != null && !fileID.isEmpty()) {
-//                FileUpload fileUpload = fileUploadRepository.findById(Long.valueOf(fileID));
-//
-//                if (fileUpload != null) {
-//                    String filePath = fileUpload.getLocation(); 
-//                    File file = new File(filePath);
-//                    InputStream inputStream = new FileInputStream(file);
-//                    byte[] bytes = Files.readAllBytes(file.toPath());
-//                    setViewedFileData(bytes); 
-//                    return new DefaultStreamedContent(new ByteArrayInputStream(bytes), "*/*");
-//                }
-//            }
         }
+    }
+    
+    
+
+    public boolean isImage() {
+    if (fileUploads != null) {
+        String fileName = fileUploads.getfName(); 
+        return fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".png"); 
+    }
+    return false;
+}
+
+
+    private void addErrorMessage(String message) {
+        FacesMessage errorMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null);
+        FacesContext.getCurrentInstance().addMessage(null, errorMessage);
     }
 
     public void loadData() {

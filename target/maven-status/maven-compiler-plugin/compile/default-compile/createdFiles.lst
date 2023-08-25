@@ -32,6 +32,7 @@ com/souraj/foodorder/controller/FoodItemsController.class
 com/souraj/foodorder/model/MenuItem.class
 com/souraj/foodorder/repository/CategoryRepo.class
 com/souraj/foodorder/dto/MenuDto.class
+com/souraj/foodorder/utils/ImageUtill.class
 com/souraj/foodorder/model/OrderDetails_.class
 com/souraj/foodorder/controller/MenuItemController.class
 com/souraj/foodorder/model/OrderDetails.class
@@ -42,6 +43,7 @@ com/souraj/foodorder/model/IAbstractClass.class
 com/souraj/foodorder/repository/ConfigurationRepository.class
 com/souraj/foodorder/controller/ConfigurationController.class
 com/souraj/foodorder/model/Payments_.class
+com/souraj/foodorder/controller/FileServlet.class
 com/souraj/foodorder/converter/CategoryConverter.class
 com/souraj/foodorder/controller/LoginController.class
 com/souraj/foodorder/model/Orders_.class
@@ -56,6 +58,7 @@ com/souraj/foodorder/controller/FileUploadController.class
 com/souraj/foodorder/api/RestResponse.class
 com/souraj/foodorder/model/FileUpload_.class
 com/souraj/foodorder/model/Configuration.class
+com/souraj/foodorder/controller/FileDownloadController.class
 com/souraj/foodorder/model/Menu_.class
 com/souraj/foodorder/repository/FileNameRepository.class
 com/souraj/foodorder/controller/CategoryController.class

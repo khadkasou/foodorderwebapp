@@ -1,12 +1,25 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:p="http://primefaces.org/ui"   
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+
     <h:head>
-        <title>Uploaded File List</title>
+        <script type="text/javascript">
+            function start() {
+                PF('statusDialog').show();
+            }
+
+            function stop() {
+                PF('statusDialog').hide();
+            }
+        </script>
     </h:head>
     <h:body>
+
         <div class="middle-header">
             <h2>Uploaded File List</h2>
         </div>
@@ -43,30 +56,39 @@
                                          update="show_file" 
                                          action="#{fileUploadController.delete(c.id)}"
                                          styleClass="file-action-button" />
-                        <p:commandButton title="Show Details" icon="ui-icon-person" 
-                                         action="#{fileUploadController.imageForFile()}" 
-                                         oncomplete="PF('fileDetailsDlg').show();" 
-                                         process="@this" update="@(.fileDetailsFrm1)" id="ufShowDetBtn"/>
-
+                        <p:commandButton id="btn_view_doc" title="View Document" icon="fa fa-file"
+                                         actionListener="#{fileUploadController.loadFileData(c.id)}"
+                                         process="@this" update="@(.doc) frm_view_document" />
+                        <p:commandButton title="Download" icon="ui-icon-arrowreturnthick-1-s" ajax="false" immediate="true" 
+                                         id="ufDownloadBtn" onclick="PrimeFaces.monitorDownload(start, stop);">
+                            <p:fileDownload value="#{fileDownloadController.downloadFile()}" />
+                        </p:commandButton>                 
                     </div>
                 </p:column>
-
             </p:dataTable>
-
-            <p:dialog widgetVar="fileDetailsDlg" modal="true" dynamic="true" 
-                      appendTo="@(body)" closable="true" closeOnEscape="true"
-                      styleClass="fileDetailsFrm1" id="showFileDetails" header="File Details"
-                      style="max-width: 80%; max-height: 90%; margin-top: 2%; margin-left: 15%; overflow: auto" 
-                      position="left top">
-                <h:form id="fileDetailsFrm">
-                    <h:panelGrid>
-                        <p:graphicImage value="#{fileUploadController.viewedFileData}" cache="false" id="grpImage" />
-                    </h:panelGrid>
-                </h:form>
-            </p:dialog>
-
-
         </h:form>
+
+        <p:dialog widgetVar="viewDocDlg" modal="true" dynamic="true" appendTo="@(body)" closable="true" 
+                  closeOnEscape="true" 
+                  id="show_document" header="Document" 
+                  style="max-width: 80%; max-height: 90%; margin-top: 2%; margin-left: 15%; overflow: auto" position="left top">
+            <h:form id="frm_view_document">
+                <h:panelGrid width="100%" style="overflow: scroll">
+                    <p:graphicImage  rendered="#{fileUploadController.isImage()}"
+                                     value="#{imageUtill.loadFileData()}"  
+                                     height="500" width="800" cache="false">
+                        <f:param name="docId"  value="#{fileUploadController.fileUploads.id.toString()}"/>
+                    </p:graphicImage>
+                    <pe:documentViewer rendered="#{!fileUploadController.isImage()}"   
+                                       value="#{imageUtill.loadFileData()}" 
+                                       height="500" width="800" cache="false" zoom="page-width" >
+                        <f:param name="docId"  value="#{fileUploadController.fileUploads.id.toString()}"/>             
+                    </pe:documentViewer>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+
         <p:dialog header="Upload File" widgetVar="dlg_create_file" modal="true">
             <h:form id="frm_file" enctype="multipart/form-data">
                 <p:messages id="fileMessages" showDetail="true" autoUpdate="true" closable="true" />
@@ -101,8 +123,5 @@
                                  style="margin: 0 auto; display: block;" />
             </h:form>
         </p:dialog>
-
-
-
     </h:body>
 </html>
