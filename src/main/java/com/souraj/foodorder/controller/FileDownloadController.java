@@ -37,7 +37,7 @@ public class FileDownloadController implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         String id = context.getExternalContext().getRequestParameterMap().get("docId");
         String fileLocation = fileUploadRepository.findById(Long.valueOf(id)).getLocation();
-
+        
         InputStream stream = ((ServletContext) FacesContext
                 .getCurrentInstance()
                 .getExternalContext()
@@ -46,7 +46,20 @@ public class FileDownloadController implements Serializable {
 
         file = new DefaultStreamedContent(stream);
     }
+    
+    
+    
+    
+//    public String getDownloadUrl() {
+//    FacesContext context = FacesContext.getCurrentInstance();
+//    String id = context.getExternalContext().getRequestParameterMap().get("docId");
+//    
+//    return "/fileDownload.xhtml?docId=" + id;
+//}
+
 }
+
+
 
 //    public FileDownloadController() {
 //        FacesContext context = FacesContext.getCurrentInstance();

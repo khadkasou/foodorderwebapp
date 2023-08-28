@@ -20,16 +20,12 @@ import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.ServletContext;
 import org.apache.commons.io.IOUtils;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
@@ -50,9 +46,8 @@ public class FileUploadController implements Serializable {
     private byte[] viewedFileData;
     private StreamedContent viewedFileContent;
     private InputStream inputStream;
-    private String updateValue;
-    
-     private StreamedContent streamContent;
+
+    private StreamedContent streamContent;
 
     @Inject
     private FileUploadRepository fileUploadRepository;
@@ -68,21 +63,12 @@ public class FileUploadController implements Serializable {
         this.streamContent = streamContent;
     }
 
-    
     public InputStream getInputStream() {
         return inputStream;
     }
 
     public void setInputStream(InputStream inputStream) {
         this.inputStream = inputStream;
-    }
-
-    public String getUpdateValue() {
-        return updateValue;
-    }
-
-    public void setUpdateValue(String updateValue) {
-        this.updateValue = updateValue;
     }
 
     public StreamedContent getViewedFileContent() {
@@ -142,7 +128,6 @@ public class FileUploadController implements Serializable {
 
     @PostConstruct
     public void init() {
-        updateValue = "www";
         this.fileUploads = new FileUpload();
         selectedConfiguration = new Configuration();
         this.configurationList = configurationRepository.findAll();
@@ -225,22 +210,16 @@ public class FileUploadController implements Serializable {
         this.fileUploads = new FileUpload();
         if (id != null) {
             fileUploads = fileUploadRepository.findById(id);
-            RequestContext context = RequestContext.getCurrentInstance();
-            context.execute("PF('viewDocDlg').show();");
-
         }
     }
-    
-    
 
     public boolean isImage() {
-    if (fileUploads != null) {
-        String fileName = fileUploads.getfName(); 
-        return fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".png"); 
+        if (fileUploads != null) {
+            String fileName = fileUploads.getfName();
+            return fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".png");
+        }
+        return false;
     }
-    return false;
-}
-
 
     private void addErrorMessage(String message) {
         FacesMessage errorMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null);

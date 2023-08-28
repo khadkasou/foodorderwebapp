@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>View Document</title>
+    </h:head>
+    <h:body>
+        <h:outputText value="View Document" style="font-size: 20px; font-weight: bold;" />
+        <br /><br />
+        <h:panelGrid width="100%" style="overflow: scroll">
+            <p:graphicImage rendered="#{fileUploadController.isImage()}"
+                            value="#{imageUtill.loadFileData()}" 
+                            height="500" width="800" cache="false" >
+                <f:param name="docId"  value="#{fileUploadController.fileUploads.id.toString()}"/>
+            </p:graphicImage>
+            <pe:documentViewer rendered="#{!fileUploadController.isImage()}"
+                               value="#{imageUtill.loadFileData()}" 
+                               height="500" width="800" cache="false" zoom="page-width" >
+                <f:param name="docId"  value="#{fileUploadController.fileUploads.id.toString()}"/>
+            </pe:documentViewer>
+        </h:panelGrid>
+        <h:form>
+            <p:commandButton value="Close" onclick="window.close();" />
+        </h:form>
+    </h:body>
+</html>
