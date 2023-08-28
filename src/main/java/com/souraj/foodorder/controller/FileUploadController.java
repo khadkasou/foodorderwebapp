@@ -25,6 +25,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
@@ -210,8 +211,22 @@ public class FileUploadController implements Serializable {
         this.fileUploads = new FileUpload();
         if (id != null) {
             fileUploads = fileUploadRepository.findById(id);
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.execute("PF('viewDocDlg').show();");
         }
     }
+    
+//    public void FileDownload(Long id) throws FileNotFoundException, IOException {
+//        this.fileUploads = new FileUpload();
+//        if (id != null) {
+//            fileUploads = fileUploadRepository.findById(id);
+//            RequestContext context = RequestContext.getCurrentInstance();
+//            context.execute("PF('statusDialog').show();");
+//        }
+//    }
+   
+    
+    
 
     public boolean isImage() {
         if (fileUploads != null) {

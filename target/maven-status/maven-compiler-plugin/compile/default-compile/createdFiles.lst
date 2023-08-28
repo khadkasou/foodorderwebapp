@@ -7,6 +7,7 @@ com/souraj/foodorder/model/Configuration_.class
 com/souraj/foodorder/repository/OrdersRepository.class
 com/souraj/foodorder/repository/MenuRepository.class
 com/souraj/foodorder/repository/GenericAbstractClasss.class
+com/souraj/foodorder/controller/YourFileRepository.class
 com/souraj/foodorder/model/DocTypeConst.class
 com/souraj/foodorder/repository/FoodItemsRepository.class
 com/souraj/foodorder/model/Menu.class

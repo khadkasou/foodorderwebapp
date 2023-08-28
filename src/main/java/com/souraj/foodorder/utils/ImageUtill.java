@@ -4,7 +4,6 @@
  */
 package com.souraj.foodorder.utils;
 
-import com.souraj.foodorder.controller.FileUploadController;
 import com.souraj.foodorder.repository.FileUploadRepository;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -28,8 +27,8 @@ public class ImageUtill implements Serializable {
     @Inject
     private FileUploadRepository fileUploadRepository;
     
-    @Inject
-    private FileUploadController fileUploadController;
+//    @Inject
+//    private FileUploadController fileUploadController;
 
 
     public StreamedContent loadFileData() throws FileNotFoundException, IOException {
@@ -41,13 +40,13 @@ public class ImageUtill implements Serializable {
             File file = new File(fileLocation);
             byte[] newByte = Files.readAllBytes(file.toPath());
 
-            String contentType = "application/pdf";
-            
-            if (fileUploadController.isImage()) {
-                contentType = "image/png";
-            }
+//            String contentType = "application/pdf";
+//            
+//            if (fileUploadController.isImage()) {
+//                contentType = "image/png";
+//            }
 
-            return new DefaultStreamedContent(new ByteArrayInputStream(newByte), contentType);
+            return new DefaultStreamedContent(new ByteArrayInputStream(newByte), "*/*");
         }
         return new DefaultStreamedContent();
     }

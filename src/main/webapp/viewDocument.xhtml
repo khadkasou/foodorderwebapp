@@ -7,6 +7,9 @@
     <h:head>
         <title>View Document</title>
     </h:head>
+    <f:metadata>
+        <f:viewParam name="docId" value="#{fileUploadController.fileUploads.id}"  />
+    </f:metadata>
     <h:body>
         <h:outputText value="View Document" style="font-size: 20px; font-weight: bold;" />
         <br /><br />

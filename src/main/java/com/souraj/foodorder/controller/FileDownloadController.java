@@ -5,89 +5,59 @@
 package com.souraj.foodorder.controller;
 
 import com.souraj.foodorder.repository.FileUploadRepository;
-import java.io.InputStream;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+import java.io.InputStream;
 import java.io.Serializable;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.imageio.ImageIO;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletContext;
-import org.primefaces.model.DefaultStreamedContent;
 
-@Named(value = "fileDownloadController")
-@SessionScoped
+@Named
+@ViewScoped
 public class FileDownloadController implements Serializable {
+
+    private StreamedContent file;
 
     @Inject
     private FileUploadRepository fileUploadRepository;
 
-    private StreamedContent file;
-
-    public StreamedContent getFile() {
-        return file;
-    }
-
     public void setFile(StreamedContent file) {
         this.file = file;
     }
-    
-    public void downloadFile() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        String id = context.getExternalContext().getRequestParameterMap().get("docId");
-        String fileLocation = fileUploadRepository.findById(Long.valueOf(id)).getLocation();
-        
-        InputStream stream = ((ServletContext) FacesContext
-                .getCurrentInstance()
-                .getExternalContext()
-                .getContext())
-                .getResourceAsStream(fileLocation);
 
-        file = new DefaultStreamedContent(stream);
+    public void fileDownload(Long id) throws IOException {
+
+        String fileName = fileUploadRepository.findById(Long.valueOf(id)).getLocation();
+        String contentType = "application/pdf";
+        //  InputStream inputStream = this.getClass().getResourceAsStream("/path/to/" + fileName);
+
+        BufferedImage thumb = ImageIO.read(new File(fileName));
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+        ImageIO.write(thumb,
+                contentType, os);
+        InputStream is = new ByteArrayInputStream(os.toByteArray());
+        file = new DefaultStreamedContent(is, contentType);
     }
-    
-    
-    
-    
-//    public String getDownloadUrl() {
-//    FacesContext context = FacesContext.getCurrentInstance();
-//    String id = context.getExternalContext().getRequestParameterMap().get("docId");
-//    
-//    return "/fileDownload.xhtml?docId=" + id;
-//}
+
+    public StreamedContent downloadFile(Long id) {
+
+        String filess = fileUploadRepository.findById(Long.valueOf(id)).getLocation();
+        InputStream stream = ((ServletContext)FacesContext
+                .getCurrentInstance().getExternalContext().getContext())
+                .getResourceAsStream(filess);
+        String contentType = "application/pdf";
+        return new DefaultStreamedContent(stream, contentType, "fileName.pdf");
+
+    }
 
 }
-
-
-
-//    public FileDownloadController() {
-//        FacesContext context = FacesContext.getCurrentInstance();
-//        String id = context.getExternalContext().getRequestParameterMap().get("docId");
-//        FileUpload fileUpload = fileUploadRepository.findById(Long.valueOf(id));
-//
-//        InputStream stream = ((ServletContext) FacesContext
-//                .getCurrentInstance()
-//                .getExternalContext()
-//                .getContext())
-//                .getResourceAsStream(fileUpload.getLocation());
-//
-//        String contentType = determineContentType(fileUpload.getfName());
-//        file = new DefaultStreamedContent(stream, contentType, fileUpload.getfName());
-//
-//    }
-//
-//    private String determineContentType(String fileName) {
-//        String extension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-//        switch (extension) {
-//            case "jpg":
-//            case "jpeg":
-//            case "png":
-//                return "image/" + extension;
-//            case "pdf":
-//                return "application/pdf";
-//            default:
-//                return "application/octet-stream";
-//        }
-//    }
-

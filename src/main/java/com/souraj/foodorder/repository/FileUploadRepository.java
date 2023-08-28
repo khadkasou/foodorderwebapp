@@ -28,4 +28,8 @@ public class FileUploadRepository extends GenericAbstractClasss<FileUpload> {
         return em;
     }
 
+    public FileUpload findById(FileUpload fileId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

@@ -48,6 +48,7 @@
 /home/synergy/Netbeans-project/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/MenuItemRepository.java
 /home/synergy/Netbeans-project/foodorderwebapp/src/main/java/com/souraj/foodorder/model/Menu.java
 /home/synergy/Netbeans-project/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/GenericRepo.java
+/home/synergy/Netbeans-project/foodorderwebapp/src/main/java/com/souraj/foodorder/controller/YourFileRepository.java
 /home/synergy/Netbeans-project/foodorderwebapp/src/main/java/com/souraj/foodorder/model/Configuration.java
 /home/synergy/Netbeans-project/foodorderwebapp/src/main/java/com/souraj/foodorder/converter/MenConverter.java
 /home/synergy/Netbeans-project/foodorderwebapp/src/main/java/com/souraj/foodorder/model/Category.java
