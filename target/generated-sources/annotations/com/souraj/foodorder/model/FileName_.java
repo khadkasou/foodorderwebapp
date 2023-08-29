@@ -4,7 +4,7 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.7.10.v20211216-rNA", date="2023-08-28T21:44:22")
+@Generated(value="EclipseLink-2.7.10.v20211216-rNA", date="2023-08-29T11:42:47")
 @StaticMetamodel(FileName.class)
 public class FileName_ extends AbstractEntity_ {
 

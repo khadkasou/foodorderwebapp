@@ -60,11 +60,12 @@
                                          actionListener="#{fileUploadController.loadFileData(c.id)}"
                                          process="@this" 
                                          update="@(.doc) frm_view_document" />
-                        
+
                         <p:commandButton value="Download" ajax="false" 
                                          onclick="PrimeFaces.monitorDownload(showStatus, hideStatus)">
                             <p:fileDownload value="#{fileDownloadController.downloadFile(c.id)}"/>
                         </p:commandButton>
+
 
                     </div>
                 </p:column>
@@ -73,6 +74,7 @@
         <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false">
             <p:graphicImage value="/design/ajaxloadingbar.gif" />
         </p:dialog>
+
         <p:dialog widgetVar="viewDocDlg" modal="true" dynamic="true" appendTo="@(body)" closable="true" 
                   closeOnEscape="true" 
                   id="show_document" header="Document" 
