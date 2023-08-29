@@ -19,107 +19,63 @@ import javax.inject.Named;
 @ViewScoped
 public class FileDownloadController implements Serializable {
 
-    private StreamedContent file;
-
     @Inject
     private FileUploadRepository fileUploadRepository;
-
-    public void setFile(StreamedContent file) {
-        this.file = file;
-    }
-
-//    public StreamedContent downloadFile(Long id) {
-//        try {
-//            FileUpload fileUpload = fileUploadRepository.findById(id);
-//
-//            if (fileUpload == null) {
-//                System.out.println("File not found for id: " + id);
-//                return null;
-//            }
-//
-//            String fileLocation = fileUpload.getLocation();
-//
-//            if (fileLocation != null) {
-//
-//                InputStream stream = new FileInputStream(fileUpload.getLocation());
-//
-//                if (stream != null) {
-//                    String contentType = "application/pdf";
-//
-//                    String fileName = "fileName.pdf";
-//                    return new DefaultStreamedContent(stream, contentType, fileName);
-//                } else {
-//                    System.out.println("Stream is null : " + fileLocation);
-//                    return null;
-//                }
-//            } else {
-//                System.out.println("File location is null: " + id);
-//                return null;
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
     
+     private final String basePath ="/home/synergy/Uploads/";
+
     public StreamedContent downloadFile(Long id) {
-    try {
-        FileUpload fileUpload = fileUploadRepository.findById(id);
+        try {
+            FileUpload fileUpload = fileUploadRepository.findById(id);
 
-        if (fileUpload == null) {
-            System.out.println("File not found for id: " + id);
-            return null;
-        }
-
-        String fileLocation = fileUpload.getLocation();
-
-        if (fileLocation != null) {
-            InputStream stream = new FileInputStream(fileUpload.getLocation());
-
-            if (stream != null) {
-                String contentType;
-                String fileName = fileUpload.getfName(); 
-
-                // Determine content type based on file extension
-                String extension = getFileExtension(fileName);
-                switch (extension.toLowerCase()) {
-                    case "pdf":
-                        contentType = "application/pdf";
-                        break;
-                    case "jpg":
-                    case "jpeg":
-                        contentType = "image/jpeg";
-                        break;
-                    case "png":
-                        contentType = "image/png";
-                        break;
-                    default:
-                        contentType = "application/octet-stream"; 
-                }
-
-                return new DefaultStreamedContent(stream, contentType, fileName);
-            } else {
-                System.out.println("Stream is null : " + fileLocation);
+            if (fileUpload == null) {
                 return null;
             }
-        } else {
-            System.out.println("File location is null: " + id);
+
+            String fileLocation = basePath+fileUpload.getLocation();
+
+            if (fileLocation != null) {
+                InputStream stream = new FileInputStream(fileLocation);
+
+                if (stream != null) {
+                    String contentType;
+                    String fileName = fileUpload.getfName();
+
+                    String extension = getFileExtension(fileName);
+                    switch (extension.toLowerCase()) {
+                        case "pdf":
+                            contentType = "application/pdf";
+                            break;
+                        case "jpg":
+                        case "jpeg":
+                            contentType = "image/jpeg";
+                            break;
+                        case "png":
+                            contentType = "image/png";
+                            break;
+                        default:
+                            contentType = "application/octet-stream";
+                    }
+
+                    return new DefaultStreamedContent(stream, contentType, fileName);
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-        return null;
     }
-}
 
-
-private String getFileExtension(String fileName) {
-    int dotIndex = fileName.lastIndexOf(".");
-    if (dotIndex > 0) {
-        return fileName.substring(dotIndex + 1);
+    private String getFileExtension(String fileName) {
+        int f = fileName.lastIndexOf(".");
+        if (f > 0) {
+            return fileName.substring(f + 1);
+        }
+        return "";
     }
-    return "";
-}
-
 
 }

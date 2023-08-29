@@ -26,6 +26,7 @@ public class ImageUtill implements Serializable {
 
     @Inject
     private FileUploadRepository fileUploadRepository;
+    private final String basePath ="/home/synergy/Uploads/";
     
 //    @Inject
 //    private FileUploadController fileUploadController;
@@ -37,7 +38,7 @@ public class ImageUtill implements Serializable {
 
         if (id != null) {
             String fileLocation = fileUploadRepository.findById(Long.valueOf(id)).getLocation();
-            File file = new File(fileLocation);
+            File file = new File(basePath+fileLocation);
             byte[] newByte = Files.readAllBytes(file.toPath());
 
 //            String contentType = "application/pdf";
