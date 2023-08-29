@@ -184,34 +184,34 @@ public class FileUploadController implements Serializable {
 //    }
     
     
-//    public void saveFile() {
-//    List<Configuration> conList = configurationRepository.findAll();
-//    for (Configuration config : conList) {
-//        List<String> extensions = Arrays.asList(config.getAllowedTypes().split(","));
-//        if (config.getId() == fileUploads.getConfiguration().getId()) {
-//            if (validateFileSize(uploadedFile, config.getFsize())
-//                    && validateFileType(uploadedFile, extensions)) {
-//                try {
-//                    String uploadFolderPath = basePath + "Files/";
-//                    Path folderPath = Paths.get(uploadFolderPath);
-//                    Path destinationPath = folderPath.resolve(uploadedFile.getFileName());
-//
-//                    
-//                    Path relativePath = Paths.get("Files", uploadedFile.getFileName());
-//                    Files.write(destinationPath, this.file);
-//                    this.fileUploads.setfName(uploadedFile.getFileName());
-//                    this.fileUploads.setLocation(relativePath.toString()); // Save relative path
-//
-//                    fileUploadRepository.save(this.fileUploads);
-//                    loadData();
-//                } catch (IOException e) {
-//                    addErrorMessage("Error while uploading the file.");
-//                    return;
-//                }
-//            }
-//        }
-//    }
-//}
+    public void saveFile() {
+    List<Configuration> conList = configurationRepository.findAll();
+    for (Configuration config : conList) {
+        List<String> extensions = Arrays.asList(config.getAllowedTypes().split(","));
+        if (config.getId() == fileUploads.getConfiguration().getId()) {
+            if (validateFileSize(uploadedFile, config.getFsize())
+                    && validateFileType(uploadedFile, extensions)) {
+                try {
+                    String uploadFolderPath = basePath + "Files/";
+                    Path folderPath = Paths.get(uploadFolderPath);
+                    Path destinationPath = folderPath.resolve(uploadedFile.getFileName());
+
+                    
+                    Path relativePath = Paths.get("Files", uploadedFile.getFileName());
+                    Files.write(destinationPath, this.file);
+                    this.fileUploads.setfName(uploadedFile.getFileName());
+                    this.fileUploads.setLocation(relativePath.toString()); // Save relative path
+
+                    fileUploadRepository.save(this.fileUploads);
+                    loadData();
+                } catch (IOException e) {
+                    addErrorMessage("Error while uploading the file.");
+                    return;
+                }
+            }
+        }
+    }
+}
     
     
 //public void saveFile() {
