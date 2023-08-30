@@ -20,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -51,8 +52,8 @@ public class FileUploadController implements Serializable {
     private InputStream inputStream;
 
     private StreamedContent streamContent;
-    
-    private final String basePath ="/home/synergy/Uploads/";
+
+    private final String basePath = "/home/synergy/Uploads/";
 
     @Inject
     private FileUploadRepository fileUploadRepository;
@@ -156,121 +157,43 @@ public class FileUploadController implements Serializable {
 
     }
 
-//    public void saveFile() {
-//        List<Configuration> conList = configurationRepository.findAll();
-//        for (Configuration config : conList) {
-//            List<String> extensions = Arrays.asList(config.getAllowedTypes().split(","));
-//            if (config.getId() == fileUploads.getConfiguration().getId()) {
-//                if (validateFileSize(uploadedFile, config.getFsize())
-//                        && validateFileType(uploadedFile, extensions)) {
-//                    try {
-//                        String uploadFolderPath = "/home/synergy/Uploads/Files/";
-//                        Path folderPath = Paths.get(uploadFolderPath);
-//                        Path destinationPath = folderPath.resolve(uploadedFile.getFileName());
-//                        Files.write(destinationPath, this.file);
-//                        this.fileUploads.setfName(uploadedFile.getFileName());
-//                        this.fileUploads.setLocation(destinationPath.toString());
-//
-//                        fileUploadRepository.save(this.fileUploads);
-//                        loadData();
-//                    } catch (IOException e) {
-//                        addErrorMessage("Error while uploading the file.");
-//                        return;
-//
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
-    
     public void saveFile() {
-    List<Configuration> conList = configurationRepository.findAll();
-    for (Configuration config : conList) {
-        List<String> extensions = Arrays.asList(config.getAllowedTypes().split(","));
-        if (config.getId() == fileUploads.getConfiguration().getId()) {
-            if (validateFileSize(uploadedFile, config.getFsize())
-                    && validateFileType(uploadedFile, extensions)) {
-                try {
-                    String uploadFolderPath = basePath + "Files/";
-                    Path folderPath = Paths.get(uploadFolderPath);
-                    Path destinationPath = folderPath.resolve(uploadedFile.getFileName());
-
-                    
-                    Path relativePath = Paths.get("Files", uploadedFile.getFileName());
-                    Files.write(destinationPath, this.file);
-                    this.fileUploads.setfName(uploadedFile.getFileName());
-                    this.fileUploads.setLocation(relativePath.toString()); // Save relative path
-
-                    fileUploadRepository.save(this.fileUploads);
-                    loadData();
-                } catch (IOException e) {
-                    addErrorMessage("Error while uploading the file.");
-                    return;
+        List<Configuration> conList = configurationRepository.findAll();
+        for (Configuration config : conList) {
+            List<String> extensions = Arrays.asList(config.getAllowedTypes().split(","));
+            if (Objects.equals(config.getId(), fileUploads.getConfiguration().getId())) {
+                if (validateFileSize(uploadedFile, config.getFsize())
+                        && validateFileType(uploadedFile, extensions)) {
+                    try {
+                        String fileType =fileUploads.getConfiguration().getName();
+                        String uploadDate = getFormattedUploadDate();
+                        String uploadFolderPath = basePath + fileType + "/" + uploadDate + "/";
+                        Path folderPath = Paths.get(uploadFolderPath);
+                        if (!Files.exists(folderPath)) {
+                            Files.createDirectories(folderPath);
+                        }
+                        Path destinationPath = folderPath.resolve(uploadedFile.getFileName());
+                        Path relativePath = Paths.get(fileType, uploadDate, uploadedFile.getFileName());
+                        Files.write(destinationPath, this.file);
+                        this.fileUploads.setfName(uploadedFile.getFileName());
+                        this.fileUploads.setLocation(relativePath.toString());
+                        fileUploadRepository.save(this.fileUploads);
+                        loadData();
+                    } catch (IOException e) {
+                        addErrorMessage("Error while uploading the file.");
+                        return;
+                    }
                 }
             }
         }
     }
-}
-    
-    
-//public void saveFile() {
-//    List<Configuration> conList = configurationRepository.findAll();
-//    for (Configuration config : conList) {
-//        List<String> extensions = Arrays.asList(config.getAllowedTypes().split(","));
-//        if (config.getId() == fileUploads.getConfiguration().getId()) {
-//            if (validateFileSize(uploadedFile, config.getFsize())
-//                    && validateFileType(uploadedFile, extensions)) {
-//                try {
-//                    
-//                    String fileType = determineFileType(uploadedFile);
-//                    String uploadDate = getFormattedUploadDate();
-//
-//                    String uploadFolderPath = basePath + fileType + "/" + uploadDate + "/";
-//                    Path folderPath = Paths.get(uploadFolderPath);
-//
-//                    if (!Files.exists(folderPath)) {
-//                        Files.createDirectories(folderPath);
-//                    }
-//
-//                    
-//                    Path destinationPath = folderPath.resolve(uploadedFile.getFileName());
-//
-//                    
-//                    Path relativePath = Paths.get(fileType, uploadDate, uploadedFile.getFileName());
-//                    Files.write(destinationPath, this.file);
-//                    this.fileUploads.setfName(uploadedFile.getFileName());
-//                    this.fileUploads.setLocation(relativePath.toString()); 
-//
-//                    fileUploadRepository.save(this.fileUploads);
-//                    loadData();
-//                } catch (IOException e) {
-//                    addErrorMessage("Error while uploading the file.");
-//                    return;
-//                }
-//            }
-//        }
-//    }
-//}
-
-//private String determineFileType(UploadedFile uploadedFile) {
-//    String fileName = uploadedFile.getFileName();
-//    if (fileName.toLowerCase().contains("citizenship")) {
-//        return "Citizenship";
-//    }
-//   
-//    return "Other"; 
-//}
-//
-//private String getFormattedUploadDate() {
-//    LocalDate uploadDate = LocalDate.now(); 
-//
-//    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//    return uploadDate.format(formatter);
-//}
 
 
-    
+    private String getFormattedUploadDate() {
+        LocalDate uploadDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return uploadDate.format(formatter);
+    }
 
     public boolean validateFileType(UploadedFile uploadedFile, List<String> allowedFileTypes) {
         String f = uploadedFile.getFileName();
@@ -308,7 +231,7 @@ public class FileUploadController implements Serializable {
             context.execute("PF('viewDocDlg').show();");
         }
     }
-    
+
     public boolean isImage() {
         if (fileUploads != null) {
             String fileName = fileUploads.getfName();

@@ -26,11 +26,7 @@ public class ImageUtill implements Serializable {
 
     @Inject
     private FileUploadRepository fileUploadRepository;
-    private final String basePath ="/home/synergy/Uploads/";
-    
-//    @Inject
-//    private FileUploadController fileUploadController;
-
+    private final String basePath = "/home/synergy/Uploads/";
 
     public StreamedContent loadFileData() throws FileNotFoundException, IOException {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -38,15 +34,8 @@ public class ImageUtill implements Serializable {
 
         if (id != null) {
             String fileLocation = fileUploadRepository.findById(Long.valueOf(id)).getLocation();
-            File file = new File(basePath+fileLocation);
+            File file = new File(basePath + fileLocation);
             byte[] newByte = Files.readAllBytes(file.toPath());
-
-//            String contentType = "application/pdf";
-//            
-//            if (fileUploadController.isImage()) {
-//                contentType = "image/png";
-//            }
-
             return new DefaultStreamedContent(new ByteArrayInputStream(newByte), "*/*");
         }
         return new DefaultStreamedContent();

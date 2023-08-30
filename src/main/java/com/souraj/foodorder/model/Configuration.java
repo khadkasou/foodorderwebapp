@@ -94,4 +94,8 @@ public class Configuration extends AbstractEntity {
         return "configuration";
     }
 
+    public CharSequence toLowerCase() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

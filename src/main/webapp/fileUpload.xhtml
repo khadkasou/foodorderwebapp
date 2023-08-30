@@ -30,20 +30,17 @@
         <br /><br />
         <h:form id="show_file">
             <p:dataTable value="#{fileUploadController.fileUploadList}" var="c" rowIndexVar="rowIndex">
-                <p:column>
-                    <f:facet name="header">ID</f:facet>
+                
+                <p:column headerText="ID">
                     <h:outputText value="#{rowIndex + 1}" />
                 </p:column>
-                <p:column>
-                    <f:facet name="header">Created At</f:facet>
+                <p:column headerText="Created At" sortBy="#{c.createdAt}" filterBy="#{c.createdAt}">
                     <h:outputText value="#{c.createdAt}" />
                 </p:column>
-                <p:column>
-                    <f:facet name="header">Remarks</f:facet>
+                <p:column headerText="Remarks" sortBy="#{c.remarks}" filterBy="#{c.remarks}">
                     <h:outputText value="#{c.remarks}" />
                 </p:column>
-                <p:column>
-                    <f:facet name="header">File Name</f:facet>
+                <p:column headerText="File Name" sortBy="#{c.configuration.name}" filterBy="#{c.configuration.name}">
                     <h:outputText value="#{c.configuration.name}" />
                 </p:column>
                 <p:column headerText="Action">

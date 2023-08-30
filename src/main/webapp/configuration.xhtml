@@ -24,28 +24,22 @@
         <h:form id="frm_show_file">
             <p:dataTable value="#{configurationController.configurationsList}" var="c" 
                          rowIndexVar="rowIndex">
-                <p:column>
-                    <f:facet name="header">ID</f:facet>
+                <p:column headerText="ID">                  
                     <h:outputText value="#{rowIndex + 1}" />
                 </p:column>
-                <p:column>
-                    <f:facet name="header">Name</f:facet>
+                <p:column headerText="Name" sortBy="#{c.name}" filterBy="#{c.name}">
                     <h:outputText value="#{c.name}" />
                 </p:column>
-                <p:column>
-                    <f:facet name="header">Created At</f:facet>
+                <p:column headerText="Created At" sortBy="#{c.createdAt}" filterBy="#{c.createdAt}">
                     <h:outputText value="#{c.createdAt}" />
                 </p:column>
-                <p:column>
-                    <f:facet name="header">Updated At</f:facet>
+                <p:column headerText="Updated At" sortBy="#{c.updatedAt}" filterBy="#{c.updatedAt}">
                     <h:outputText value="#{c.updatedAt}" />
                 </p:column>
-                <p:column>
-                    <f:facet name="header">Size</f:facet>
+                <p:column headerText="Size" sortBy="#{c.fsize}" filterBy="#{c.fsize}">
                     <h:outputText value="#{c.fsize}" />
                 </p:column>
-                <p:column>
-                    <f:facet name="header">allowed Type</f:facet>
+                <p:column headerText="Allowed Type" sortBy="#{c.allowedTypes}" filterBy="#{c.allowedTypes}">
                     <h:outputText value="#{c.allowedTypes}" />
                 </p:column>
                 <p:column headerText="Action">
