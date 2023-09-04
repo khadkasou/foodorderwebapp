@@ -60,6 +60,7 @@ com/souraj/foodorder/api/RestResponse.class
 com/souraj/foodorder/model/FileUpload_.class
 com/souraj/foodorder/model/Configuration.class
 com/souraj/foodorder/controller/FileDownloadController.class
+com/souraj/foodorder/controller/FileUploadController$1.class
 com/souraj/foodorder/model/Menu_.class
 com/souraj/foodorder/repository/FileNameRepository.class
 com/souraj/foodorder/controller/CategoryController.class

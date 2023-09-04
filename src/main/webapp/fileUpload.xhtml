@@ -28,9 +28,13 @@
                              onclick="PF('dlg_create_file').show();" />
         </h:form>
         <br /><br />
-        <h:form id="show_file">
-            <p:dataTable value="#{fileUploadController.fileUploadList}" var="c" rowIndexVar="rowIndex">
-                
+        <h:form id="show_file">    
+            <p:dataTable var="c" rowIndexVar="rowIndex"
+                         paginator="true" rows="10" paginatorPosition="bottom"
+                         lazy="true"
+                         value="#{fileUploadController.lazyModel}"
+                         emptyMessage="No data found">
+
                 <p:column headerText="ID">
                     <h:outputText value="#{rowIndex + 1}" />
                 </p:column>

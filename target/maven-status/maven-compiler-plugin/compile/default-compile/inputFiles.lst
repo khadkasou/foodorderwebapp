@@ -15,6 +15,7 @@
 /home/synergy/Netbeans-project/foodorderwebapp/src/main/java/com/souraj/foodorder/restClient/CategoryRestClient.java
 /home/synergy/Netbeans-project/foodorderwebapp/src/main/java/com/souraj/foodorder/model/Orders.java
 /home/synergy/Netbeans-project/foodorderwebapp/src/main/java/com/souraj/foodorder/model/FoodItems.java
+/home/synergy/Netbeans-project/foodorderwebapp/src/main/java/com/souraj/foodorder/repository/LazyRepository.java
 /home/synergy/Netbeans-project/foodorderwebapp/src/main/java/com/souraj/foodorder/model/UserRole.java
 /home/synergy/Netbeans-project/foodorderwebapp/src/main/java/com/souraj/foodorder/controller/UserTableController.java
 /home/synergy/Netbeans-project/foodorderwebapp/src/main/java/com/souraj/foodorder/converter/ConfigurationConverter.java

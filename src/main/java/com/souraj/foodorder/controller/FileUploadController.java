@@ -19,7 +19,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -30,6 +32,8 @@ import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortOrder;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
@@ -50,6 +54,9 @@ public class FileUploadController implements Serializable {
     private byte[] viewedFileData;
     private StreamedContent viewedFileContent;
     private InputStream inputStream;
+
+    private LazyDataModel<FileUpload> lazyModel;
+    private Map<String, Object> filters = new HashMap<>();
 
     private StreamedContent streamContent;
 
@@ -134,11 +141,25 @@ public class FileUploadController implements Serializable {
 
     @PostConstruct
     public void init() {
-        this.fileUploads = new FileUpload();
-        selectedConfiguration = new Configuration();
-        this.configurationList = configurationRepository.findAll();
 
-        loadData();
+        lazyModel = new LazyDataModel<FileUpload>() {
+            @Override
+            public List<FileUpload> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+                List<FileUpload> data = fileUploadRepository.loadDataLazy(first, pageSize, sortField, sortOrder, filters);
+                int rowCount = fileUploadRepository.countDataLazy(filters);
+                lazyModel.setRowCount(rowCount);
+                return data;
+            }
+        };
+        lazyModel.setPageSize(10);
+    }
+
+    public LazyDataModel<FileUpload> getLazyModel() {
+        return lazyModel;
+    }
+
+    public void loadLazyData() {
+
     }
 
     public void beforeCreate() {
@@ -165,7 +186,7 @@ public class FileUploadController implements Serializable {
                 if (validateFileSize(uploadedFile, config.getFsize())
                         && validateFileType(uploadedFile, extensions)) {
                     try {
-                        String fileType =fileUploads.getConfiguration().getName();
+                        String fileType = fileUploads.getConfiguration().getName();
                         String uploadDate = getFormattedUploadDate();
                         String uploadFolderPath = basePath + fileType + "/" + uploadDate + "/";
                         Path folderPath = Paths.get(uploadFolderPath);
@@ -187,7 +208,6 @@ public class FileUploadController implements Serializable {
             }
         }
     }
-
 
     private String getFormattedUploadDate() {
         LocalDate uploadDate = LocalDate.now();
